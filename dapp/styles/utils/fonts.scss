@@ -1,1 +1,12 @@
-$fontSizes: 16px 32px 64px;
+$fontSizes: 16px 20px 24px 32px 64px;
+
+@mixin font($type){
+    @if $type == 'title'{
+        font-family: 'Dosis', sans-serif;
+        font-weigth: 700;
+    }
+    @if $type == 'regular'{
+        font-family: 'Assistant', sans-serif;
+        font-weigth: 400;
+    } 
+}

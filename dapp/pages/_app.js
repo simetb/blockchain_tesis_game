@@ -1,21 +1,26 @@
+// Needed components
 import { Layout } from "../components";
+// Styles
 import "../styles/globals.scss";
-import { config } from "@fortawesome/fontawesome-svg-core";
-import "@fortawesome/fontawesome-svg-core/styles.css";
-config.autoAddCss = false;
-import { MoralisProvider } from "react-moralis";
+// import { MoralisProvider } from "react-moralis";
 
-function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }) {
   return (
-    <MoralisProvider
-      appId="gg6ViGobuRiEcaIQCAwvq7Mc2OmC4087hHilpx9e"
-      serverUrl="https://yufng00t8jg7.usemoralis.com:2053/server"
-    >
+
+
+    // <MoralisProvider
+    //   appId="gg6ViGobuRiEcaIQCAwvq7Mc2OmC4087hHilpx9e"
+    //   serverUrl="https://yufng00t8jg7.usemoralis.com:2053/server"
+    // >
+
+
+    // This layout component receives <Component as a children>
       <Layout>
         <Component {...pageProps} />
       </Layout>
-    </MoralisProvider>
+
+
+    // </MoralisProvider>
   );
 }
 
-export default MyApp;
