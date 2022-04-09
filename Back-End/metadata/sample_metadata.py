@@ -1,5 +1,4 @@
 # NFT CHARACTER METADATA
-
 METADATA_TEMPLATE = {
     "level": 0,
     "name":"",
