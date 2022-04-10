@@ -38,6 +38,8 @@ contract StudentsNft is ERC721, VRFConsumerBase{
 
     // user that request of the random
     mapping(bytes32 => address) public requestToSender;
+    mapping(address => uint256) userRandomNumber;
+    mapping(address => bytes32) senderToRequest;
 
     // constructor function of the contract
     constructor(address _VRFCoordinator, address _linkToken, bytes32 _keyhash, uint256 _fee) public 
@@ -61,11 +63,20 @@ contract StudentsNft is ERC721, VRFConsumerBase{
 
     // Nft Random Creatrion
     function fulfillRandomness(bytes32 requestId, uint256 randomNumber) internal override {
+        address caller = requestToSender[requestId];
+        senderToRequest[caller] = requestId; 
+        userRandomNumber[caller] = randomNumber;
+    }
+
+    function createNftStudent() public {
         uint256 newId = students.length; // NFT ID
+        address caller = msg.sender; // NFT OWNER
+        bytes32 requestId = senderToRequest[caller];
+        uint256 randomNumber = userRandomNumber[caller]; // Generated random number
 
         // Stats
-        uint256 level = (randomNumber % 3) + 1;
-        uint256 intelligenceLevel = 0;
+        uint256 level = (randomNumber % 3) + 1; //NFT LEVEL
+        uint256 intelligenceLevel = 0; // NFT INTELLIGENCE
         if(level == 1){
             intelligenceLevel = (randomNumber % 100) + 1;
         }else if(level == 2){
@@ -73,8 +84,8 @@ contract StudentsNft is ERC721, VRFConsumerBase{
         }else{
             intelligenceLevel = (randomNumber % 100) + 201;
         }
-        uint256 cheatLevel = ((randomNumber * 50) % 100) + 1;
-        string memory name = names[randomNumber % 25];
+        uint256 cheatLevel = ((randomNumber * 50) % 100) + 1; // NEFT CHEAT
+        string memory name = names[randomNumber % 25]; // NFT NAME
         students.push(
             Student(
                 level,
@@ -85,11 +96,9 @@ contract StudentsNft is ERC721, VRFConsumerBase{
         );
 
         // NFT mint associated to the owner address
-        address caller = requestToSender[requestId];
         nftOwnerCount[caller]++;
         nftToOwner[newId] = caller;
         _safeMint(caller, newId);
-
     }
 
     function getStudentsByOwner(address _owner) external view returns(uint256[] memory){
