@@ -3,13 +3,16 @@
 pragma solidity ^0.6.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "./Ownable.sol";
 
 /**
 *   @title tokenUJG to use it in the `Ujap students` game 
 */
 
-contract TokenUJG is ERC20{
-    constructor() public ERC20("UjapGame","UJG"){
+contract TokenUJG is ERC20,Ownable{
+    constructor() public 
+    ERC20("UjapGame","UJG")
+    Ownable(){
     }
 
     /**
@@ -33,14 +36,18 @@ contract TokenUJG is ERC20{
     *   (ERC20 - _mint(uint256 amount, address account))
     *
     */
-    function mint(uint256 amount,address account) public {
+    function mintToken(uint256 amount,address account) public {
         _mint(account, amount);
     }
 
     /**
     *   @dev see balance
     */
-    function getBalance(address account) public view returns(uint256){
+    function getTokenBalance(address account) public view returns(uint256){
         return(balanceOf(account));
+    }
+
+    function burnToken(address from, uint256 amount) public{
+        _burn(from,amount);
     }
 }

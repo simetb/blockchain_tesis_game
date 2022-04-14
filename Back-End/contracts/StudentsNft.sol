@@ -7,22 +7,29 @@ import "@chainlink/contracts/src/v0.6/VRFConsumerBase.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./TokenUJG.sol";
+import "./Ownable.sol";
 
 /**
 *   @title `Ujap students` game full solidity nft contract
 *   @dev Full implementation of an ERC721, VRFConsumerBase, Ownable, Strings contracts
+*   
+*   Description:
+*
+*   Project made for the presentation of a university thesis, based on the studies 
+*   and databases of the blockchain to create a game, made to be run on Kovan Test 
+*   Blockchain, Local Blockchain and Main Ethereum Blockchain.
+*
+*   This contract (StudentsNft) contains all the elements for the construction and operation of the NFT
+*   
+*   Author: https://github.com/simetb
+*   
+*   
 */
 
-contract StudentsNft is ERC721, VRFConsumerBase{
+contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     
     // Token Contract
-    TokenUJG public tokenUJG;
-    
-    // Random Nft Names
-    string[] private names  = ["Temis", "Jekatherina", "Hernandez","Gabriel","Maria","Juan","Maru",
-           "Sebastian", "Kevin", "Caranfa", "Julio", "Sammer", "Edkar",
-           "Quintero", "Ochado", "Francisco", "Diego", "Cristian", "Luis",
-           "Gocho", "Lopez" , "Marcel" , "Kristofer" , "Simet" , "Manguito"];
+    TokenUJG internal _tokenUJG;
 
     /**
     *   @dev Data nft structure to the game
@@ -31,13 +38,16 @@ contract StudentsNft is ERC721, VRFConsumerBase{
     *   `cheatLevel` cheat character stat
     *   `attackTime` is the rest time that take the nft for his next attack round
     *   `random` selected randomly
+    *   `id` The NFT Id
+    *   `win` To check if the nft recently win
+    *   `market` To check if the nft is in the market 
     *   
     *   `intelligenceLevel`, `cheatLevel` & `name` are selected randomly
     *
     *   Requirements:
     * - `level` stat cannot be zero and this just can take 3 values (1,2,3) 
     * - `intelligenceLevel` stat cannot be zero and the final value deppend of the `level` stat
-    * but this is just a buff MIN value 1, Max value 300
+    *   but this is just a buff MIN value 1, Max value 300
     * - `cheatLevel` stat cannot be zero MIN value 1, MAX value 100
     */
     struct Student{
@@ -46,25 +56,67 @@ contract StudentsNft is ERC721, VRFConsumerBase{
         uint256 cheatLevel;
         string name;
         uint32 attackTime;
+        uint256 id;
+        bool market;
     }
 
-    // Array that save all the characters
-    Student[] public students;
+    // Cooldown Attack of the NFT
+    uint32 internal _coolDownTime;
 
+    // Id of the NFT
+    uint256 private _nftId;
+
+    // Random Nft Names
+    string[] private _names  = ["Temis", "Jekatherina", "Hernandez","Gabriel","Maria","Juan","Maru",
+           "Sebastian", "Kevin", "Caranfa", "Julio", "Sammer", "Edkar",
+           "Quintero", "Ochado", "Francisco", "Diego", "Cristian", "Luis",
+           "Gocho", "Lopez" , "Marcel" , "Kristofer" , "Simet" , "Manguito"];
+
+    // Array that save all the characters
+    Student[] internal _students;
+    
+    /** 
+    *   @dev Variable mapping for the correct control and distribution of prizes and NFT
+    */
     // Mapping from the owner to the amount of nft students
-    mapping(address => uint256) public nftOwnerCount;
+    mapping(address => uint256) internal _nftOwnerCount;
     
     // Mapping from the owner to the nft
-    mapping(uint256 => address ) public nftToOwner;
+    mapping(uint256 => address ) internal _nftToOwner;
 
     // User that request of the random
-    mapping(bytes32 => address) private requestToSender;
+    mapping(bytes32 => address) private _requestToSender;
 
     //  Data random number from the user
-    mapping(address => uint256) public userRandomNumber;
+    mapping(address => uint256) internal _userRandomNumber;
 
+    /** 
+    *   @dev Events that are used to deploy events in js with the contract
+    */
+    // Event that get the result of the Attack
+    event ResultAttack(bool win, uint256 powerCharacter, uint256 powerLevel, uint256 roll);
+
+    // Evemt that get the created nft and their stats
+    event NftCreated(string name, uint256 level, uint256 intelligenceLevel, uint256 cheatLevel); 
+
+    /** 
+    *   @dev The control variables are used to adjust the prices, 
+    *   prizes and consequences that the nfts bring if necessary.
+    */
+    // Control the price for the NFT mint function 
+    uint256 private _nftPrice;
+
+    // Control Wear Variable
+    uint256 private _wearMultiplicator;
+
+    // Control Attack Variable
+    uint256 private _attackPriceMultiplicator;
+
+    // Control Reward Variables
+    uint256 private _rewardPriceMultiplicator;
+    
     /**
-    *   @dev kovan default blockhain implementation
+    *   @dev Kovan Default Blockhain Implementation
     *   `_keyhash` kovan default = 0x6c3699283bda56ad74f6b855546325b68d482e983852a7a82979cc4807b641f4
     *   `_fee` kovan default = 100000000000000000
     *   `_VRFCoordinator` = 0xdD3782915140c8f3b190B5D67eAc6dc5760C46E9
@@ -73,142 +125,233 @@ contract StudentsNft is ERC721, VRFConsumerBase{
     bytes32 internal keyhash;
 
     uint256 internal fee;
-
-    uint32 internal coolDownTime;
-
-    address internal owner;
     
     constructor(
         address _VRFCoordinator, 
         address _linkToken, 
         bytes32 _keyhash,  
-        address _tokenAddress
+        address _tokenAddress,
+        uint256 nftPrice,
+        uint256 wearMultiplicator,
+        uint256 attackMultiplicator,
+        uint256 rewardPriceMultiplicator
     ) public 
     VRFConsumerBase(_VRFCoordinator, _linkToken) 
     ERC721("Ujapista","UJAP")
+    Ownable()
     {
+        // Randomness Variables
         keyhash = _keyhash;
         fee = 0.1 * 10**18;
-        coolDownTime = 1 days;
-        owner = msg.sender;
-        tokenUJG = TokenUJG(_tokenAddress);
+
+        // Nft Variables
+        _coolDownTime = 1 days;
+        _nftId = 0;
+        _nftPrice = nftPrice;
+        _wearMultiplicator = wearMultiplicator;
+        _attackPriceMultiplicator = attackMultiplicator;
+        _rewardPriceMultiplicator = rewardPriceMultiplicator;
+
+        // Token Contract Initialization
+        _tokenUJG = TokenUJG(_tokenAddress);
+
     }
 
     /**
-    *   @dev Throws if called by any account other than the owner.
+    *   @dev Just the owner of the nft: `StudentIndex.id` can interact with the function    
     */
-    modifier onlyOwner() {
-        require(owner == msg.sender, "Ownable: caller is not the owner");
+    modifier onlyOwnerOf(uint256 studentIndex) {
+        require(msg.sender == _nftToOwner[_students[studentIndex].id],"U aren't the nft Owner");
         _;
     }
 
     /**
-    *   @dev just the owner of the nft: `_StudentId` can interact with the function    
+    *   @dev Checking the enough UJG Token balance of the account     
     */
-    modifier onlyOwnerOf(uint256 _StudentId) {
-        require(msg.sender == nftToOwner[_StudentId],"U aren't the nft Owner");
-        _;
-    }
-
     modifier EnoughToken(address account, uint256 amount){
-        require(tokenUJG.getBalance(account) >= amount,"Not enough UJG");
+        require(_tokenUJG.getTokenBalance(account) >= amount,"Not enough UJG");
         _;
     }
 
     /**
-    *   @dev get request {VRFConsumerBase - requestRandomness}
+    *   @dev Check the attacktime status 
+    */
+    modifier attackReady(uint256 studentIndex){
+        require(_students[studentIndex].attackTime <= now, "Let rest your Student");
+        _;
+    }
+
+    /**
+    *   @dev Check the market student status 
+    */
+    modifier inMarket(uint256 studentIndex){
+        require(!(_students[studentIndex].market), "The Student are in market");
+        _;
+    }
+
+    /** 
+    *   @dev Set the new `RewardMultiplicator`
+    *
+    *   Requirement:
+    *   
+    * - Only the contract owner can set a `RewardMultiplicator`
+    */
+    function setRewardMultiplicator(uint256 newRewardMultiplicator) 
+    public 
+    onlyOwner(){
+        _rewardPriceMultiplicator = newRewardMultiplicator;
+    }
+
+    /**
+    *   @dev Set the new `WearMultiplicator`
+    *
+    *   Requirement:
+    *   
+    * - Only the contract owner can set a `WearMultiplicator`
+    */
+    function setWearMultiplicator(uint256 newWearMultiplicator) 
+    public 
+    onlyOwner(){
+        _wearMultiplicator = newWearMultiplicator;
+    }
+
+    /**
+    *   @dev Set the new `AttackMultiplicator`
+    *
+    *   Requirement:
+    *   
+    * - Only the contract owner can set a `AttackMultiplicator`
+    */
+    function setAttackPriceMultiplicator(uint256 newAttackMultiplicator) 
+    public 
+    onlyOwner(){
+        _attackPriceMultiplicator = newAttackMultiplicator;
+    }
+
+    /**
+    *   @dev Set the new `NftPrice`
+    *
+    *   Requirement:
+    *   
+    * - Only the contract owner can set a `NftPrice`
+    */
+    function setNftPrice(uint256 newNftPrice) 
+    public 
+    onlyOwner(){
+        _nftPrice = newNftPrice;
+    }
+
+    /**
+    *   @dev Get the value nft price mint function
+    */
+    function getNftPrice()
+    public
+    view returns(uint256){
+        return(_nftPrice);
+    }
+
+    /**
+    *   @dev Change the CoolDownTime value
+    *   
+    *   Requirements:
+    *
+    * - Only the owner can set a new `_coolDownTime` 
+    */
+    function setCoolDownTime(uint32 coolDownTime) 
+    public 
+    onlyOwner(){
+        _coolDownTime = coolDownTime;
+    }
+    
+
+    /**
+    *   @dev Restart the character Cooldown attack
+    */
+    function _triggerCooldown(uint256 _StudentIndex) 
+    internal {
+        _students[_StudentIndex].attackTime = uint32(now + _coolDownTime);
+    }
+
+    /**
+    *   @dev Get request {VRFConsumerBase - requestRandomness}
     *   Kovan LinktToken Faucet: https://faucets.chain.link
     *
     *   Requirements:
     *
     * - Min user Link token balance 0.1
     */
-    function requestRandomness() public returns (bytes32) {
+    function requestRandomness() 
+    internal 
+    returns (bytes32) {
         require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK - fill the contract with faucet");       
 
         bytes32 requestId = requestRandomness(keyhash, fee);
 
-        requestToSender[requestId] = msg.sender;
-        userRandomNumber[msg.sender] = 432423432432;
+        _requestToSender[requestId] = msg.sender;
+
+        // TEST LOCAL BLOCKCHAIN //
+        _userRandomNumber[msg.sender] = 432423432432;
 
         return requestId;
     }
 
     /**
-    * @dev save the random number `userRandomNumber`
-    * internal override {VRFConsumerBase - fulfillRandomness  }
+    *   @dev Save the random number `userRandomNumber`
+    *   internal override {VRFConsumerBase - fulfillRandomness}
     */
     function fulfillRandomness(bytes32 requestId, uint256 randomNumber) 
-    internal override {
-        userRandomNumber[requestToSender[requestId]] = randomNumber;
+    internal 
+    override {
+        _userRandomNumber[_requestToSender[requestId]] = randomNumber;
     }
 
     /**
-    *   @dev Mint a nft and associate with the owner
-    *   get the `newId` from the students array length take the random number and generate the stats
-    *   and save it
+    *   @dev function that wear the nft 
     */
-    function createNftStudent() public EnoughToken(msg.sender,100){
-        tokenUJG.TransferToken(msg.sender, address(this), 100);
-        uint256 newId = students.length;
-        uint256 randomNumber = userRandomNumber[msg.sender];
-
-        // Generating character stats...
-        uint256 level = (randomNumber % 3) + 1;
-        uint256 intelligenceLevel = 0;
-        if(level == 1){
-            intelligenceLevel = (randomNumber % 100) + 1;
-        }else if(level == 2){
-            intelligenceLevel = (randomNumber % 100) + 101;
+    function _wear(uint256 studentIndex, uint256 wearIntelligence) 
+    internal{
+        wearIntelligence = wearIntelligence * _wearMultiplicator;
+        if (((_students[studentIndex].intelligenceLevel) - wearIntelligence) < 0){
+            _students[studentIndex].intelligenceLevel = 0;
         }else{
-            intelligenceLevel = (randomNumber % 100) + 201;
+            _students[studentIndex].intelligenceLevel -= wearIntelligence;
         }
-        uint256 cheatLevel = ((randomNumber * 50) % 100) + 1;
-        string memory name = names[randomNumber % 25];
+    }
 
-        // Saving the character...
-        students.push(
-            Student(
-                level,
-                intelligenceLevel,
-                cheatLevel,
-                name,
-                uint32 (now + coolDownTime)
 
-            )
-        );
+    /**
+    *   @dev Mint a nft and associate with the owner
+    *   get the `newId` from the number of total nft, take the random number and generate the stats
+    *   and save it
+    *
+    *   Requirements:
+    *   
+    * - You can only create a student nft if you have the full price token in ur wallet
+    */
+    function createNftStudent() 
+    public 
+    EnoughToken(msg.sender,_nftPrice){
 
+        _tokenUJG.TransferToken(msg.sender, address(this), _nftPrice);
+
+        uint256 newId = _nftId; // New Nft Id
+
+        Student memory student =  _generatingStats(newId);
         /**
-        *   @dev increase the `nftOwnerCount` because we got a new nft
+        *   @dev increase the `_nftOwnerCount` because we got a new nft
         *   associated the mapping with `newId`: NftId with the owner
         *   _safeMint function call
         *
         *   Requirements:
         * - github {ERC720 - _safeMint}
         */
-        nftOwnerCount[msg.sender]++;
+        _nftOwnerCount[msg.sender]++;
 
-        nftToOwner[newId] = msg.sender;
+        _nftToOwner[newId] = msg.sender;
 
         _safeMint(msg.sender, newId);
-    }
 
-    /**
-    *   @dev function that wear the nft 
-    */
-    function _wear(Student memory _student, uint256 _wearIntelligence) internal{
-        if ((_student.intelligenceLevel - _wearIntelligence) < 0){
-            _student.intelligenceLevel = 0;
-        }else{
-            _student.intelligenceLevel -= _wearIntelligence;
-        }
-    }
-
-    /**
-    *   @dev Change the CoolDownTime value 
-    */
-    function setCoolDownTime(uint32 _coolDownTime) public onlyOwner(){
-        coolDownTime = _coolDownTime;
+        emit NftCreated(student.name,student.level,student.intelligenceLevel,student.cheatLevel);
     }
 
     /**
@@ -216,18 +359,23 @@ contract StudentsNft is ERC721, VRFConsumerBase{
     * 
     *   Requirements:
     * 
-    * - The `_levelNumber` cannot be a value below than 1 an upper than 10
+    * - The `levelNumber` cannot be a value below than 1 an upper than 10
     * - The stat of `_intelligenceLevel` from `Student` need to be greater than 0
+    * - You need to be the student owner
+    * - Enough token to attack
+    * - Your NFT need to be rest
+    * - Your NFT It should not be in the marketplace
     */
+    function attack(uint256 studentIndex, uint256 levelNumber) 
+    external 
+    onlyOwnerOf(studentIndex) 
+    EnoughToken(msg.sender, (10 * levelNumber) * _attackPriceMultiplicator)
+    attackReady(studentIndex)
+    inMarket(studentIndex)
+    {
+        require((levelNumber >= 1 && levelNumber <= 10), "Invalid Level");
 
-    function attack(uint256 _StudentId, uint256 _levelNumber) 
-    public 
-    onlyOwnerOf(_StudentId) 
-    EnoughToken(msg.sender, (10 * _levelNumber))
-    returns(bool){
-        require((_levelNumber >= 1 && _levelNumber <= 10), "Invalid Level");
-
-        Student memory student = students[_StudentId];
+        Student memory student = _students[studentIndex];
 
         require(student.intelligenceLevel > 0);
 
@@ -240,56 +388,64 @@ contract StudentsNft is ERC721, VRFConsumerBase{
         *   after that, thath go to trigger the cooldown function   
         */
 
-        uint256 basePowerLevel = 40 * _levelNumber;
+        uint256 basePowerLevel = (40 * levelNumber);
 
-        uint256 roll = (userRandomNumber[msg.sender] % 100) + 1 ; 
+        uint256 roll = (_userRandomNumber[msg.sender] % 100) + 1 ; 
 
         uint256 totalAttackPower = roll + student.cheatLevel + student.intelligenceLevel;
 
-        _triggerCooldown(student);
+        _triggerCooldown(studentIndex);
 
-        tokenUJG.TransferToken(msg.sender, address(this) , (10*_levelNumber));
+        uint256 attackPrice = (10*levelNumber) * _attackPriceMultiplicator;
+
+        _tokenUJG.TransferToken(msg.sender, address(this) , attackPrice);
 
         if( basePowerLevel <= totalAttackPower){
             uint256 wear = (basePowerLevel/20)*2;
-            _wear(student,wear);
-            tokenUJG.TransferToken(address(this), msg.sender , (20*_levelNumber));
-            return(true);
+            _wear(studentIndex,wear);
+            uint256 reward = (20*levelNumber) * _rewardPriceMultiplicator;
+            _tokenUJG.TransferToken(address(this), msg.sender , reward);
+            emit ResultAttack(true, totalAttackPower, basePowerLevel,roll);
+    
+        }else{
+            uint256 wear = (basePowerLevel/10)*2;
+            _wear(studentIndex,wear);
+            emit ResultAttack(false, totalAttackPower, basePowerLevel,roll);
         }
-        uint256 wear = (basePowerLevel/10)*2;
-        _wear(student,wear);
-        return(false);
+
     }
 
     /**
-    *   @dev Restart the character Cooldown attack
+    *   @dev generating the random stats for the nft and save it in the contract  
     */
-    function _triggerCooldown(Student memory _student) internal {
-        _student.attackTime = uint32(now + coolDownTime);
+    function _generatingStats(uint256 newId)
+    internal
+    returns(Student memory){
+        requestRandomness();
+
+        uint256 randomNumber = _userRandomNumber[msg.sender];
+
+        // Generating character stats...
+        uint256 level = (randomNumber % 3) + 1;
+       
+        uint256 intelligenceLevel = 0;
+        if(level == 1){
+            intelligenceLevel = (randomNumber % 100) + 1;
+        }else if(level == 2){
+            intelligenceLevel = (randomNumber % 100) + 101;
+        }else{
+            intelligenceLevel = (randomNumber % 100) + 201;
+        }
+        
+        uint256 cheatLevel = ((randomNumber * 50) % 100) + 1;
+        
+        string memory name = _names[randomNumber % 25];
+
+        Student memory character =  Student(level,intelligenceLevel,cheatLevel,name,uint32 (now),newId,false);
+        // Saving the character...
+        _students.push(character);
+        _nftId+=1;
+        return(character);
     }
 
-    /** 
-    *   @dev get the URI from the NFT Tokem
-    *
-    *   Requirements: 
-    *   
-    *   - Only the owner of the token can doit
-    */
-    function getTokenURI(uint256 _StudentId) 
-    public view onlyOwnerOf(_StudentId) 
-    returns(string memory)  {
-        return tokenURI(_StudentId);
-    }
-
-    /** 
-    *   @dev get the URI from the NFT Tokem
-    *
-    *   Requirements: 
-    *   
-    *   - Only the owner of the token can doit
-    */
-    function setTokenURI(uint256 _StudentId, string memory _tokenURI) 
-    public onlyOwnerOf(_StudentId){
-        _setTokenURI(_StudentId, _tokenURI);
-    }
 }

@@ -16,6 +16,10 @@ def deploy_contracts():
         get_contract("link_token").address,
         config["networks"][network.show_active()]["keyhash"],
         token_ERC20.address,
+        100,
+        1,
+        1,
+        1,
         {"from":account}
     )
 

@@ -10,6 +10,14 @@ import "./StudentsNft.sol";
 */
 contract StudentsMain is StudentsNft{
 
+    struct StudentMarket{
+        uint256 id;
+        uint256 price;
+        address owner;
+    }
+
+    StudentMarket[] internal market;
+
     /**
     *   @dev This constructor start the values of StundentsNft and the dependencies
     *   
@@ -19,8 +27,13 @@ contract StudentsMain is StudentsNft{
         address _VRFCoordinator, 
         address _linkToken, 
         bytes32 _keyhash, 
-        address _tokenAddress) public
-    StudentsNft(_VRFCoordinator, _linkToken,_keyhash,_tokenAddress){
+        address _tokenAddress,
+        uint256 _nftPrice,
+        uint256 _wearMultiplicator,
+        uint256 _attackMultiplicator,
+        uint256 _rewardPriceMultiplicator) public
+    StudentsNft(_VRFCoordinator, _linkToken,_keyhash,_tokenAddress,_nftPrice,
+    _wearMultiplicator,_attackMultiplicator,_rewardPriceMultiplicator){
     }
 
     /**
@@ -30,15 +43,21 @@ contract StudentsMain is StudentsNft{
     *   Warning:
     * - THIS WILL DELETE THE NFT
     */
-    function burn(uint256 _StudentId) external onlyOwnerOf(_StudentId){
+    function burnNft(uint256 studentIndex) 
+    external 
+    onlyOwnerOf(studentIndex)
+    inMarket(studentIndex){
         address owner = msg.sender;
 
-        ERC721._beforeTokenTransfer(owner, address(0), _StudentId);
+        uint256 studentId = _students[studentIndex].id;
 
-        nftOwnerCount[owner] -= 1;
-        delete nftToOwner[_StudentId];
+        _beforeTokenTransfer(owner, address(0), studentId);
 
-        tokenUJG.TransferToken(owner, msg.sender, 50);
+        _nftOwnerCount[owner] -= 1;
+        delete _nftToOwner[studentId];
+        delete _students[studentIndex];
+
+        _tokenUJG.TransferToken(address(this), msg.sender, 50);
     }
 
 
@@ -46,11 +65,17 @@ contract StudentsMain is StudentsNft{
     *   @dev Transfer the character...
     *   {ERC721 - _transfer()} 
     */
-    function transfer(address from, address to, uint256 _StudentId) external onlyOwnerOf(_StudentId){
-        ERC721._transfer(from,to,_StudentId);
-        nftOwnerCount[from] --;
-        nftOwnerCount[to] ++;
-        nftToOwner[_StudentId] = to;
+    function transferNft(address from, address to, uint256 _StudentId) public 
+    onlyOwnerOf(_StudentId)
+    inMarket(getStudentIndexById(_StudentId))
+    {
+        _transfer(from,to,_StudentId);
+
+        _nftOwnerCount[from] -=1;
+
+        _nftOwnerCount[to] +=1;
+
+        _nftToOwner[_StudentId] = to;
     }
 
 
@@ -62,7 +87,7 @@ contract StudentsMain is StudentsNft{
     *   - Just the owner of the contract can doit
     */
     function setTokenERC20Address(address _address) external onlyOwner(){
-        tokenUJG = TokenUJG(_address);
+        _tokenUJG = TokenUJG(_address);
     }
 
     /**
@@ -74,13 +99,13 @@ contract StudentsMain is StudentsNft{
     function getStudentsByOwner(address _owner) external view returns(uint256[] memory){
         require(_owner != address(0),"Address 0x0... invalid");
 
-        uint256[] memory result = new uint256[](nftOwnerCount[_owner]);
+        uint256[] memory result = new uint256[](_nftOwnerCount[_owner]);
 
         uint256 counter = 0;
 
-        for (uint i = 0; i < students.length; i++){
+        for (uint i = 0; i < _students.length; i++){
 
-            if(nftToOwner[i] == _owner){
+            if(_nftToOwner[i] == _owner){
                 result[counter] = i;
                 counter++;
             }
@@ -90,10 +115,10 @@ contract StudentsMain is StudentsNft{
     }
 
     /** 
-    *   @dev get the students Stats no URI
+    *   @dev get the `_students` Stats no URI
     *
     */
-    function getStudentStats(uint _StudentId) 
+    function getStudentStats(uint256 _StudentIndex) 
     public 
     view 
     returns(
@@ -104,11 +129,107 @@ contract StudentsMain is StudentsNft{
         uint32
         ){
         return(
-            students[_StudentId].level,
-            students[_StudentId].intelligenceLevel,
-            students[_StudentId].cheatLevel,
-            students[_StudentId].name,
-            students[_StudentId].attackTime
+            _students[_StudentIndex].level,
+            _students[_StudentIndex].intelligenceLevel,
+            _students[_StudentIndex].cheatLevel,
+            _students[_StudentIndex].name,
+            _students[_StudentIndex].attackTime
         );
+    }
+
+
+    function putInMarket(uint256 _StudentIndex, uint256 _price) public onlyOwnerOf(_StudentIndex){
+        market.push(
+            StudentMarket(
+                _StudentIndex,
+                _price,
+                msg.sender
+            )
+        );
+        _students[_StudentIndex].market = true;
+    }
+
+    function buyMarket(uint256 amount, uint256 _marketIndex) public EnoughToken(msg.sender,amount){
+        
+        address owner = market[_marketIndex].owner;
+        
+        uint256 id = market[_marketIndex].id;
+
+        address buyer = msg.sender;
+        
+        _tokenUJG.TransferToken(buyer, owner, amount);
+
+        _students[id].market = false;
+
+        transferNft(owner,buyer,_students[id].id);
+
+        delete market[_marketIndex];
+
+    }
+
+    function getOutMarket(uint256 _marketIndex) public onlyOwnerOf(market[_marketIndex].id){
+        address owner = market[_marketIndex].owner;
+        
+        uint256 amount = 1;
+        _tokenUJG.TransferToken(owner, address(this), amount);
+        
+        uint256 id = market[_marketIndex].id;
+
+        _students[id].market = false;
+
+        delete market[_marketIndex];
+    }
+
+    
+    /** 
+    *   @dev get the URI from the NFT Tokem
+    *
+    *   Requirements: 
+    *   
+    *   - Only the owner of the token can doit
+    */
+    function getTokenURI(uint256 _StudentId) 
+    public view onlyOwner() 
+    returns(string memory)  {
+        return tokenURI(_StudentId);
+    }
+
+    /** 
+    *   @dev get the URI from the NFT Tokem
+    *
+    *   Requirements: 
+    *   
+    *   - Only the owner of the token can doit
+    */
+    function setTokenURI(uint256 _StudentId, string memory _tokenURI) 
+    public 
+    onlyOwner(){
+        _setTokenURI(_StudentId, _tokenURI);
+    }
+
+    function getNumbersNft(address account) 
+    public 
+    view 
+    returns(uint256){return(_nftOwnerCount[account]);}
+
+    function getTotalNftInGame() 
+    public 
+    view 
+    returns(uint256){return(_students.length);}
+
+    function getTotalNftInMarket() 
+    public 
+    view 
+    returns(uint256){return(market.length);}
+
+    function getStudentIndexById(uint256 id)
+    public 
+    view 
+    returns(uint256){
+        for (uint256 i = 0; i < _students.length; i++) {
+            if(id == _students[i].id){
+                return(i);
+            }
+        }
     }
 }
