@@ -24,3 +24,6 @@
             json.dump(collectible_metadata, file)
         if os.getenv("UPLOAD_IPFS") == "true":
             upload_to_ipfs(metadata_file_name)"""
+
+# Desarrollo de los scripts y los test
+# Desarrollo del URI en IPF y la metadata

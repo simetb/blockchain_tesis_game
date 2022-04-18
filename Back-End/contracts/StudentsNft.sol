@@ -31,6 +31,9 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     // Token Contract
     TokenUJG internal _tokenUJG;
 
+    // Amount of tokens in contract
+    uint256 internal _tokenPool;
+
     /**
     *   @dev Data nft structure to the game
     *   `level` character level
@@ -94,7 +97,7 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     *   @dev Events that are used to deploy events in js with the contract
     */
     // Event that get the result of the Attack
-    event ResultAttack(bool win, uint256 powerCharacter, uint256 powerLevel, uint256 roll);
+    event ResultAttack(bool win, uint256 powerCharacter, uint256 powerLevel, uint256 wear, uint256 roll);
 
     // Evemt that get the created nft and their stats
     event NftCreated(string name, uint256 level, uint256 intelligenceLevel, uint256 cheatLevel); 
@@ -160,7 +163,7 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     /**
     *   @dev Just the owner of the nft: `StudentIndex.id` can interact with the function    
     */
-    modifier onlyOwnerOf(uint256 studentIndex) {
+    modifier OnlyOwnerOf(uint256 studentIndex) {
         require(msg.sender == _nftToOwner[_students[studentIndex].id],"U aren't the nft Owner");
         _;
     }
@@ -169,14 +172,14 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     *   @dev Checking the enough UJG Token balance of the account     
     */
     modifier EnoughToken(address account, uint256 amount){
-        require(_tokenUJG.getTokenBalance(account) >= amount,"Not enough UJG");
+        require(_tokenUJG.GetTokenBalance(account) >= amount,"Not enough UJG");
         _;
     }
 
     /**
     *   @dev Check the attacktime status 
     */
-    modifier attackReady(uint256 studentIndex){
+    modifier AttackReady(uint256 studentIndex){
         require(_students[studentIndex].attackTime <= now, "Let rest your Student");
         _;
     }
@@ -184,9 +187,25 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     /**
     *   @dev Check the market student status 
     */
-    modifier inMarket(uint256 studentIndex){
+    modifier InMarket(uint256 studentIndex){
         require(!(_students[studentIndex].market), "The Student are in market");
         _;
+    }
+
+    /** 
+    *   @dev Transfer function for token payments within the game  `USER TO CONTRACT`
+    */
+    function _transferUserToContract(uint256 amount, address from) internal{
+        _tokenUJG.TransferToken(from,address(this), amount);
+        _tokenPool += amount;
+    }
+
+    /** 
+    *   @dev Transfer function for token payments within the game  `CONTRACT TO USER`
+    */
+    function _transferContractToUser(uint256 amount, address to) internal{
+        _tokenUJG.TransferToken(address(this),to, amount);
+        _tokenPool -= amount;
     }
 
     /** 
@@ -196,11 +215,20 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     *   
     * - Only the contract owner can set a `RewardMultiplicator`
     */
-    function setRewardMultiplicator(uint256 newRewardMultiplicator) 
+    function SetRewardMultiplicator(uint256 newRewardMultiplicator) 
     public 
-    onlyOwner(){
+    OnlyOwner(){
         _rewardPriceMultiplicator = newRewardMultiplicator;
     }
+
+    /** 
+    *   @dev Get the `_rewardPriceMultiplicator`
+    */
+    function GetRewardMultiplicator() 
+    public 
+    view
+    returns(uint256)
+    {return(_rewardPriceMultiplicator);}
 
     /**
     *   @dev Set the new `WearMultiplicator`
@@ -209,11 +237,20 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     *   
     * - Only the contract owner can set a `WearMultiplicator`
     */
-    function setWearMultiplicator(uint256 newWearMultiplicator) 
+    function SetWearMultiplicator(uint256 newWearMultiplicator) 
     public 
-    onlyOwner(){
+    OnlyOwner(){
         _wearMultiplicator = newWearMultiplicator;
     }
+
+    /** 
+    *   @dev Get the `_wearMultiplicator`
+    */
+    function GetWearMultiplicator()
+    public 
+    view
+    returns(uint256)
+    {return(_wearMultiplicator);}
 
     /**
     *   @dev Set the new `AttackMultiplicator`
@@ -222,11 +259,20 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     *   
     * - Only the contract owner can set a `AttackMultiplicator`
     */
-    function setAttackPriceMultiplicator(uint256 newAttackMultiplicator) 
+    function SetAttackPriceMultiplicator(uint256 newAttackMultiplicator) 
     public 
-    onlyOwner(){
+    OnlyOwner(){
         _attackPriceMultiplicator = newAttackMultiplicator;
     }
+
+    /** 
+    *   @dev Get the `_attackPriceMultiplicator`
+    */
+    function GetAttackPriceMultiplicator() 
+    public 
+    view
+    returns(uint256)
+    {return (_attackPriceMultiplicator);}
 
     /**
     *   @dev Set the new `NftPrice`
@@ -235,21 +281,43 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     *   
     * - Only the contract owner can set a `NftPrice`
     */
-    function setNftPrice(uint256 newNftPrice) 
+    function SetNftPrice(uint256 newNftPrice) 
     public 
-    onlyOwner(){
+    OnlyOwner(){
         _nftPrice = newNftPrice;
     }
 
     /**
     *   @dev Get the value nft price mint function
     */
-    function getNftPrice()
+    function GetNftPrice()
     public
-    view returns(uint256){
-        return(_nftPrice);
-    }
+    view 
+    returns(uint256){return(_nftPrice);}
 
+    /**
+    *   @dev Get the Total attack price
+    */
+    function GetTotalAttackPrice(uint256 level)
+    public
+    view
+    returns(uint256){return(10 * level * _attackPriceMultiplicator);}
+
+    /** 
+    *   @dev Get the power level
+    */
+    function GetPowerLevel(uint256 level)
+    public
+    view
+    returns(uint256){return(level * 40);}
+    
+    /** 
+    *   @dev Get the level reward
+    */
+    function Reward(uint256 level) 
+    public 
+    view
+    returns(uint256){(20 * level * _rewardPriceMultiplicator);}
     /**
     *   @dev Change the CoolDownTime value
     *   
@@ -257,12 +325,19 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     *
     * - Only the owner can set a new `_coolDownTime` 
     */
-    function setCoolDownTime(uint32 coolDownTime) 
+    function SetCoolDownTime(uint32 coolDownTime) 
     public 
-    onlyOwner(){
+    OnlyOwner(){
         _coolDownTime = coolDownTime;
     }
-    
+
+    /**
+    *   @dev Get `_coolDownTime`
+    */
+    function GetCoolDownTime()
+    public
+    view
+    returns(uint256){return(_coolDownTime);}
 
     /**
     *   @dev Restart the character Cooldown attack
@@ -279,6 +354,8 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     *   Requirements:
     *
     * - Min user Link token balance 0.1
+    *
+    *   CAMMELCASE EXCEPTION FUNCTION
     */
     function requestRandomness() 
     internal 
@@ -298,6 +375,7 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     /**
     *   @dev Save the random number `userRandomNumber`
     *   internal override {VRFConsumerBase - fulfillRandomness}
+    *   CAMMELCASE EXCEPTION FUNCTION
     */
     function fulfillRandomness(bytes32 requestId, uint256 randomNumber) 
     internal 
@@ -318,7 +396,6 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
         }
     }
 
-
     /**
     *   @dev Mint a nft and associate with the owner
     *   get the `newId` from the number of total nft, take the random number and generate the stats
@@ -328,17 +405,17 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     *   
     * - You can only create a student nft if you have the full price token in ur wallet
     */
-    function createNftStudent() 
+    function CreateNftStudent() 
     public 
     EnoughToken(msg.sender,_nftPrice){
 
-        _tokenUJG.TransferToken(msg.sender, address(this), _nftPrice);
+        _transferUserToContract(_nftPrice, msg.sender);
 
         uint256 newId = _nftId; // New Nft Id
 
         Student memory student =  _generatingStats(newId);
         /**
-        *   @dev increase the `_nftOwnerCount` because we got a new nft
+        *   @dev Increase the `_nftOwnerCount` because we got a new nft
         *   associated the mapping with `newId`: NftId with the owner
         *   _safeMint function call
         *
@@ -355,7 +432,7 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     }
 
     /**
-    *   @dev function that get the nft and attack the level
+    *   @dev Function that get the nft and attack the level
     * 
     *   Requirements:
     * 
@@ -366,12 +443,12 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     * - Your NFT need to be rest
     * - Your NFT It should not be in the marketplace
     */
-    function attack(uint256 studentIndex, uint256 levelNumber) 
+    function Attack(uint256 studentIndex, uint256 levelNumber) 
     external 
-    onlyOwnerOf(studentIndex) 
-    EnoughToken(msg.sender, (10 * levelNumber) * _attackPriceMultiplicator)
-    attackReady(studentIndex)
-    inMarket(studentIndex)
+    OnlyOwnerOf(studentIndex) 
+    EnoughToken(msg.sender, GetTotalAttackPrice(levelNumber))
+    AttackReady(studentIndex)
+    InMarket(studentIndex)
     {
         require((levelNumber >= 1 && levelNumber <= 10), "Invalid Level");
 
@@ -388,7 +465,7 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
         *   after that, thath go to trigger the cooldown function   
         */
 
-        uint256 basePowerLevel = (40 * levelNumber);
+        uint256 basePowerLevel = GetPowerLevel(levelNumber);
 
         uint256 roll = (_userRandomNumber[msg.sender] % 100) + 1 ; 
 
@@ -396,21 +473,21 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
 
         _triggerCooldown(studentIndex);
 
-        uint256 attackPrice = (10*levelNumber) * _attackPriceMultiplicator;
+        uint256 attackPrice = GetTotalAttackPrice(levelNumber);
 
-        _tokenUJG.TransferToken(msg.sender, address(this) , attackPrice);
+        _transferUserToContract(attackPrice, msg.sender);
 
         if( basePowerLevel <= totalAttackPower){
             uint256 wear = (basePowerLevel/20)*2;
             _wear(studentIndex,wear);
-            uint256 reward = (20*levelNumber) * _rewardPriceMultiplicator;
-            _tokenUJG.TransferToken(address(this), msg.sender , reward);
-            emit ResultAttack(true, totalAttackPower, basePowerLevel,roll);
+            uint256 reward = Reward(levelNumber);
+            _transferContractToUser(reward, msg.sender);
+            emit ResultAttack(true, totalAttackPower, basePowerLevel,wear,roll);
     
         }else{
             uint256 wear = (basePowerLevel/10)*2;
             _wear(studentIndex,wear);
-            emit ResultAttack(false, totalAttackPower, basePowerLevel,roll);
+            emit ResultAttack(false, totalAttackPower, basePowerLevel,wear,roll);
         }
 
     }
