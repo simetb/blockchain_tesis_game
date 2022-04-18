@@ -21,7 +21,6 @@ contract_to_mock = {
 
 # Get the account
 def get_account(index=None, id=None):
-    print(f"NETWORK: {network.show_active()}")
     if index:
         return accounts[index]
     elif network.show_active() in LOCAL_BLOCKCHAIN_ENVIRONMENTS:
@@ -50,7 +49,6 @@ def deploy_mocks():
     account = get_account()
     link_token = LinkToken.deploy({"from": account})
     VRFCoordinatorMock.deploy(link_token,{"from": account})
-    print("Deployed!")
 
 # Fun with link the contract to use randomness functions
 def fund_with_link(contract_address, account=None, link_token=None,amount=100000000000000000):
