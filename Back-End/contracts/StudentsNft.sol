@@ -26,7 +26,7 @@ import "./Ownable.sol";
 *   
 */
 
-contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
+contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
     
     // Token Contract
     TokenUJG internal _tokenUJG;
@@ -139,9 +139,9 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
         uint256 attackMultiplicator,
         uint256 rewardPriceMultiplicator
     ) public 
+    Ownable()
     VRFConsumerBase(_VRFCoordinator, _linkToken) 
     ERC721("Ujapista","UJAP")
-    Ownable()
     {
         // Randomness Variables
         keyhash = _keyhash;
@@ -217,7 +217,7 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     */
     function SetRewardMultiplicator(uint256 newRewardMultiplicator) 
     public 
-    OnlyOwner(){
+    OnlyOwner(msg.sender){
         _rewardPriceMultiplicator = newRewardMultiplicator;
     }
 
@@ -239,7 +239,7 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     */
     function SetWearMultiplicator(uint256 newWearMultiplicator) 
     public 
-    OnlyOwner(){
+    OnlyOwner(msg.sender){
         _wearMultiplicator = newWearMultiplicator;
     }
 
@@ -261,7 +261,7 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     */
     function SetAttackPriceMultiplicator(uint256 newAttackMultiplicator) 
     public 
-    OnlyOwner(){
+    OnlyOwner(msg.sender){
         _attackPriceMultiplicator = newAttackMultiplicator;
     }
 
@@ -283,7 +283,7 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     */
     function SetNftPrice(uint256 newNftPrice) 
     public 
-    OnlyOwner(){
+    OnlyOwner(msg.sender){
         _nftPrice = newNftPrice;
     }
 
@@ -327,7 +327,7 @@ contract StudentsNft is ERC721, VRFConsumerBase, Ownable{
     */
     function SetCoolDownTime(uint32 coolDownTime) 
     public 
-    OnlyOwner(){
+    OnlyOwner(msg.sender){
         _coolDownTime = coolDownTime;
     }
 

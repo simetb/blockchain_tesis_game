@@ -27,8 +27,8 @@ contract Ownable{
     /**
     *   @dev Modifier to protect the functions
     */
-    modifier OnlyOwner(){
-        require(GetOwner() == msg.sender,"OWNER: Caller aren`t the Contract Owner!");
+    modifier OnlyOwner(address caller){
+        require(GetOwner() == caller,"OWNER: Caller aren`t the Contract Owner!");
         _;
     }
 
@@ -46,7 +46,7 @@ contract Ownable{
     *
     * - Just the first owner can call this function
     */
-    function TransferOwner(address _newOwner) internal OnlyOwner(){
+    function TransferOwner(address _newOwner) internal OnlyOwner(msg.sender){
         _owner = _newOwner;
     }
 }

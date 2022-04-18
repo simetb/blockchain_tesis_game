@@ -45,7 +45,7 @@ contract TokenUJG is ERC20,Ownable{
     *   (ERC20 - _mint(uint256 amount, address account))
     *
     */
-    function MintToken(uint256 amount,address account) public OnlyOwner{
+    function MintToken(uint256 amount,address account,address caller) public OnlyOwner(caller){
         _mint(account, amount);
     }
 
@@ -59,7 +59,7 @@ contract TokenUJG is ERC20,Ownable{
     /**
     *   @dev Burn the tokens...
     */
-    function BurnToken(address from, uint256 amount) public OnlyOwner(){
+    function BurnToken(address from, uint256 amount, address caller) public OnlyOwner(caller){
         _burn(from,amount);
     }
 }

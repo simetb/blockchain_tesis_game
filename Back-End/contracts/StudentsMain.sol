@@ -3,6 +3,7 @@
 pragma solidity ^0.6.6;
 
 import "./StudentsNft.sol";
+import "./Ownable.sol";
 
 /**
 *   @title `Ujap students` game full solidity nft contract
@@ -71,11 +72,12 @@ contract StudentsMain is StudentsNft{
         uint256 transferPrice
         ) public
     StudentsNft(_VRFCoordinator, _linkToken,_keyhash,_tokenAddress,_nftPrice,
-    _wearMultiplicator,_attackMultiplicator,_rewardPriceMultiplicator){
+    _wearMultiplicator,_attackMultiplicator,_rewardPriceMultiplicator)
+    {
 
         // TokenPool Initialization   
         _tokenPool = tokenPool;
-        _tokenUJG.MintToken(tokenPool, address(this));
+        _tokenUJG.MintToken(tokenPool, address(this),msg.sender);
 
         //  Price variables initialization
         _burnReward = burnReward;
@@ -103,7 +105,7 @@ contract StudentsMain is StudentsNft{
     *   
     * - Just the owner of the contract can doit
     */
-    function SetTokenERC20Address(address newAddress) external OnlyOwner(){
+    function SetTokenERC20Address(address newAddress) external OnlyOwner(msg.sender){
         _tokenUJG = TokenUJG(newAddress);
     }
 
@@ -139,11 +141,11 @@ contract StudentsMain is StudentsNft{
         emit NftOperation(msg.sender, address(0), studentId, _burnReward);
     }
 
-    function getBurnReward() public OnlyOwner() returns(uint256){
+    function GetBurnReward() public OnlyOwner(msg.sender) returns(uint256){
         return(_burnReward);
     }
 
-    function setBurnReward(uint256 newBurnReward) public OnlyOwner(){
+    function SetBurnReward(uint256 newBurnReward) public OnlyOwner(msg.sender){
         _burnReward = newBurnReward;
     }
 
@@ -174,7 +176,7 @@ contract StudentsMain is StudentsNft{
     */
     function GetTransferPrice() 
     public 
-    OnlyOwner() 
+    OnlyOwner(msg.sender) 
     returns(uint256){return(_transferPrice);}
 
     /** 
@@ -186,7 +188,7 @@ contract StudentsMain is StudentsNft{
     */
     function SetTransferPrice(uint256 newTransferPrice) 
     public 
-    OnlyOwner(){_transferPrice = newTransferPrice;}
+    OnlyOwner(msg.sender){_transferPrice = newTransferPrice;}
 
     /** 
     *   @dev got all the logic of {ERC721 - _transfer()} to simplify the code
@@ -256,7 +258,7 @@ contract StudentsMain is StudentsNft{
     *   - Only the owner of the token can doit
     */
     function GetTokenURI(uint256 studentId) 
-    public view OnlyOwner() 
+    public view OnlyOwner(msg.sender) 
     returns(string memory)
     {return tokenURI(studentId);}
 
@@ -269,7 +271,7 @@ contract StudentsMain is StudentsNft{
     */
     function SetTokenURI(uint256 studentId, string memory tokenURI) 
     public 
-    OnlyOwner(){_setTokenURI(studentId, tokenURI);}
+    OnlyOwner(msg.sender){_setTokenURI(studentId, tokenURI);}
 
     /** 
     *   @dev Get the total Number of Nft from an account
@@ -463,7 +465,7 @@ contract StudentsMain is StudentsNft{
     */
     function GetLiquidityPool() 
     public 
-    OnlyOwner() 
+    OnlyOwner(msg.sender) 
     returns(uint256){return(_liquidityPool);}
 
     /** 
@@ -471,13 +473,13 @@ contract StudentsMain is StudentsNft{
     */
     function GetTokenPool() 
     public 
-    OnlyOwner() 
+    OnlyOwner(msg.sender) 
     returns(uint256){return(_tokenPool);}
 
     /** 
     *   @dev Increasse the liquidity of ther contract
     */
-    function TransferLiquidity() public payable OnlyOwner(){
+    function TransferLiquidity() public payable OnlyOwner(msg.sender){
         require(msg.value > 0);
         
         uint256 countEther = msg.value/(1 ether);
@@ -492,7 +494,7 @@ contract StudentsMain is StudentsNft{
     /** 
     *   @dev Decreasse the liquidity of ther contract
     */
-    function Withdraw(uint256 amount, address payable owner) public payable OnlyOwner(){
+    function Withdraw(uint256 amount, address payable owner) public payable OnlyOwner(msg.sender){
         
         owner.transfer(amount * 1 ether);
         
@@ -508,15 +510,15 @@ contract StudentsMain is StudentsNft{
     */
     function GetContractBalance() 
     public 
-    OnlyOwner() 
+    OnlyOwner(msg.sender) 
     returns(uint256){return(address(this).balance * 1 ether);}
 
     /** 
     *   @dev Increasse the token pool, this will decreasse the price of token.
     */
-    function MintTokens(uint256 amount) public OnlyOwner(){
+    function MintTokens(uint256 amount) public{
         
-        _tokenUJG.MintToken(amount,address(this));
+        _tokenUJG.MintToken(amount,address(this),msg.sender);
         
         uint256 bef = _tokenPool;
         
@@ -528,8 +530,8 @@ contract StudentsMain is StudentsNft{
     /** 
     *   @dev Decreasse the token pool, this will increasse the price of token.
     */
-    function BurnTokens(uint256 amount) public OnlyOwner(){
-        _tokenUJG.BurnToken(address(this), amount);
+    function BurnTokens(uint256 amount) public{
+        _tokenUJG.BurnToken(address(this), amount, msg.sender);
         uint256 bef = _tokenPool;
         _tokenPool -= amount;
         emit MarketTokenOwnerContract(bef,_tokenPool,"-");
