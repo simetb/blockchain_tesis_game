@@ -1,7 +1,8 @@
 # NFT CHARACTER METADATA
 METADATA_TEMPLATE = {
     "level": 0,
-    "name":"",
+    "name":" ",
+    "id":0,
     "skills":[
         {
             "skill_type":"intelligence",
@@ -11,5 +12,6 @@ METADATA_TEMPLATE = {
             "skill_type":"cheat",
             "level":0
         }
-    ]
+    ],
+    "imageUrl":" "
 }

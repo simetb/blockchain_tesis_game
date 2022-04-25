@@ -26,11 +26,13 @@ contract StudentsMain is StudentsNft{
     /** 
     *   @dev Events of the contract to js
     */
-    event MarketToken(address owner, uint256 amount, uint256 etherPrice);
+    event TokenOperation(address from,address to, uint256 amount, uint256 etherPrice);
 
     event MarketTokenOwnerContract(uint256 bef, uint256 aft, string operation);
 
     event NftOperation(address from, address to, uint256 nftId, uint256 amount);
+
+    event ContractBalance(uint256 balance);
     /** 
     *   @dev Control variables to control the price game token
     */
@@ -141,7 +143,7 @@ contract StudentsMain is StudentsNft{
         emit NftOperation(msg.sender, address(0), studentId, _burnReward);
     }
 
-    function GetBurnReward() public OnlyOwner(msg.sender) returns(uint256){
+    function GetBurnReward() public view returns(uint256){
         return(_burnReward);
     }
 
@@ -158,10 +160,11 @@ contract StudentsMain is StudentsNft{
     * - You need to be the owner of the NFT
     * - The nft cannot be in the marketplace
     */
-    function TransferNft(address from, address to, uint256 studentId) public 
-    OnlyOwnerOf(studentId)
-    InMarket(GetStudentIndexById(studentId))
+    function TransferNft(address from, address to, uint256 studentIndex) public 
+    OnlyOwnerOf(studentIndex)
+    InMarket(studentIndex)
     {
+        uint256 studentId =  _students[studentIndex].id;
         _transferUserToContract(_transferPrice, msg.sender);
         _transferLogic(from, to, studentId);
         emit NftOperation(from, to, studentId, _transferPrice);
@@ -175,8 +178,8 @@ contract StudentsMain is StudentsNft{
     * - only the owner cant  do it
     */
     function GetTransferPrice() 
-    public 
-    OnlyOwner(msg.sender) 
+    public
+    view 
     returns(uint256){return(_transferPrice);}
 
     /** 
@@ -228,10 +231,10 @@ contract StudentsMain is StudentsNft{
     }
 
     /** 
-    *   @dev Get the `_students` (NFT) Stats 
+    *   @dev Get the `_students` (NFT) Info 
     *
     */
-    function GetStudentStats(uint256 studentIndex) 
+    function GetStudentInfo(uint256 studentIndex) 
     public 
     view 
     returns(
@@ -239,14 +242,18 @@ contract StudentsMain is StudentsNft{
         uint256,
         uint256,
         string memory,
-        uint32
+        uint32,
+        uint256,
+        bool
         ){
         return(
             _students[studentIndex].level,
             _students[studentIndex].intelligenceLevel,
             _students[studentIndex].cheatLevel,
             _students[studentIndex].name,
-            _students[studentIndex].attackTime
+            _students[studentIndex].attackTime,
+            _students[studentIndex].id,
+            _students[studentIndex].market
         );
     }
 
@@ -255,7 +262,6 @@ contract StudentsMain is StudentsNft{
     *
     *   Requirements: 
     *   
-    *   - Only the owner of the token can doit
     */
     function GetTokenURI(uint256 studentId) 
     public view OnlyOwner(msg.sender) 
@@ -267,11 +273,10 @@ contract StudentsMain is StudentsNft{
     *
     *   Requirements: 
     *   
-    *   - Only the owner of the token can doit
     */
     function SetTokenURI(uint256 studentId, string memory tokenURI) 
     public 
-    OnlyOwner(msg.sender){_setTokenURI(studentId, tokenURI);}
+   {_setTokenURI(studentId, tokenURI);}
 
     /** 
     *   @dev Get the total Number of Nft from an account
@@ -296,6 +301,18 @@ contract StudentsMain is StudentsNft{
     public 
     view 
     returns(uint256){return(_market.length);}
+
+    function GetNftInMarket(uint256 marketIndex)
+    public
+    view
+    returns(
+        uint256,
+        uint256,
+        address){return(
+            _market[marketIndex].id,
+            _market[marketIndex].price,
+            _market[marketIndex].owner);
+        }
 
     /** 
     *   @dev Get the student index by the id
@@ -336,8 +353,8 @@ contract StudentsMain is StudentsNft{
     function PutInMarket(uint256 studentIndex, uint256 price) 
     public 
     OnlyOwnerOf(studentIndex)
-    EnoughToken(msg.sender, 10){
-        _transferUserToContract(10, msg.sender);
+    EnoughToken(msg.sender, 10 * 1 ether){
+        _transferUserToContract(10 * 1 ether, msg.sender);
         
         _market.push(
             StudentMarket(
@@ -348,7 +365,7 @@ contract StudentsMain is StudentsNft{
         );
         _students[studentIndex].market = true;
         
-        emit NftOperation(msg.sender, address(this), _students[studentIndex].id, 10);
+        emit NftOperation(msg.sender, address(this), _students[studentIndex].id, 10 * 1 ether);
     }
 
     /** 
@@ -359,11 +376,12 @@ contract StudentsMain is StudentsNft{
     *
     * - U need to have the enough amount of token in your wallet
     */
-    function BuyMarket(uint256 amount, uint256 marketIndex) 
+    function BuyMarket(uint256 marketIndex) 
     public 
-    EnoughToken(msg.sender,amount)
+    EnoughToken(msg.sender,_market[marketIndex].price)
     MarketExist(_market[marketIndex].id){
-        
+        uint256 amount = _market[marketIndex].price;
+
         address owner = _market[marketIndex].owner;
     
         uint256 indexNft = GetStudentIndexById(_market[marketIndex].id);
@@ -388,16 +406,19 @@ contract StudentsMain is StudentsNft{
     *
     * - U need to have the enough amount of token in your wallet
     */
-    function GetOutMarket(uint256 nftId) 
+    function GetOutMarket(uint256 studentIndex) 
     public 
-    OnlyOwnerOf(nftId)
-    EnoughToken(msg.sender, 10)
-    MarketExist(nftId){
+    OnlyOwnerOf(studentIndex)
+    EnoughToken(msg.sender, 10 * 1 ether)
+    MarketExist(_students[studentIndex].id){
+
+        uint256 nftId = _students[studentIndex].id;
+
         uint256 marketIndex = GetMarketIndexById(nftId);
 
         address owner = _market[marketIndex].owner;
         
-        _transferUserToContract(10, owner);
+        _transferUserToContract(10 * 1 ether, owner);
         
         uint256 indexNft = GetStudentIndexById(_market[marketIndex].id); 
 
@@ -405,7 +426,7 @@ contract StudentsMain is StudentsNft{
 
         delete _market[marketIndex];
 
-        emit NftOperation(msg.sender, msg.sender, _market[marketIndex].id, 10);
+        emit NftOperation(msg.sender, msg.sender, _market[marketIndex].id, 10 * 1 ether);
     }
 
     /**
@@ -417,18 +438,16 @@ contract StudentsMain is StudentsNft{
     *
     *   You need to have the full price in ether in the transfer
     */
-    function BuyToken(uint256 amount) public payable{
-        require(msg.value >= (amount * (GetTokenPrice())));
+    function BuyToken(uint256 amount, uint256 price) external payable{
+        require(msg.value >= ((amount * price)/1 ether));
         
         _tokenUJG.TransferToken(address(this), msg.sender, amount);
        
-        uint256 countEther = msg.value/(1 ether);
-        
-        _liquidityPool += countEther;
+        _liquidityPool += msg.value;
         
         _tokenPool -= amount;
         
-        emit MarketToken(msg.sender, amount, amount * (GetTokenPrice()));
+        emit TokenOperation(msg.sender,address(this), amount, (amount * price)/ 1 ether);
     }
 
     /**
@@ -440,40 +459,47 @@ contract StudentsMain is StudentsNft{
     *
     *   You need to have the full amount of token y your wallet
     */
-    function SellToken(uint256 amount) public payable EnoughToken(msg.sender, amount){
-        uint256 total = (GetTokenPrice() * amount);
+    function SellToken(uint256 amount,uint256 price) external payable EnoughToken(msg.sender, amount){
+        uint256 total = ((price * amount)/1 ether);
         
         _transferUserToContract(amount, msg.sender);
         
-        msg.sender.transfer(total * 1 ether);
+        msg.sender.transfer(total);
         
         _liquidityPool -= total;
+
+        _tokenPool +=amount;
         
-        emit MarketToken(msg.sender, amount, amount * (GetTokenPrice()));
+        emit TokenOperation(address(this),msg.sender, amount,  (amount * price)/ 1 ether);
     }
 
     /**
-    *   @dev Get the actual token price 
+    *   @dev Transfer the tokens from one account to another, this will reduce 
+    *   the account of the sender and increase the account of the receiver
+    *
+    * - Requirements:
+    *
+    *   You need to have the full amount of token y your wallet
     */
-    function GetTokenPrice() 
-    public 
-    view 
-    returns(uint256){return(_liquidityPool/_tokenPool);}
+    function TransferToken(address to,uint256 amount) public EnoughToken(msg.sender, amount){
+        _tokenUJG.TransferToken(msg.sender,to,amount);
+        emit TokenOperation(msg.sender,to,amount,0);
+    }
 
     /** 
     *   @dev Get the value of the actual liquidity pool
     */
     function GetLiquidityPool() 
     public 
-    OnlyOwner(msg.sender) 
+    view
     returns(uint256){return(_liquidityPool);}
 
     /** 
     *   @dev Get the value of the actual token pool
     */
     function GetTokenPool() 
-    public 
-    OnlyOwner(msg.sender) 
+    public
+    view 
     returns(uint256){return(_tokenPool);}
 
     /** 
@@ -482,11 +508,9 @@ contract StudentsMain is StudentsNft{
     function TransferLiquidity() public payable OnlyOwner(msg.sender){
         require(msg.value > 0);
         
-        uint256 countEther = msg.value/(1 ether);
-        
         uint256 bef = _liquidityPool;
         
-        _liquidityPool += countEther;
+        _liquidityPool += msg.value;
         
         emit MarketTokenOwnerContract(bef,_liquidityPool,"+");
     }
@@ -496,7 +520,7 @@ contract StudentsMain is StudentsNft{
     */
     function Withdraw(uint256 amount, address payable owner) public payable OnlyOwner(msg.sender){
         
-        owner.transfer(amount * 1 ether);
+        owner.transfer(amount);
         
         uint256 bef = _liquidityPool;
         
@@ -509,9 +533,7 @@ contract StudentsMain is StudentsNft{
     *   @dev Get the contrac balance in eth
     */
     function GetContractBalance() 
-    public 
-    OnlyOwner(msg.sender) 
-    returns(uint256){return(address(this).balance * 1 ether);}
+    public {emit ContractBalance(address(this).balance);}
 
     /** 
     *   @dev Increasse the token pool, this will decreasse the price of token.
@@ -536,4 +558,12 @@ contract StudentsMain is StudentsNft{
         _tokenPool -= amount;
         emit MarketTokenOwnerContract(bef,_tokenPool,"-");
     }
+
+    /** 
+    *   @dev Check the user balance
+    */
+    function TokenBalance(address account)
+    public
+    view
+    returns(uint256){return(_tokenUJG.GetTokenBalance(account));}
 }

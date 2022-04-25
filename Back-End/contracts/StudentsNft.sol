@@ -97,7 +97,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
     *   @dev Events that are used to deploy events in js with the contract
     */
     // Event that get the result of the Attack
-    event ResultAttack(bool win, uint256 powerCharacter, uint256 powerLevel, uint256 wear, uint256 roll);
+    event ResultAttack(bool win, uint256 powerCharacter, uint256 powerLevel, uint256 wear, uint256 roll, uint256 reward);
 
     // Evemt that get the created nft and their stats
     event NftCreated(string name, uint256 level, uint256 intelligenceLevel, uint256 cheatLevel); 
@@ -301,7 +301,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
     function GetTotalAttackPrice(uint256 level)
     public
     view
-    returns(uint256){return(10 * level * _attackPriceMultiplicator);}
+    returns(uint256){return(10 * level * _attackPriceMultiplicator * 1 ether);}
 
     /** 
     *   @dev Get the power level
@@ -317,7 +317,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
     function Reward(uint256 level) 
     public 
     view
-    returns(uint256){(20 * level * _rewardPriceMultiplicator);}
+    returns(uint256){return(20 * level * _rewardPriceMultiplicator * 1 ether);}
     /**
     *   @dev Change the CoolDownTime value
     *   
@@ -482,12 +482,12 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
             _wear(studentIndex,wear);
             uint256 reward = Reward(levelNumber);
             _transferContractToUser(reward, msg.sender);
-            emit ResultAttack(true, totalAttackPower, basePowerLevel,wear,roll);
+            emit ResultAttack(true, totalAttackPower, basePowerLevel,wear,roll,reward);
     
         }else{
             uint256 wear = (basePowerLevel/10)*2;
             _wear(studentIndex,wear);
-            emit ResultAttack(false, totalAttackPower, basePowerLevel,wear,roll);
+            emit ResultAttack(false, totalAttackPower, basePowerLevel,wear,roll,-attackPrice);
         }
 
     }
