@@ -2,12 +2,12 @@ import React from 'react';
 import Image from 'next/image'
 //components
 import { OptionsMenu } from '../components/';
+import { Stars } from '../components/';
 //styles
 import styles from "../styles/components/FresherCard.module.scss";
 //images
 import platform from "../public/img/platform.png";
-//Icons
-import {IoStarOutline, IoStar} from 'react-icons/io5';
+
 
 export default function FresherCard( { fresher } ) {
 
@@ -31,16 +31,7 @@ export default function FresherCard( { fresher } ) {
           <b>Cheats:</b> {fresher.cheats}
         </p>
       </div>
-      <span className={styles.rarity}>
-        {new Array(fresher.rarity).fill(null).map(() => (
-          // eslint-disable-next-line react/jsx-key
-          <IoStar/>
-        ))}
-        {new Array(3 - fresher.rarity).fill(null).map(() => (
-          // eslint-disable-next-line react/jsx-key
-          <IoStarOutline/>
-        ))}
-      </span>
+      <Stars rarity={fresher.rarity}></Stars>
       <div className={styles.platform}>
         <Image src={platform} alt='platform' width={100} height={20}/>
       </div>

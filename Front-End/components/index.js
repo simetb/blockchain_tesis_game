@@ -6,3 +6,4 @@ export { default as FresherCard } from './FresherCard';
 export { default as OptionsMenu } from './OptionsMenu';
 export { default as MintCard } from './MintCard';
 export { default as Counter } from './Counter';
+export { default as Stars } from './Stars';
