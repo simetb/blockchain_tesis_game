@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image'
 //components
-import { OptionsMenu } from '../components/';
+import { OptionsMenu } from '.';
 //styles
 import styles from "../styles/components/FresherCard.module.scss";
 //images
@@ -28,7 +28,7 @@ export default function FresherCard( { fresher } ) {
           <b>Iq:</b> {fresher.iq}
         </p>
         <p>
-          <b>Classes:</b> {fresher.classes}
+          <b>Cheats:</b> {fresher.cheats}
         </p>
       </div>
       <span className={styles.rarity}>
@@ -36,7 +36,7 @@ export default function FresherCard( { fresher } ) {
           // eslint-disable-next-line react/jsx-key
           <IoStar/>
         ))}
-        {new Array(5 - fresher.rarity).fill(null).map(() => (
+        {new Array(3 - fresher.rarity).fill(null).map(() => (
           // eslint-disable-next-line react/jsx-key
           <IoStarOutline/>
         ))}

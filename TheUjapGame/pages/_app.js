@@ -9,14 +9,14 @@ export default function MyApp({ Component, pageProps }) {
   return (
 
     // This layout component receives <Component as a children>
+    <MoralisProvider
+      serverUrl={process.env.NEXT_PUBLIC_SERVER_URL}
+      appId={process.env.NEXT_PUBLIC_APP_ID}
+    >  
       <Layout>
-        <MoralisProvider
-        serverUrl=""
-        appId=""
-        >
           <Component {...pageProps} />
-        </MoralisProvider>
       </Layout>
+    </MoralisProvider>
 
   );
 }

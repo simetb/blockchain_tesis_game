@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "components/Header.jsx"  ],
   "exclude": [
     "node_modules"
   ]
