@@ -1,0 +1,24 @@
+@import '../utils/variables.scss';
+@import '../utils/fonts.scss';
+@import '../utils/mixins.scss';
+
+.wrapper{
+    height: 100%;
+    @include flexbox(column, initial, center);
+
+    h2{
+        width: min(100%, 930px);
+        color: nth($palette,1);
+        font-size: nth($fontSizes,3);
+        margin-bottom: 55px;
+        border-bottom: solid 2px nth($palette,1);
+        padding-left: 35px;
+    }
+
+    .cards{
+        width: min(100%, 930px);
+        @include flexbox(row, initial, center, wrap);
+        gap: 15px;
+        padding-bottom: 15px;
+    }
+}
