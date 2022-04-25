@@ -12,7 +12,7 @@ import { useMoralis } from "react-moralis";
 
 const Header =  () => {
 
-  const { authenticate, isAuthenticated, logout } = useMoralis();
+  const { authenticate, isAuthenticated, logout, account} = useMoralis();
  
   const login = () =>{
     if(!isAuthenticated){
@@ -26,17 +26,33 @@ const Header =  () => {
     }
   }
 
-  return (
-    <div className={styles.header}>
-      <Link href='/' passHref>
-        <Image className={styles.logo} src={logo} alt="Dapp Logo" width={160} height={65}/>
-      </Link>
-      <button onClick={login} className={styles.connect}>
-        <IoWalletOutline className={styles.icon} />
-        <span>Connect</span>
-      </button>
-    </div>
-  );
+  if(!isAuthenticated){
+    return (
+      <div className={styles.header}>
+        <Link href='/' passHref>
+          <Image className={styles.logo} src={logo} alt="Dapp Logo" width={160} height={65}/>
+        </Link>
+        <button onClick={login} className={styles.connect}>
+          <IoWalletOutline className={styles.icon} />
+          <span>Connect</span>
+        </button>
+      </div>
+    );
+  }
+  else{
+    return (
+      <div className={styles.header}>
+        <Link href='/' passHref>
+          <Image className={styles.logo} src={logo} alt="Dapp Logo" width={160} height={65}/>
+        </Link>
+        <button onClick={logOut} className={styles.connect}>
+          <IoWalletOutline className={styles.icon} />
+          <span>{account}</span>
+        </button>
+      </div>
+    );
+  }
+
 
 };
 
