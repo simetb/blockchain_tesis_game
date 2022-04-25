@@ -1,0 +1,8 @@
+@import '../utils/variables.scss';
+
+.rarity {
+    position: absolute;
+    bottom: 15px;
+    right: 45px;
+    color: nth($palette,1);
+}

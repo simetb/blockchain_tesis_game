@@ -23,6 +23,8 @@
         cursor: pointer;
         border-radius: 10px;
         transition: .125s;
+        max-width: 200px;
+        overflow: hidden;
 
         .icon{
             font-size: nth($fontSizes,2);
