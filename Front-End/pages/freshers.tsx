@@ -20,7 +20,7 @@ export const getStaticProps = async () => {
 }
 
 const Freshers = ({ freshers }) => {
-
+  console.log(freshers)
   return (
     <div className={styles.wrapper}>
       <h2>Freshers</h2>
