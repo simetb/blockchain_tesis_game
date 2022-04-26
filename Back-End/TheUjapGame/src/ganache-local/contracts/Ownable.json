@@ -1,0 +1,1301 @@
+{
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "GetOwner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "allSourcePaths": {
+    "19": "contracts/Ownable.sol"
+  },
+  "ast": {
+    "absolutePath": "contracts/Ownable.sol",
+    "exportedSymbols": {
+      "Ownable": [
+        54
+      ]
+    },
+    "id": 55,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".6"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "61:23:19"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": {
+          "id": 2,
+          "nodeType": "StructuredDocumentation",
+          "src": "86:430:19",
+          "text": "   @dev Contract developed to prevent the improper use of some \n   functions in our contracts, providing protection to the owner\n   Description:\n   Project made for the presentation of a university thesis, based on the studies \n   and databases of the blockchain to create a game, made to be run on Kovan Test \n   Blockchain, Local Blockchain and Main Ethereum Blockchain.\n   Author: https://github.com/simetb"
+        },
+        "fullyImplemented": true,
+        "id": 54,
+        "linearizedBaseContracts": [
+          54
+        ],
+        "name": "Ownable",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 4,
+            "mutability": "mutable",
+            "name": "_owner",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 54,
+            "src": "574:22:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 3,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "574:7:19",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "private"
+          },
+          {
+            "body": {
+              "id": 12,
+              "nodeType": "Block",
+              "src": "666:36:19",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 10,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 7,
+                      "name": "_owner",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4,
+                      "src": "676:6:19",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 8,
+                        "name": "msg",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": -15,
+                        "src": "685:3:19",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_magic_message",
+                          "typeString": "msg"
+                        }
+                      },
+                      "id": 9,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "sender",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "685:10:19",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address_payable",
+                        "typeString": "address payable"
+                      }
+                    },
+                    "src": "676:19:19",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 11,
+                  "nodeType": "ExpressionStatement",
+                  "src": "676:19:19"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 13,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 5,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "657:2:19"
+            },
+            "returnParameters": {
+              "id": 6,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "666:0:19"
+            },
+            "scope": 54,
+            "src": "646:56:19",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 27,
+              "nodeType": "Block",
+              "src": "804:100:19",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 22,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "arguments": [],
+                          "expression": {
+                            "argumentTypes": [],
+                            "id": 19,
+                            "name": "GetOwner",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 38,
+                            "src": "822:8:19",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
+                              "typeString": "function () view returns (address)"
+                            }
+                          },
+                          "id": 20,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "822:10:19",
+                          "tryCall": false,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "==",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "id": 21,
+                          "name": "caller",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 16,
+                          "src": "836:6:19",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "822:20:19",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4f574e45523a2043616c6c6572206172656e60742074686520436f6e7472616374204f776e657221",
+                        "id": 23,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "843:42:19",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_44c836b447c24e1670407b372dc003bc7cac4f9ae5df57d4d881c916a844495f",
+                          "typeString": "literal_string \"OWNER: Caller aren`t the Contract Owner!\""
+                        },
+                        "value": "OWNER: Caller aren`t the Contract Owner!"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_44c836b447c24e1670407b372dc003bc7cac4f9ae5df57d4d881c916a844495f",
+                          "typeString": "literal_string \"OWNER: Caller aren`t the Contract Owner!\""
+                        }
+                      ],
+                      "id": 18,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        -18,
+                        -18
+                      ],
+                      "referencedDeclaration": -18,
+                      "src": "814:7:19",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 24,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "814:72:19",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 25,
+                  "nodeType": "ExpressionStatement",
+                  "src": "814:72:19"
+                },
+                {
+                  "id": 26,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "896:1:19"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 14,
+              "nodeType": "StructuredDocumentation",
+              "src": "708:57:19",
+              "text": "   @dev Modifier to protect the functions"
+            },
+            "id": 28,
+            "name": "OnlyOwner",
+            "nodeType": "ModifierDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 17,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 16,
+                  "mutability": "mutable",
+                  "name": "caller",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 28,
+                  "src": "789:14:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 15,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "789:7:19",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "788:16:19"
+            },
+            "src": "770:134:19",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 37,
+              "nodeType": "Block",
+              "src": "1017:31:19",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "components": [
+                      {
+                        "argumentTypes": null,
+                        "id": 34,
+                        "name": "_owner",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4,
+                        "src": "1034:6:19",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "id": 35,
+                    "isConstant": false,
+                    "isInlineArray": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "TupleExpression",
+                    "src": "1033:8:19",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "functionReturnParameters": 33,
+                  "id": 36,
+                  "nodeType": "Return",
+                  "src": "1027:14:19"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 29,
+              "nodeType": "StructuredDocumentation",
+              "src": "910:54:19",
+              "text": "   @dev get the owner of the contract"
+            },
+            "functionSelector": "0ae50a39",
+            "id": 38,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "GetOwner",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 30,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "986:2:19"
+            },
+            "returnParameters": {
+              "id": 33,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 32,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 38,
+                  "src": "1009:7:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 31,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1009:7:19",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1008:9:19"
+            },
+            "scope": 54,
+            "src": "969:79:19",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 52,
+              "nodeType": "Block",
+              "src": "1266:35:19",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 50,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 48,
+                      "name": "_owner",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4,
+                      "src": "1276:6:19",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 49,
+                      "name": "_newOwner",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 41,
+                      "src": "1285:9:19",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "1276:18:19",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 51,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1276:18:19"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 39,
+              "nodeType": "StructuredDocumentation",
+              "src": "1054:135:19",
+              "text": "   @dev Transfer the owner powers\n   Requirements:\n - Just the first owner can call this function"
+            },
+            "id": 53,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "expression": {
+                      "argumentTypes": null,
+                      "id": 44,
+                      "name": "msg",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": -15,
+                      "src": "1255:3:19",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_magic_message",
+                        "typeString": "msg"
+                      }
+                    },
+                    "id": 45,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "memberName": "sender",
+                    "nodeType": "MemberAccess",
+                    "referencedDeclaration": null,
+                    "src": "1255:10:19",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address_payable",
+                      "typeString": "address payable"
+                    }
+                  }
+                ],
+                "id": 46,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 43,
+                  "name": "OnlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 28,
+                  "src": "1245:9:19",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$_t_address_$",
+                    "typeString": "modifier (address)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "1245:21:19"
+              }
+            ],
+            "name": "TransferOwner",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 42,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 41,
+                  "mutability": "mutable",
+                  "name": "_newOwner",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 53,
+                  "src": "1217:17:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 40,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1217:7:19",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1216:19:19"
+            },
+            "returnParameters": {
+              "id": 47,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1266:0:19"
+            },
+            "scope": 54,
+            "src": "1194:107:19",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 55,
+        "src": "517:786:19"
+      }
+    ],
+    "src": "61:1242:19"
+  },
+  "bytecode": "6080604052348015600f57600080fd5b50600080546001600160a01b031916331790556094806100306000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c80630ae50a3914602d575b600080fd5b6033604f565b604080516001600160a01b039092168252519081900360200190f35b6000546001600160a01b03169056fea2646970667358221220451847e6101dba01de3ce4de4c5aed6127aa61371eeadb509d73594b4a17aa2664736f6c634300060c0033",
+  "bytecodeSha1": "2cee0cb6dcb9154bfff0251475ff827b91650e50",
+  "compiler": {
+    "evm_version": "istanbul",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "version": "0.6.12+commit.27d51765"
+  },
+  "contractName": "Ownable",
+  "coverageMap": {
+    "branches": {
+      "19": {}
+    },
+    "statements": {
+      "19": {
+        "Ownable.GetOwner": {
+          "0": [
+            1027,
+            1041
+          ]
+        }
+      }
+    }
+  },
+  "dependencies": [],
+  "deployedBytecode": "6080604052348015600f57600080fd5b506004361060285760003560e01c80630ae50a3914602d575b600080fd5b6033604f565b604080516001600160a01b039092168252519081900360200190f35b6000546001600160a01b03169056fea2646970667358221220451847e6101dba01de3ce4de4c5aed6127aa61371eeadb509d73594b4a17aa2664736f6c634300060c0033",
+  "deployedSourceMap": "517:786:19:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;969:79;;;:::i;:::-;;;;-1:-1:-1;;;;;969:79:19;;;;;;;;;;;;;;;1009:7;1034:6;-1:-1:-1;;;;;1034:6:19;969:79;:::o",
+  "language": "Solidity",
+  "natspec": {
+    "details": "Contract developed to prevent the improper use of some    functions in our contracts, providing protection to the owner   Description:   Project made for the presentation of a university thesis, based on the studies    and databases of the blockchain to create a game, made to be run on Kovan Test    Blockchain, Local Blockchain and Main Ethereum Blockchain.   Author: https://github.com/simetb",
+    "kind": "dev",
+    "methods": {
+      "GetOwner()": {
+        "details": "get the owner of the contract"
+      }
+    },
+    "version": 1
+  },
+  "offset": [
+    517,
+    1303
+  ],
+  "opcodes": "PUSH1 0x80 PUSH1 0x40 MSTORE CALLVALUE DUP1 ISZERO PUSH1 0xF JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH1 0x4 CALLDATASIZE LT PUSH1 0x28 JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0xAE50A39 EQ PUSH1 0x2D JUMPI JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH1 0x33 PUSH1 0x4F JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH1 0x0 SLOAD PUSH1 0x1 PUSH1 0x1 PUSH1 0xA0 SHL SUB AND SWAP1 JUMP INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 GASLIMIT XOR SELFBALANCE 0xE6 LT SAR 0xBA ADD 0xDE EXTCODECOPY 0xE4 0xDE 0x4C GAS 0xED PUSH2 0x27AA PUSH2 0x371E 0xEA 0xDB POP SWAP14 PUSH20 0x594B4A17AA2664736F6C634300060C0033000000 ",
+  "pcMap": {
+    "0": {
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0x80"
+    },
+    "2": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0x40"
+    },
+    "4": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "MSTORE",
+      "path": "19"
+    },
+    "5": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "CALLVALUE",
+      "path": "19"
+    },
+    "6": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "DUP1",
+      "path": "19"
+    },
+    "7": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "ISZERO",
+      "path": "19"
+    },
+    "8": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0xF"
+    },
+    "10": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "JUMPI",
+      "path": "19"
+    },
+    "11": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0x0"
+    },
+    "13": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "DUP1",
+      "path": "19"
+    },
+    "14": {
+      "dev": "Cannot send ether to nonpayable function",
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "REVERT",
+      "path": "19"
+    },
+    "15": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "JUMPDEST",
+      "path": "19"
+    },
+    "16": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "POP",
+      "path": "19"
+    },
+    "17": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0x4"
+    },
+    "19": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "CALLDATASIZE",
+      "path": "19"
+    },
+    "20": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "LT",
+      "path": "19"
+    },
+    "21": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0x28"
+    },
+    "23": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "JUMPI",
+      "path": "19"
+    },
+    "24": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0x0"
+    },
+    "26": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "CALLDATALOAD",
+      "path": "19"
+    },
+    "27": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0xE0"
+    },
+    "29": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "SHR",
+      "path": "19"
+    },
+    "30": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "DUP1",
+      "path": "19"
+    },
+    "31": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "PUSH4",
+      "path": "19",
+      "value": "0xAE50A39"
+    },
+    "36": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "EQ",
+      "path": "19"
+    },
+    "37": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0x2D"
+    },
+    "39": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "JUMPI",
+      "path": "19"
+    },
+    "40": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "JUMPDEST",
+      "path": "19"
+    },
+    "41": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0x0"
+    },
+    "43": {
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "DUP1",
+      "path": "19"
+    },
+    "44": {
+      "first_revert": true,
+      "fn": null,
+      "offset": [
+        517,
+        1303
+      ],
+      "op": "REVERT",
+      "path": "19"
+    },
+    "45": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "JUMPDEST",
+      "path": "19"
+    },
+    "46": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0x33"
+    },
+    "48": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0x4F"
+    },
+    "50": {
+      "fn": "Ownable.GetOwner",
+      "jump": "i",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "JUMP",
+      "path": "19"
+    },
+    "51": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "JUMPDEST",
+      "path": "19"
+    },
+    "52": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0x40"
+    },
+    "54": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "DUP1",
+      "path": "19"
+    },
+    "55": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "MLOAD",
+      "path": "19"
+    },
+    "56": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "58": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "60": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "62": {
+      "op": "SHL"
+    },
+    "63": {
+      "op": "SUB"
+    },
+    "64": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "SWAP1",
+      "path": "19"
+    },
+    "65": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "SWAP3",
+      "path": "19"
+    },
+    "66": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "AND",
+      "path": "19"
+    },
+    "67": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "DUP3",
+      "path": "19"
+    },
+    "68": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "MSTORE",
+      "path": "19"
+    },
+    "69": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "MLOAD",
+      "path": "19"
+    },
+    "70": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "SWAP1",
+      "path": "19"
+    },
+    "71": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "DUP2",
+      "path": "19"
+    },
+    "72": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "SWAP1",
+      "path": "19"
+    },
+    "73": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "SUB",
+      "path": "19"
+    },
+    "74": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0x20"
+    },
+    "76": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "ADD",
+      "path": "19"
+    },
+    "77": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "SWAP1",
+      "path": "19"
+    },
+    "78": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "RETURN",
+      "path": "19"
+    },
+    "79": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "JUMPDEST",
+      "path": "19"
+    },
+    "80": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        1009,
+        1016
+      ],
+      "op": "PUSH1",
+      "path": "19",
+      "value": "0x0"
+    },
+    "82": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        1034,
+        1040
+      ],
+      "op": "SLOAD",
+      "path": "19",
+      "statement": 0
+    },
+    "83": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "85": {
+      "op": "PUSH1",
+      "value": "0x1"
+    },
+    "87": {
+      "op": "PUSH1",
+      "value": "0xA0"
+    },
+    "89": {
+      "op": "SHL"
+    },
+    "90": {
+      "op": "SUB"
+    },
+    "91": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        1034,
+        1040
+      ],
+      "op": "AND",
+      "path": "19"
+    },
+    "92": {
+      "fn": "Ownable.GetOwner",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "SWAP1",
+      "path": "19"
+    },
+    "93": {
+      "fn": "Ownable.GetOwner",
+      "jump": "o",
+      "offset": [
+        969,
+        1048
+      ],
+      "op": "JUMP",
+      "path": "19"
+    }
+  },
+  "sha1": "98cd6f629e07a7ac24360a0e71f09816743cbd2d",
+  "source": "// contracts/StudentsNft.sol\n// SPDX-License-Identifier: MIT\npragma solidity ^0.6.6;\n\n/** \n*   @dev Contract developed to prevent the improper use of some \n*   functions in our contracts, providing protection to the owner\n*\n*   Description:\n*\n*   Project made for the presentation of a university thesis, based on the studies \n*   and databases of the blockchain to create a game, made to be run on Kovan Test \n*   Blockchain, Local Blockchain and Main Ethereum Blockchain.\n*\n*   Author: https://github.com/simetb\n*/\ncontract Ownable{\n    \n    // Contract owner address\n    address private _owner;\n    \n    // First Run `_owner` = msg.sender\n    constructor() public{\n        _owner = msg.sender;\n    }\n\n    /**\n    *   @dev Modifier to protect the functions\n    */\n    modifier OnlyOwner(address caller){\n        require(GetOwner() == caller,\"OWNER: Caller aren`t the Contract Owner!\");\n        _;\n    }\n\n    /** \n    *   @dev get the owner of the contract\n    */\n    function GetOwner() public view returns(address){\n        return(_owner);\n    }\n\n    /**\n    *   @dev Transfer the owner powers\n    *\n    *   Requirements:\n    *\n    * - Just the first owner can call this function\n    */\n    function TransferOwner(address _newOwner) internal OnlyOwner(msg.sender){\n        _owner = _newOwner;\n    }\n}",
+  "sourceMap": "517:786:19:-:0;;;646:56;;;;;;;;;-1:-1:-1;676:6:19;:19;;-1:-1:-1;;;;;;676:19:19;685:10;676:19;;;517:786;;;;;;",
+  "sourcePath": "contracts/Ownable.sol",
+  "type": "contract"
+}

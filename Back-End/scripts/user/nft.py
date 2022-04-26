@@ -1,6 +1,5 @@
 from scripts.helpful_scripts import *
 from brownie import(StudentsMain)
-from scripts.create_metadata import create_metadata
 
 
 def nft_option(account):
@@ -25,14 +24,12 @@ def nft_option(account):
     else:
         print("We cannot found a deployed contract")
 
-
 def create_nft(contract,account):
     tx = contract.CreateNftStudent({"from":account})
     tx.wait(1)
     print("Random NFT Created!")
     print(f"You have: {contract.GetNumbersNft(account)} Students Minted")
     print(tx.events["NftCreated"])
-    #create_metadata()
 
 def burn_nft(contract,account):
     print(contract.GetStudentsByOwner(account))

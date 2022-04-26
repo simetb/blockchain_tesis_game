@@ -1,0 +1,52 @@
+@import '../utils/variables.scss';
+@import '../utils/fonts.scss';
+@import '../utils/mixins.scss';
+
+.card {
+    width: min(100%, 300px);
+    position: relative;
+    padding: 20px;
+    height: 200px;
+    background-color: nth($palette, 5);
+    @include flexbox(column, initial, initial);
+    border-radius: 20px;
+    filter: drop-shadow(4px 4px 2px rgba(0, 0, 0, 0.5));
+    cursor: pointer;
+
+    .title {
+        width: 100%;
+        padding: 2.5px;
+        padding-left: 25px;
+        font-size: nth($fontSizes,2);
+        font-weight: 700;
+        border-bottom: solid 2px nth($palette,1);
+    }
+
+    .identity {
+        font-size: 12px;
+        padding-left: 26px;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .info {
+        margin-left: 10px;
+        p{
+            margin-bottom: 5px;
+        }
+    }
+
+    .fresher, .platform {
+        position: absolute;
+        bottom: 35px;
+        right: 20px;
+    }
+
+    .rarity {
+        position: absolute;
+        bottom: 15px;
+        right: 45px;
+        color: nth($palette,1);
+    }
+
+}

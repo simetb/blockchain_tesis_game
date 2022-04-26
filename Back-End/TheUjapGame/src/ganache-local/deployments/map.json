@@ -1,0 +1,16 @@
+{
+  "5777": {
+    "LinkToken": [
+      "0x6e0dFfD8eFE568e16f11B875Adda5E9ff0737629"
+    ],
+    "StudentsMain": [
+      "0x1279854B2f90E8B4aA92D861271A6DBD51AC6cD7"
+    ],
+    "TokenUJG": [
+      "0x18dE1D32Bab085D6269895E3a0b14604Ff0D0eF7"
+    ],
+    "VRFCoordinatorMock": [
+      "0x9fDa4EBFEC167044ab6df37ff1FD427D97FB4559"
+    ]
+  }
+}

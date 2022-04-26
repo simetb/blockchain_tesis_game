@@ -1,6 +1,10 @@
 from brownie import StudentsMain,TokenUJG, config, network
 from scripts.helpful_scripts import *;
 from scripts.texts import *;
+import yaml
+import json
+import os
+import shutil
 
 # Default Contract Game Variables
 NFT_PRICE = 100 * 10 ** 18
@@ -127,7 +131,27 @@ def deploy_contracts(account):
 
         line_space()
 
+        update_front_end()
+
         return contract_owner
     else:
         print("\nYOU NEED TO HAVE AN ACCOUNT SELECTED!")
         line_space()
+
+
+def update_front_end():
+    # Send the build folder
+    copy_folders_to_front_end("./build", f"./TheUjapGame/src/{network.show_active()}")
+
+    # Sending the front end our config in JSON format
+    with open("brownie-config.yaml", "r") as brownie_config:
+        config_dict = yaml.load(brownie_config, Loader=   yaml.FullLoader)
+        with open("./TheUjapGame/src/brownie-config.json", "w") as brownie_config_json:
+            json.dump(config_dict, brownie_config_json)
+    print("Front end updated!")
+
+
+def copy_folders_to_front_end(src, dest):
+    if os.path.exists(dest):   
+        shutil.rmtree(dest)
+    shutil.copytree(src, dest)
