@@ -45,6 +45,7 @@ const Header =  () => {
         <Link href='/' passHref>
           <Image className={styles.logo} src={logo} alt="Dapp Logo" width={160} height={65}/>
         </Link>
+        <span>UJG IN YOUR WALLET:(FUNCTION AMOUNT UJG)</span>
         <button onClick={logOut} className={styles.connect}>
           <IoWalletOutline className={styles.icon} />
           <span>Working</span>
