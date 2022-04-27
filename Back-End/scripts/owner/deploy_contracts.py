@@ -57,8 +57,6 @@ def custom_state_variables():
             print("Execution Error...")
 
 def deploy_contracts(account):
-     
-
     if account:
         # Default Values
         nft_price =  NFT_PRICE
@@ -70,70 +68,76 @@ def deploy_contracts(account):
         transfer_price = TRANSFER_PRICE
 
         line_space()
-        option = select_option(["Yes","No"],"Enter Custom Deploy values?")
-        
+        option = select_option(["Last Contract","New Deploy"],"Select the last contract or deploy a new one")
+        line_space()
+
         if option == 1:
-            nft_price,burnw_reward,token_pool,transfer_price,wear_multiplicator,attack_multiplicator,reward_multiplicator = custom_state_variables()
-
-        line_space()
-        print(f"DEPLOYING CONTRACT IN {network.show_active()} network")
-        line_space()
-        # Token Contract - {ERC20} {Ownable}
-        token_ERC20 = TokenUJG.deploy(
-            {"from":account}
-        )
-
-        # Nft Main Contract - {StudentsNft}
-        # {StudentsNft} - {ERC721} {VRFConsumerBase} {Ownable}
-        """
-            Constructor solidity ref:
+            return "Selected Last Contrac Owner"
+        else:
+            option = select_option(["Yes","No"],"Enter Custom Deploy values?")
             
-            - address _VRFCoordinator 
-            - address _linkToken 
-            - bytes32 _keyhash 
-            - address _tokenAddress
-            - uint256 nftPrice
-            - uint256 wearMultiplicator
-            - uint256 attackMultiplicator
-            - uint256 rewardPriceMultiplicator
-            - uint256 tokenPool,
-            - uint256 burnReward,
-            - uint256 transferPrice
+            if option == 1:
+                nft_price,burn_reward,token_pool,transfer_price,wear_multiplicator,attack_multiplicator,reward_multiplicator = custom_state_variables()
 
-        """
-        main_contract = StudentsMain.deploy(
-            get_contract("vrf_coordinator",account).address,
-            get_contract("link_token",account).address,
-            config["networks"][network.show_active()]["keyhash"],
-            token_ERC20.address,
-            nft_price,
-            wear_multiplicator,
-            attack_multiplicator,
-            reward_multiplicator,
-            token_pool,
-            burn_reward,
-            transfer_price,
-            {"from":account}
-        )
+            line_space()
+            print(f"DEPLOYING CONTRACT IN {network.show_active()} network")
+            line_space()
+            # Token Contract - {ERC20} {Ownable}
+            token_ERC20 = TokenUJG.deploy(
+                {"from":account}
+            )
 
-        contract_owner = account
+            # Nft Main Contract - {StudentsNft}
+            # {StudentsNft} - {ERC721} {VRFConsumerBase} {Ownable}
+            """
+                Constructor solidity ref:
+                
+                - address _VRFCoordinator 
+                - address _linkToken 
+                - bytes32 _keyhash 
+                - address _tokenAddress
+                - uint256 nftPrice
+                - uint256 wearMultiplicator
+                - uint256 attackMultiplicator
+                - uint256 rewardPriceMultiplicator
+                - uint256 tokenPool,
+                - uint256 burnReward,
+                - uint256 transferPrice
 
-        fund_with_link(main_contract,account)
+            """
+            main_contract = StudentsMain.deploy(
+                get_contract("vrf_coordinator",account).address,
+                get_contract("link_token",account).address,
+                config["networks"][network.show_active()]["keyhash"],
+                token_ERC20.address,
+                nft_price,
+                wear_multiplicator,
+                attack_multiplicator,
+                reward_multiplicator,
+                token_pool,
+                burn_reward,
+                transfer_price,
+                {"from":account}
+            )
 
-        line_space()
-        print(f"Contracts Owner - {token_ERC20.GetOwner()}")
-        
-        print(f"You can see the Contract Token Address: {token_ERC20.address} in {network.show_active()}")
+            contract_owner = account
 
-        print(f"You can see the Contract MainContract Address: {main_contract.address} in {network.show_active()}")
+            fund_with_link(main_contract,account)
 
-        print("- WARNING! - The actual main contract doesn't have any ETH funded, Please fund some ETH to get a initial token price")
+            line_space()
+            print(f"Contracts Owner - {token_ERC20.GetOwner()}")
+            
+            print(f"You can see the Contract Token Address: {token_ERC20.address} in {network.show_active()}")
 
-        line_space()
+            print(f"You can see the Contract MainContract Address: {main_contract.address} in {network.show_active()}")
 
-        update_front_end()
+            print("- WARNING! - The actual main contract doesn't have any ETH funded, Please fund some ETH to get a initial token price")
 
-        return contract_owner
+            line_space()
+
+            update_front_end()
+
+            return contract_owner
     else:
         print("\nYOU NEED TO HAVE AN ACCOUNT SELECTED!")
         line_space()

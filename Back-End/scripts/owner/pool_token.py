@@ -38,6 +38,6 @@ def info_token(contract):
     tokenPool = contract.GetTokenPool()/10**18
     liquidity = contract.GetLiquidityPool()/10**18
     print(f"Contract Balance - {contract.GetTokenPool()/10**18}UJG")
-    print(f"Contract Balance - {contract.GetLiquidityPool()/10**18}UJG")
+    print(f"Contract Balance - {contract.GetLiquidityPool()/10**18}ETH")
     print(f"Token Price: 1 UJP = {liquidity/tokenPool}ETH")
     pass
