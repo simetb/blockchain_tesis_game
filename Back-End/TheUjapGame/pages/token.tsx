@@ -3,19 +3,27 @@ import { useMoralis, useWeb3ExecuteFunction } from 'react-moralis'
 import ABI from '../src/ganache-local/contracts/StudentsMain.json'
 
 export default function nft() {
-
+  // Const Hooks that are used for get the token info
+  //
+  // amount, check the amount of tokens that you going to sell or buy
+  // liquidity, save the liquidity of the contract in ETH (18 decimals)
+  // tokenPool, save the amount of token in the tokenPool in ETH(18 decimals)
+  // price, act the real price of token and avoid any BigNumber error
+  // userTokens, get the amount of tokens in the user wallet
   const [amount,setAmount] = useState(0);
   const [liquidity,setLiquidity] = useState(0);
-  const [pool,setPool] = useState(0);
+  const [tokenPool,setTokenPool] = useState(0);
   const [price,setPrice] = useState(0);
-  const [token,setToken] = useState(0);
+  const [userTokens,setUserToken] = useState(0);
 
+  // Const Hooks Moralis
   const { Moralis, account } = useMoralis();
   const contractProcessor = useWeb3ExecuteFunction();
 
-  const contractAddress = "0xdE73727780e8697bB4e820260A57F9769cb6f26e";
+  // Contract address...(Replace for and .env variable)
+  const contractAddress = "0x65F677E297564CBBB86A65171792a442F17a63B5";
 
-  // Change the Amount
+  // Change the Amount of total tokens to buy or sell
   const changeAmount = (e) =>{
     let fullAmount:number;
     if(e.target.value){
@@ -26,8 +34,15 @@ export default function nft() {
     setAmount(fullAmount)
   }
 
-  // Function to Buy tokens Requirements - Signed Metamask User
+  // Function to Buy tokens (Payable Function)
+  //
+  // Requirements: 
+  //
+  //- Signed Metamask User
   const buyTokens = async () =>{
+    // Options of the contract function
+    // Amount(In WEI)
+    // Price(In Wei)
     let options = {
       contractAddress: contractAddress,
       functionName: 'BuyToken',
@@ -39,15 +54,18 @@ export default function nft() {
         msgValue: Moralis.Units.ETH(price * amount)
      }
 
+    // Call the function from the Blockchain
     await contractProcessor.fetch({
       params:options,
       onSuccess: () =>{
+        // On Success the Operation => Do Someting?
         console.log("Tokens Buyed - Do Something")
       }
     })
   }
 
-  // Function to solve BigNumber Object
+  // Function to solve BigNumber Object and avoid Errors in contract
+  // If the value is not an BigNumber Object return the entry value
   const HexToDec = (val: any) =>{
     if(val?._isBigNumber){
       return parseInt(val._hex, 16)
@@ -56,30 +74,37 @@ export default function nft() {
     }
   }
 
-  // Function to Act / Get the Price Requirements - Signed Metamask User
+  // Function to Act / Get the Price, to get the price is liquidityPool/tokenPool
+  // 
+  // Requirements 
+  //
+  // - Signed Metamask User
   const getPrice = async () =>{
 
-    console.log("Im here in ActPrice");
+    // Options from contract function GetTokenPool
     let options = {
       contractAddress: contractAddress,
       functionName: 'GetTokenPool',
       abi : ABI.abi
     }
 
+    // Get the tokenPool
     contractProcessor.fetch({
       params:options,
       onSuccess: async(value) =>{
         let data = HexToDec(value);
-        setPool(Math.round(data/10**18));
+        setTokenPool(Math.round(data/10**18));
       }
     })
 
+    // Options from contract function GetLiquidityPool
     options = {
       contractAddress: contractAddress,
       functionName: 'GetLiquidityPool',
       abi : ABI.abi
     }
 
+    // Get the liquidityPool
     contractProcessor.fetch({
       params:options,
       onSuccess: async(value) =>{
@@ -92,14 +117,20 @@ export default function nft() {
   // Function to act the price
   const actPrice = () =>{
     console.log(liquidity);
-    console.log(pool);
-    let value = liquidity/pool;
+    console.log(tokenPool);
+    let value = liquidity/tokenPool;
     value = Number(value.toFixed(8));
     setPrice(value);
   }
 
-  // Function to get the Total balance token Requirements - Signed metamask user 
+  // Function to get the Total balance token 
+  //
+  // Requirements 
+  //
+  // - Signed metamask user 
   const getUserTokens = async () =>{
+
+    // Options to the contract function TokenBalance
     let options = {
       contractAddress:contractAddress,
       functionName: 'TokenBalance',
@@ -109,18 +140,23 @@ export default function nft() {
       }
     }
 
+    // Get the Balance
     contractProcessor.fetch({
       params:options,
       onSuccess: async(value) =>{
         let data = HexToDec(value);
-        setToken(Math.round(data/10**18));
+        setUserToken(Math.round(data/10**18));
       }
     })
   }
 
-  // Function to sell the specified amount of tokens Requirements - Signed metamask user 
+  // Function to sell the specified amount of tokens 
+  // Requirements 
+  //
+  // - Signed metamask user 
   // (estimate gas 0.0007ETH)
   const sellTokens = async () =>{
+    // Options to the contract function SellToken
     let options = {
       contractAddress:contractAddress,
       functionName: 'SellToken',
@@ -131,6 +167,7 @@ export default function nft() {
       }
     }
 
+    // Sell the tokens on Success => (Do Something)
     contractProcessor.fetch({
       params:options,
       onSuccess: () =>{
@@ -143,7 +180,7 @@ export default function nft() {
     <div>
       <h1>Token</h1>
       <button onClick={getUserTokens}>Tokens of this wallet</button>
-      <span>{token}</span>
+      <span>{userTokens}</span>
       <br />
       <span>Amount</span>
       <input type="number" onChange={(e) => changeAmount(e)}/>
@@ -160,6 +197,7 @@ export default function nft() {
       <button onClick={sellTokens}>Sell Tokens</button>
       <span>Price c/u: {price} ETH</span>  
       <span>Total Price{price * amount}</span>
+      <button onClick={getPrice}>PRUEBA</button>
     </div>
   )
 }

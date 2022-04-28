@@ -5,6 +5,7 @@ import "../styles/globals.scss";
 // Moralis Dependencies
 import { MoralisProvider } from "react-moralis";
 
+
 export default function MyApp({ Component, pageProps }) {
   return (
 
