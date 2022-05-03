@@ -1,9 +1,14 @@
-import React from 'react'
+import Head from "next/head";
+//components
+import { Title } from '../components';
 
 export default function nft() {
   return (
     <div>
-      <h1>Take a test</h1>
+      <Head>
+        <title>Freshers - Play</title>
+      </Head>
+      <Title>Take a test</Title>
     </div>
   )
 }

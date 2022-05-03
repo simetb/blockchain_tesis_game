@@ -2,6 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 //components
 import { Counter } from '../components/';
+import { Button } from '../components/'
 //styles
 import styles from "../styles/components/MintCard.module.scss"
 //images
@@ -17,10 +18,10 @@ export default function MintCard({freshers}) {
       </div>
       <div className={styles.mint}>
         <Counter/>
-        <button className={styles.button}>
+        <Button>
           <IoSchoolOutline className={styles.icon} />
           <span>Mint</span>
-        </button>
+        </Button>
       </div>
       <div className={styles.students}>
         <p>Current Students</p>

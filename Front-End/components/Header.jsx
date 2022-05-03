@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 //Styles
 import styles from "../styles/components/Header.module.scss";
+//components
+import { Button } from '../components/'
 //Icons
 import { IoWalletOutline } from 'react-icons/io5';
 //assets
@@ -12,12 +14,14 @@ const Header = () => {
     return (
       <div className={styles.header}>
         <Link href='/' passHref>
-          <Image className={styles.logo} src={logo} alt="Dapp Logo" width={160} height={65}/>
+          <a>
+            <Image className={styles.logo} src={logo} alt="Dapp Logo" width={160} height={65}/>
+          </a>
         </Link>
-        <button className={styles.connect}>
+        <Button>
           <IoWalletOutline className={styles.icon} />
           <span>Connect</span>
-        </button>
+        </Button>
       </div>
     );
 };

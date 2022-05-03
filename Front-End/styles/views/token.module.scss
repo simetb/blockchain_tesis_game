@@ -6,7 +6,7 @@
     height: 100%;
     @include flexbox(column, initial, center);
 
-    .cards{
+    .container{
         width: min(100%, 930px);
         @include flexbox(row, center, center, wrap);
         gap: 15px;

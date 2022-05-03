@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import Head from "next/head";
 //components
 import { FresherCard, MintCard } from '../components';
+import { Title } from '../components';
 // styles
 import styles from "../styles/views/freshers.module.scss";
 
@@ -20,10 +22,12 @@ export const getStaticProps = async () => {
 }
 
 const Freshers = ({ freshers }) => {
-  console.log(freshers)
   return (
     <div className={styles.wrapper}>
-      <h2>Freshers</h2>
+      <Head>
+        <title>Freshers - My NFT's</title>
+      </Head>
+      <Title>Freshers</Title>
       <section className={styles.cards}>
         <MintCard freshers={ freshers.length }/>
         { freshers.map( fresher => (

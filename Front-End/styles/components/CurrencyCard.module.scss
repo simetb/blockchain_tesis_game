@@ -2,7 +2,7 @@
 @import '../utils/fonts.scss';
 @import '../utils/mixins.scss';
 
-.card {
+.currencyCard {
 
     @include flexbox(row, space-between ,center);
     width: 100%;
@@ -12,33 +12,16 @@
     border-radius: 20px;
     position: relative;
 
-    .school {
+    .bank {
         position: absolute;
         top: -50px;
         left: 20px;
     }
 
-    .mint {
-        
+    .balance {
         height: 120px;
         @include flexbox(column);
         margin-left: 220px;
-  
-    }
-
-    .students {
-        color: nth($palette,5);
-        border: solid 2px nth($palette,5);
-        border-radius: 20px;
-        width: 150px;
-        height: 120px;
-        padding: 10px;
-        @include flexbox(column,initial);
-        span {
-            font-size: nth($fontSizes,5);
-            margin-top: -10px;
-        }
     }
 
 }
-
