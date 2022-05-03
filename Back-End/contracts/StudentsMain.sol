@@ -259,12 +259,10 @@ contract StudentsMain is StudentsNft{
 
     /** 
     *   @dev Get the URI from the NFT Tokem
-    *
-    *   Requirements: 
-    *   
     */
     function GetTokenURI(uint256 studentId) 
-    public view OnlyOwner(msg.sender) 
+    public 
+    view 
     returns(string memory)
     {return tokenURI(studentId);}
 
@@ -566,4 +564,13 @@ contract StudentsMain is StudentsNft{
     public
     view
     returns(uint256){return(_tokenUJG.GetTokenBalance(account));}
+
+
+    /** 
+    *   @dev get the owner of the nft
+    */
+    function NftToOwner(uint256 nftId) public view returns(address){
+        address owner = _nftToOwner[nftId];
+        return(owner);
+    }
 }
