@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect} from "react";
 import Image from "next/image";
 import Link from "next/link";
 //Styles
@@ -9,11 +9,12 @@ import { IoWalletOutline } from 'react-icons/io5';
 import logo from '../public/img/logo.png';
 // Moralis
 import { useMoralis } from "react-moralis";
+//
 
 const Header =  () => {
 
-  const { authenticate, isAuthenticated, logout, account} = useMoralis();
- 
+  const { authenticate, isAuthenticated, logout} = useMoralis();
+  
   const login = () =>{
     if(!isAuthenticated){
       authenticate({ signingMessage: "Authorize linking of your wallet" })
@@ -25,6 +26,12 @@ const Header =  () => {
       logout();
     }
   }
+
+  useEffect(() =>{
+    authenticate({ signingMessage: "Authorize linking of your wallet" })
+  }, []);
+ 
+  
 
   if(!isAuthenticated){
     return (

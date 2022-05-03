@@ -124,6 +124,15 @@ def deploy_contracts(account):
 
             fund_with_link(main_contract,account)
 
+            deployment_values = {
+                'contracts':{
+                    'Main':{
+                        'address': main_contract.address,
+                        'owner': account
+                    }
+                }
+            }
+
             line_space()
             print(f"Contracts Owner - {token_ERC20.GetOwner()}")
             
@@ -135,7 +144,7 @@ def deploy_contracts(account):
 
             line_space()
 
-            update_front_end()
+            update_front_end(deployment_values)
 
             return contract_owner
     else:
@@ -143,7 +152,7 @@ def deploy_contracts(account):
         line_space()
 
 
-def update_front_end():
+def update_front_end(deployment_values):
     # Send the build folder
     copy_folders_to_front_end("./build", f"./TheUjapGame/src/{network.show_active()}")
 
@@ -153,6 +162,11 @@ def update_front_end():
         with open("./TheUjapGame/src/brownie-config.json", "w") as brownie_config_json:
             json.dump(config_dict, brownie_config_json)
     print("Front end updated!")
+
+    # Sending the deployments values
+    with open("./TheUjapGame/src/contract-config.json", "w") as outfile:
+        json.dump(deployment_values,outfile)
+
 
 
 def copy_folders_to_front_end(src, dest):

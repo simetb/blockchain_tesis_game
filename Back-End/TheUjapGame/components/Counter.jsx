@@ -22,7 +22,7 @@ export default function Counter() {
         <button onClick={decrease}>
           <BiLeftArrow className={styles.icons} />
         </button>
-        <span>
+        <span id='numberCounter'>
           {count}
         </span>
         <button onClick={increase}>

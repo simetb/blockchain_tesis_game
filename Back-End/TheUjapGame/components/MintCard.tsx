@@ -1,27 +1,19 @@
 import React from 'react'
 import Image from 'next/image'
-//components
+// components
 import { Counter } from '.';
-//styles
+// styles
 import styles from "../styles/components/MintCard.module.scss"
-//images
+// images
 import school from "../public/img/school.png"
-//icons
+// icons
 import { IoSchoolOutline } from 'react-icons/io5'
 
+import { useNft } from '../hooks'; 
+
 const MintCard = ({freshers}) =>{
+  const {burnNft,mintNft} = useNft();
 
-  const mintNft = () =>{
-    console.log("Mint Something")
-  }
-
-  const createMetadata = () =>{
-    console.log("Create Metadata")
-  }
-
-  const uploadToIpf = () =>{
-    console.log("")
-  }
 
   return (
     <div className={styles.card}>
@@ -30,7 +22,7 @@ const MintCard = ({freshers}) =>{
       </div>
       <div className={styles.mint}>
         <Counter/>
-        <button className={styles.button}>
+        <button onClick={() => {mintNft()}} className={styles.button}>
           <IoSchoolOutline className={styles.icon} />
           <span>Mint</span>
         </button>

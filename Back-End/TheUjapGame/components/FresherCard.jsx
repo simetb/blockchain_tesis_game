@@ -18,6 +18,7 @@ export default function FresherCard( { fresher } ) {
       </p>
       <p className={styles.identity}>IDENTITY CARD</p>
       <div className={styles.info}>
+        
         <p>
           <b>UID:</b> {fresher.id}
         </p>
@@ -25,18 +26,18 @@ export default function FresherCard( { fresher } ) {
           <b>Name:</b> {fresher.name}
         </p>
         <p>
-          <b>Iq:</b> {fresher.iq}
+          <b>Iq:</b> {fresher.atributes.iq}
         </p>
         <p>
-          <b>Cheats:</b> {fresher.cheats}
+          <b>Cheats:</b> {fresher.atributes.cheats}
         </p>
       </div>
       <span className={styles.rarity}>
-        {new Array(fresher.rarity).fill(null).map(() => (
+        {new Array(fresher.atributes.level).fill(null).map(() => (
           // eslint-disable-next-line react/jsx-key
           <IoStar/>
         ))}
-        {new Array(3 - fresher.rarity).fill(null).map(() => (
+        {new Array(3 - fresher.atributes.level).fill(null).map(() => (
           // eslint-disable-next-line react/jsx-key
           <IoStarOutline/>
         ))}
@@ -45,7 +46,7 @@ export default function FresherCard( { fresher } ) {
         <Image src={platform} alt='platform' width={100} height={20}/>
       </div>
       <div className={styles.fresher}>
-        <Image src={fresher.img} alt={fresher.id} width={100} height={100}/>
+        <Image src={fresher.image} alt={fresher.id} width={100} height={100}/>
       </div>
       {/* This component triggers the GIFT, BURN AND SELL ACTIONS */}
       <OptionsMenu/>
