@@ -1,0 +1,22 @@
+@import '../utils/variables.scss';
+@import '../utils/fonts.scss';
+@import '../utils/mixins.scss';
+
+.select {
+
+    height: 100px;
+    margin-left: 220px;
+    @include flexbox(column, space-between, center);
+
+    label {
+        @include font(title);
+        text-transform: uppercase;
+        font-size: nth($fontSizes, 2 );
+        color: nth($palette , 4 );
+    }
+
+    select{
+        max-width: 200px;
+    }
+
+}

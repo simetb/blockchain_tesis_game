@@ -1,0 +1,21 @@
+@import '../utils/variables.scss';
+@import '../utils/fonts.scss';
+@import '../utils/mixins.scss';
+
+.testCard {
+
+    @include flexbox(row, space-around ,center);
+    width: 100%;
+    min-height: 150px;
+    padding: 15px;
+    background-color: nth($palette, 2);
+    border-radius: 20px;
+    position: relative;
+
+    .academy {
+        position: absolute;
+        top: -50px;
+        left: 20px;
+    }
+
+}

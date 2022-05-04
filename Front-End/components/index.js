@@ -1,4 +1,4 @@
-// Documento encargado de exportar cada componente creado
+// This file is responsable of exporting each one of the application components
 export { default as Header } from './Header';
 export { default as Sidebar } from './Sidebar';
 export { default as Layout } from './Layout';
@@ -12,3 +12,8 @@ export { default as Button } from './Button';
 export { default as CurrencyCard } from './CurrencyCard';
 export { default as SwapCard } from './SwapCard';
 export { default as Balance } from './Balance';
+export { default as LevelTest } from './LevelTest';
+export { default as TestCard } from './TestCard';
+export { default as TestSheet } from './TestSheet';
+export { default as SelectFresher } from './SelectFresher';
+export { default as FresherPreview } from './FresherPreview';

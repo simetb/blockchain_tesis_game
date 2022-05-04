@@ -21,7 +21,7 @@ export default function Stars( {rarity} ) {
         <IoStarOutline/>
       </span>
    )
-  } else {
+  } else if (rarity === 3){
     return(
       <span className={styles.rarity}>
           <IoStar/>
@@ -29,6 +29,14 @@ export default function Stars( {rarity} ) {
           <IoStar/>
         </span>
      )
+  } else{
+    return(
+      <span className={styles.rarity}>
+          <IoStarOutline/>
+          <IoStarOutline/>
+          <IoStarOutline/>
+        </span>
+    )
   }
   
 }
