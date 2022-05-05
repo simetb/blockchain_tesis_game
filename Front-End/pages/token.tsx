@@ -6,12 +6,12 @@ import styles from "../styles/views/token.module.scss";
 
 export default function nft() {
   return (
-    <div className="wrapper">
+    <div className={styles.wrapper}>
       <Head>
         <title>Freshers - Swap Tokens</title>
       </Head>
       <Title>Token</Title>
-      <div className="container">
+      <div className={styles.container}>
         <CurrencyCard/>
         <SwapCard price={5} action="buy"/>
         <SwapCard price={5} action="sell"/>
