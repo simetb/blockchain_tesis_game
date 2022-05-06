@@ -1,6 +1,7 @@
 @import '../utils/variables.scss';
 @import '../utils/fonts.scss';
 @import '../utils/mixins.scss';
+@import '../utils/display.scss';
 
 .select {
 
@@ -17,6 +18,12 @@
 
     select{
         max-width: 200px;
+    }
+
+    @include device("mobile"){
+        margin: 0;
+        margin-top: 20px;
+        margin-bottom: 40px;
     }
 
 }

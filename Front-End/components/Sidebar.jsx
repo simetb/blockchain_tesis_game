@@ -8,14 +8,15 @@ import {RiCoinsLine} from 'react-icons/ri';
 
 
 
-export default function Sidebar() {
+export default function Sidebar( {setActive, active} ) {
   const router = useRouter();
+  console.log(active)
   return (
-    <aside className={styles.sidebar}>
+    <aside className={active ? styles.activeSidebar : styles.sidebar}>
       <nav>
         <ul>
           <Link href='/' passHref>
-            <li className={router.pathname == "/" ? styles.active : ""}>
+            <li onClick={() => setActive(!active)} className={router.pathname == "/" ? styles.active : ""}>
               <IoHomeOutline className={styles.icon}/>
               <span>
                 Home
@@ -23,7 +24,7 @@ export default function Sidebar() {
             </li>
           </Link>
           <Link href='/freshers' passHref>
-            <li className={router.pathname == "/freshers" ? styles.active: ""}>
+            <li onClick={() => setActive(!active)} className={router.pathname == "/freshers" ? styles.active: ""}>
               <IoIdCardOutline className={styles.icon}/>
               <span>
                 freshers
@@ -31,7 +32,7 @@ export default function Sidebar() {
             </li>
           </Link>
           <Link href='/marketplace' passHref>
-            <li className={router.pathname == "/marketplace" ? styles.active: ""}>
+            <li onClick={() => setActive(!active)} className={router.pathname == "/marketplace" ? styles.active: ""}>
               <IoStorefrontOutline className={styles.icon}/>
               <span>
                 Marketplace
@@ -39,7 +40,7 @@ export default function Sidebar() {
             </li>
           </Link>
           <Link href='/play' passHref>
-            <li className={router.pathname == "/play" ? styles.active: ""}>
+            <li onClick={() => setActive(!active)} className={router.pathname == "/play" ? styles.active: ""}>
               <MdOutlineQuiz className={styles.icon}/>
               <span>
                 Take a Test
@@ -47,7 +48,7 @@ export default function Sidebar() {
             </li>
           </Link>
           <Link href='/token' passHref>
-            <li className={router.pathname == "/token" ? styles.active: ""}>
+            <li onClick={() => setActive(!active)} className={router.pathname == "/token" ? styles.active: ""}>
               <RiCoinsLine className={styles.icon}/>
               <span>
                 Token

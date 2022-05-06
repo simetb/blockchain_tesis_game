@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Header } from './'
 import { Sidebar } from './'
@@ -6,11 +6,14 @@ import { Sidebar } from './'
 import styles from "../styles/components/Layout.module.scss";
 
 const Layout = ({ children }) => {
+  
+  const [active, setActive] = useState(false);
+  
   return (
   
     <div className={styles.layout}>
-        <Header className={styles.header}/>
-        <Sidebar/>
+        <Header className={styles.header} setActive={setActive} active={active}/>
+        <Sidebar setActive={setActive} active={active}/>
         <main>
           {children}
         </main>

@@ -2,6 +2,7 @@
 @import '../utils/fonts.scss';
 @import '../utils/mixins.scss';
 @import '../utils/animations.scss';
+@import '../utils/display.scss';
 
 .wrapper{
     height: 100%;
@@ -15,6 +16,8 @@
         background-color: nth($palette,2);
         border-radius: 15px;
         color: nth($palette, 5 );
+        overflow: hidden;
+
         .title {
             @include font(title);
             font-size: nth($fontSizes, 5 );	
@@ -39,7 +42,7 @@
             margin-bottom: 10px;
         }
         .buttons{
-            width: 400px;
+            width: min(100%, 400px);
             @include flexbox(row,initial);
             gap: 15px;
         }
@@ -91,6 +94,42 @@
                 span{
                     animation: walk 6s linear infinite;
                 }
+            }
+        }
+    }
+    @include device("mobile"){
+        @include flexbox(column, center);
+        .main{
+            @include flexbox(column-reverse);
+            padding: 15px;
+            height: 100%;
+            .text{
+                width: 100%;
+                text-align: center;
+                margin-bottom: 25px;
+                .title {
+                    font-size: nth($fontSizes, 4 );
+                    span{
+                        font-size: nth($fontSizes, 4 );	
+                    }
+                    .test{
+                        -webkit-text-stroke-width: .8px;
+                    }
+                    .ujg{
+                        color: nth($palette, 4 );
+                        display: inline-block;
+                        @include bounce(-8px,-3px,2s);
+                    }
+                }
+            }
+            
+            .slogan{
+                font-size: nth($fontSizes, 1 );
+            }
+    
+            .buttons{
+                @include flexbox(column);
+                gap: 15px;
             }
         }
     }

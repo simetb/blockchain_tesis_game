@@ -1,6 +1,7 @@
 @import '../utils/variables.scss';
 @import '../utils/fonts.scss';
 @import '../utils/mixins.scss';
+@import '../utils/display.scss';
 
 .card {
 
@@ -30,6 +31,25 @@
         span {
             font-size: nth($fontSizes,5);
             margin-top: -15px;
+        }
+    }
+
+    @include device("mobile"){
+        @include flexbox(column, center);
+        height: auto;
+        padding-top: 150px;
+        .school{
+            position: absolute; 
+            left: 0; 
+            right: 0; 
+            margin-left: auto; 
+            margin-right: auto; 
+            width: 200px;
+            @include flexbox(row);
+        }
+        .mint{
+            margin: 0;
+            margin-bottom: 15px;
         }
     }
 

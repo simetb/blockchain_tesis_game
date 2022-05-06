@@ -1,6 +1,7 @@
 @import '../utils/variables.scss';
 @import '../utils/fonts.scss';
 @import '../utils/mixins.scss';
+@import '../utils/display.scss';
 
 .testCard {
 
@@ -16,6 +17,20 @@
         position: absolute;
         top: -50px;
         left: 20px;
+    }
+
+    @include device("mobile"){
+        @include flexbox(column, center);
+        height: auto;
+        padding-top: 130px;
+        .academy{
+            position: absolute; 
+            left: 0; 
+            right: 0; 
+            margin-left: auto; 
+            margin-right: auto; 
+            width: 200px;
+        }
     }
 
 }

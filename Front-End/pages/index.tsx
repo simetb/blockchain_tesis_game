@@ -20,7 +20,7 @@ import { IoDocumentTextOutline, IoDocumentOutline } from "react-icons/io5";
 // '/' directory content
 export default function Home() {
   return (
-    <div className={styles.container}>
+    <div className={styles.wrapper}>
       {/* HTML HEAD */}
       <Head>
         <title>Freshers</title>
@@ -28,12 +28,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* HTML TEMPLATE */}
-      <div className={styles.wrapper}>
       <Head>
         <title>Freshers - Play</title>
       </Head>
       <section className={styles.main}>
-        <div>
+        <div className={styles.text}>
           <h1 className={styles.title}> Mint NFT's, <br /> <span className={styles.test}>Take a test</span> <br /> Earn <span className={styles.ujg}> UJAP GOLD! </span> </h1>
           <p className={styles.slogan}>Freshers is a Brand-new Play-to-Earn Game made for learning purposes</p>
           <div className={styles.buttons}>
@@ -74,7 +73,6 @@ export default function Home() {
           </section>
         </div>
       </section>
-    </div>
     </div>
   );
 }
