@@ -37,6 +37,7 @@ export default function nft( {freshers} ) {
         <LevelTest vsBar= {7} />
         <LevelTest vsBar= {8} />
         <LevelTest vsBar= {9} />
+        <LevelTest vsBar= {9} />
       </section>
     </div>
   )
