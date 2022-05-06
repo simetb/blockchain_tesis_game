@@ -1,0 +1,97 @@
+@import '../utils/variables.scss';
+@import '../utils/fonts.scss';
+@import '../utils/mixins.scss';
+@import '../utils/animations.scss';
+
+.wrapper{
+    height: 100%;
+    @include flexbox(column, initial, center);
+
+    .main{
+        width: min(100%, 930px);
+        height: calc( 100vh - 120px );
+        @include flexbox(row, space-between);
+        padding: 50px;
+        background-color: nth($palette,2);
+        border-radius: 15px;
+        color: nth($palette, 5 );
+        .title {
+            @include font(title);
+            font-size: nth($fontSizes, 5 );	
+            margin-bottom: 10px;
+            span{
+                font-size: nth($fontSizes, 5 );	
+            }
+            .test{
+                -webkit-text-stroke-width: 2px;
+                -webkit-text-stroke-color: nth($palette, 4 );
+                color: transparent;
+            }
+            .ujg{
+                color: nth($palette, 4 );
+                display: inline-block;
+                @include bounce(-10px,-5px,2s);
+            }
+        }
+        .slogan{
+            font-size: nth($fontSizes, 2 );
+            max-width: 400px;
+            margin-bottom: 10px;
+        }
+        .buttons{
+            width: 400px;
+            @include flexbox(row,initial);
+            gap: 15px;
+        }
+        .scene{
+            
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            width: 300px;
+            @include flexbox(column);
+
+            .vsBar{
+                height: 100px;
+                width: 100%;
+                overflow: hidden;
+                border: 5px solid white;
+                border-top: none;
+                margin-bottom: 10px;
+                white-space: nowrap;
+                @include scroll(-10000%,20s);
+                .fresher{
+                    transform: translateY(6px);
+                    div{
+                        width: 500px;
+                        @include scroll2(calc(-200%),16s);
+                        display: inline-block;
+                    }
+                }
+                
+            }
+            
+            .freshers{
+                span{
+                    img{
+                        cursor: pointer;
+                        &:hover{
+                            @include bounce(-5px,-2px,1s);
+                        }
+                    }
+                }
+            }
+            .desks{
+                position: absolute;
+                transform: translateY(40px);
+                pointer-events: none;
+            }
+            .teacher{
+                width: min(100%, 280px);
+                span{
+                    animation: walk 6s linear infinite;
+                }
+            }
+        }
+    }
+}

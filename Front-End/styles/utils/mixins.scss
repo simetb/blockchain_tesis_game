@@ -31,4 +31,8 @@
       scrollbar-face-color: $foreground-color;
       scrollbar-track-color: $background-color;
     }
+
+    //for Firefox and Opera
+    scrollbar-color: $background-color $foreground-color;
+    scrollbar-width: thin;
 }

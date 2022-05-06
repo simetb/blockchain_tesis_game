@@ -1,5 +1,6 @@
 @import '../utils/variables.scss';
 @import '../utils/mixins.scss';
+@import '../utils/animations.scss';
 
 .level{
     height: 120px;
@@ -13,7 +14,7 @@
     }
 
     &:hover {
-        animation: scroll-anim 25s linear infinite;
+        @include scroll(-5000%,25s);
         .teacher{
             transition: .5s;
             transform: scale(1.15) translateX(20px);
@@ -34,15 +35,4 @@
         }
     }
 
-    @keyframes scroll-anim {
-        100% {
-            background-position: -10000% 0;
-        }
-    }
-
-    @keyframes teacher-highlight {
-        100% {
-            background-position: -10000% 0;
-        }
-    }
 }
