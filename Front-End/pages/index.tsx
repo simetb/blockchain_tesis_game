@@ -1,6 +1,9 @@
 import Head from "next/head";
+import Image from "next/image";
 // styles
 import styles from "../styles/Home.module.scss";
+//images
+import teacher from "../public/img/teacher.gif"
 
 // '/' directory content
 export default function Home() {
