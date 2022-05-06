@@ -7,7 +7,6 @@ export { default as MarketCard } from './MarketCard';
 export { default as MartCard } from './MartCard';
 export { default as OptionsMenu } from './OptionsMenu';
 export { default as MintCard } from './MintCard';
-export { default as Counter } from './Counter';
 export { default as Stars } from './Stars';
 export { default as Title } from './Title';
 export { default as Button } from './Button';

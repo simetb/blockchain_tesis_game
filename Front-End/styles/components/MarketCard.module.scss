@@ -6,7 +6,7 @@
     width: min(100%, 300px);
     position: relative;
     padding: 20px;
-    height: 200px;
+    height: 220px;
     background-color: nth($palette, 5);
     @include flexbox(column, initial, initial);
     border-radius: 20px;

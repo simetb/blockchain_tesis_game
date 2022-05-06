@@ -26,6 +26,24 @@
   
     }
 
+    .price {
+        
+        margin-bottom: 10px;
+        color: nth($palette, 5 );
+        font-size: nth($fontSizes, 2 );
+        text-align: center;
+        
+        .price_number{
+            font-size: nth($fontSizes, 3 );
+        }
+        
+        b {
+            @include font(title);
+            font-size: nth($fontSizes, 2 );
+            color: nth($palette, 4 );
+        }
+    }
+
     .students {
         color: nth($palette,5);
         border: solid 2px nth($palette,5);

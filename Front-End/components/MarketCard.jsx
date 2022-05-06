@@ -32,6 +32,9 @@ export default function FresherCard( { fresher } ) {
         <p>
           <b>Cheats:</b> {fresher.cheats}
         </p>
+        <p>
+          <b>Price:</b> {fresher.value} UJG
+        </p>
       </div>
       <Stars rarity={fresher.rarity}></Stars>
       <div className={styles.platform}>

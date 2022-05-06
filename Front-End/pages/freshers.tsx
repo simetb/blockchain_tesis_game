@@ -29,7 +29,7 @@ const Freshers = ({ freshers }) => {
       </Head>
       <Title>Freshers</Title>
       <section className={styles.cards}>
-        <MintCard freshers={ freshers.length }/>
+        <MintCard freshers={ freshers.length } mintPrice={5}/>
         { freshers.map( fresher => (
           <FresherCard key={ fresher.id } fresher={ fresher } />
         ) ) }

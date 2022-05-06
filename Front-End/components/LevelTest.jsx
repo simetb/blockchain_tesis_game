@@ -23,6 +23,7 @@ import teacher6 from "../public/img/teachers/teacher6.png";
 import teacher7 from "../public/img/teachers/teacher7.png";
 import teacher8 from "../public/img/teachers/teacher8.png";
 import teacher9 from "../public/img/teachers/teacher9.png";
+import teacher10 from "../public/img/teachers/teacher10.png";
 
 export default function LevelTest( {vsBar} ) {
   if ( vsBar === 1 ){
@@ -118,6 +119,17 @@ export default function LevelTest( {vsBar} ) {
       <div className={styles.level} style={{backgroundImage: `url(${vsBar9.src})`, borderRadius: '0 0 15px 15px'}}>
         <div className={styles.teacher}>
           <Image src={teacher9} className="teacher" alt="teacher9" height={100} width={200}/>
+        </div>
+        <div className={styles.test}>
+          <TestSheet />
+        </div>
+      </div>
+    )
+  }else if ( vsBar === 10 ) {
+    return (
+      <div className={styles.level} style={{backgroundImage: `url(${vsBar2.src})`, flexDirection: "row-reverse"}}>
+        <div className={styles.teacher}>
+          <Image src={teacher10} className="teacher" alt="teacher10" height={100} width={200}/>
         </div>
         <div className={styles.test}>
           <TestSheet />
