@@ -39,7 +39,7 @@ export default function FresherCard( { fresher } ) {
         <Image src={fresher.img} alt={fresher.id} width={100} height={100}/>
       </div>
       {/* This component triggers the GIFT, BURN AND SELL ACTIONS */}
-      <OptionsMenu/>
+      <OptionsMenu isInMarket={false} />
     </div>
   )
 }
