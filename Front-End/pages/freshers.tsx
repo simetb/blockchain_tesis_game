@@ -30,7 +30,7 @@ const Freshers = ({ freshers }) => {
         <title>Freshers - My NFT's</title>
       </Head>
       {/* Test Modal Button */}
-      {/* <button onClick={() => setShowModal(!showModal)}>click me</button> */}
+      <button onClick={() => setShowModal(!showModal)}>click me</button>
       <Title>Freshers</Title>
       <section className={styles.cards}>
         <MintCard freshers={ freshers.length } mintPrice={5}/>
