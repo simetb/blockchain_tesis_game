@@ -18,3 +18,5 @@ export { default as TestCard } from './TestCard';
 export { default as TestSheet } from './TestSheet';
 export { default as SelectFresher } from './SelectFresher';
 export { default as FresherPreview } from './FresherPreview';
+export { default as CornerModal } from './CornerModal';
+export { default as InputModal } from './InputModal';

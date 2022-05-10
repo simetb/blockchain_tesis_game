@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Head from "next/head";
 //components
-import { FresherCard, MintCard } from '../components';
-import { Title } from '../components';
+import { FresherCard, MintCard, Title, InputModal } from '../components';
 // styles
 import styles from "../styles/views/freshers.module.scss";
 
@@ -22,11 +21,16 @@ export const getStaticProps = async () => {
 }
 
 const Freshers = ({ freshers }) => {
+  
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <div className={styles.wrapper}>
       <Head>
         <title>Freshers - My NFT's</title>
       </Head>
+      {/* Test Modal Button */}
+      {/* <button onClick={() => setShowModal(!showModal)}>click me</button> */}
       <Title>Freshers</Title>
       <section className={styles.cards}>
         <MintCard freshers={ freshers.length } mintPrice={5}/>
@@ -34,6 +38,7 @@ const Freshers = ({ freshers }) => {
           <FresherCard key={ fresher.id } fresher={ fresher } />
         ) ) }
       </section>
+      {showModal ? <InputModal closeModal={setShowModal} showing={showModal}/> : null}
     </div>
   );
 

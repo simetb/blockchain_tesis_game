@@ -9,4 +9,5 @@
 
 html{
   @include font(regular);
+  overflow: hidden;
 }
