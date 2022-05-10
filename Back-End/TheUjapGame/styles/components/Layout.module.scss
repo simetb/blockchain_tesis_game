@@ -1,6 +1,7 @@
 @import '../utils/variables.scss';
 @import '../utils/fonts.scss';
 @import '../utils/mixins.scss';
+@import '../utils/display.scss';
 
 .layout{
     width: 100%;
@@ -15,5 +16,9 @@
         padding: 20px;
         overflow-y: scroll;
         @include scrollbar(5px , nth($palette, 3), nth($palette,1));
+        @include device("mobile"){
+            width: 100%;
+            height: calc(100vh - 60px);
+        }
     }
 }

@@ -1,6 +1,10 @@
+# Importing the networkss
 from brownie import network
+# Importing all the helpful Scripts
 from scripts.helpful_scripts import *
+# Importing al the option texts
 from scripts.texts import *
+# Importing all the options
 from scripts.owner.deploy_contracts import deploy_contracts
 from scripts.owner.liquidity import liquidity_options
 from scripts.owner.pool_token import token_pool_options
@@ -12,18 +16,19 @@ from scripts.user.game import attack
 from scripts.user.transfer import transfer_options
 from scripts.user.marketplace import marketplace_options
 
+# Principal Run
 def main():
     # State variables
-    # -Accounts
+    # - Accounts
     principal_account = None 
     secundary_account = None
     owner_account = None
 
     while True:
-        print(f"ACTIVE NETWORK - {network.show_active()}")
-        print(f"PRINCIPAL ACCOUNT - {principal_account}")
-        print(f"SECUNDARY ACCOUNT - {secundary_account}")
-        print(f"OWNER ACCOUNT - {owner_account}")
+        print(f"RED ACTIVA - {network.show_active()}")
+        print(f"CUENTA PRINCIPAL - {principal_account}")
+        print(f"CUENTA SENCUNDARIA - {secundary_account}")
+        print(f"CUENTA ADMIN - {owner_account}")
         
         option = select_option(PRINCIPAL_MESSAGE["options"],PRINCIPAL_MESSAGE["message"])
         
@@ -60,18 +65,23 @@ def main():
                 if option == 1:
                     info_account(principal_account)
                 
+                # Market place options
                 elif option == 2:
                     marketplace_options(principal_account)
                 
+                # Nft Option
                 elif option == 3:
                     nft_option(principal_account)
                 
+                # Nft Attack game option
                 elif option == 4:
                     attack(principal_account)
                 
+                # Token options
                 elif option == 5:
                     token_options(principal_account)
                 
+                # Transfer options
                 elif option == 6:
                     transfer_options(principal_account,secundary_account)
                 
@@ -92,10 +102,11 @@ def main():
         
         # Break Option
         else:
+            line_space()
             break
 
 
-    print("\n---Good Bye!---")
+    print("\n---Hasta Pronto!---")
 
 
 

@@ -357,7 +357,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
     *
     *   CAMMELCASE EXCEPTION FUNCTION
     */
-    function requestRandomness() 
+    function requestRandomness(uint256 randomNumber) 
     internal 
     returns (bytes32) {
         require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK - fill the contract with faucet");       
@@ -367,7 +367,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
         _requestToSender[requestId] = msg.sender;
 
         // TEST LOCAL BLOCKCHAIN //
-        _userRandomNumber[msg.sender] = 432423432432;
+        _userRandomNumber[msg.sender] = randomNumber;
 
         return requestId;
     }
@@ -405,7 +405,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
     *   
     * - You can only create a student nft if you have the full price token in ur wallet
     */
-    function CreateNftStudent() 
+    function CreateNftStudent(uint256 random) 
     public 
     EnoughToken(msg.sender,_nftPrice){
 
@@ -413,7 +413,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
 
         uint256 newId = _nftId; // New Nft Id
 
-        Student memory student =  _generatingStats(newId);
+        Student memory student =  _generatingStats(newId,random);
         /**
         *   @dev Increase the `_nftOwnerCount` because we got a new nft
         *   associated the mapping with `newId`: NftId with the owner
@@ -443,7 +443,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
     * - Your NFT need to be rest
     * - Your NFT It should not be in the marketplace
     */
-    function Attack(uint256 studentIndex, uint256 levelNumber) 
+    function Attack(uint256 studentIndex, uint256 levelNumber, uint256 random) 
     external 
     OnlyOwnerOf(studentIndex) 
     EnoughToken(msg.sender, GetTotalAttackPrice(levelNumber))
@@ -456,7 +456,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
 
         require(student.intelligenceLevel > 0);
 
-        requestRandomness();
+        requestRandomness(random);
 
         /**
         *   @dev `basePowerLevel` MIN value 40 and MAX value 400
@@ -495,10 +495,10 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
     /**
     *   @dev generating the random stats for the nft and save it in the contract  
     */
-    function _generatingStats(uint256 newId)
+    function _generatingStats(uint256 newId, uint256 random)
     internal
     returns(Student memory){
-        requestRandomness();
+        requestRandomness(random);
 
         uint256 randomNumber = _userRandomNumber[msg.sender];
 
@@ -514,8 +514,8 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
             intelligenceLevel = (randomNumber % 100) + 201;
         }
         
-        uint256 cheatLevel = ((randomNumber * 50) % 100) + 1;
-        
+        //uint256 cheatLevel = ((randomNumber / 2) % 100) + 1;
+        uint256 cheatLevel = ((randomNumber * 2) % 100) + 1;
         string memory name = _names[randomNumber % 25];
 
         Student memory character =  Student(level,intelligenceLevel,cheatLevel,name,uint32 (now),newId,false);

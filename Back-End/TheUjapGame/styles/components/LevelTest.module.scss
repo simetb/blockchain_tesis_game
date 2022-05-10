@@ -1,0 +1,54 @@
+@import '../utils/variables.scss';
+@import '../utils/mixins.scss';
+@import '../utils/animations.scss';
+@import '../utils/display.scss';
+
+.level{
+    height: 120px;
+    width: 100%;
+    @include flexbox(row, space-between, flex-end);
+    overflow: hidden;
+
+    .test{
+        transform: translateY(100px);
+        transition: .5s;
+    }
+
+    &:hover {
+        @include scroll(-5000%,25s);
+        .teacher{
+            transition: .5s;
+            transform: scale(1.15) translateX(20px);
+            img{
+                filter: grayscale(0) drop-shadow(-4px 4px 1px rgba(0, 0, 0, 0.4));
+            }
+        }
+        .test{
+            transform: translateY(0px);
+            filter: grayscale(0) drop-shadow(-4px 4px 1px rgba(0, 0, 0, 0.4));
+        }
+    }
+
+    .teacher{
+        transform: translateY(4px);
+        img{
+            filter: grayscale(1);
+        }
+    }
+
+    @include device("mobile"){
+        @include scroll(-5000%,25s);
+        .test{
+            transform: translateY(0px);
+            filter: grayscale(0) drop-shadow(-4px 4px 1px rgba(0, 0, 0, 0.4));
+        }
+        .teacher{
+            transition: .5s;
+            transform: scale(1.15) translateX(0px);
+            img{
+                filter: grayscale(0) drop-shadow(-4px 4px 1px rgba(0, 0, 0, 0.4));
+            }
+        }
+    }
+
+}

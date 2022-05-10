@@ -1,0 +1,43 @@
+@import '../utils/variables.scss';
+@import '../utils/fonts.scss';
+@import '../utils/mixins.scss';
+@import '../utils/display.scss';
+
+.currencyCard {
+
+    @include flexbox(row-reverse, space-between ,center);
+    width: 100%;
+    height: 150px;
+    padding: 15px;
+    background-color: nth($palette, 2);
+    border-radius: 20px;
+    position: relative;
+
+    .bank {
+        position: absolute;
+        top: -50px;
+        left: 20px;
+    }
+
+    .balance {
+        height: 120px;
+        @include flexbox(column, initial);
+        color: nth($palette,5)
+    }
+
+    @include device("mobile"){
+        @include flexbox(column, center);
+        height: auto;
+        padding-top: 150px;
+        .bank{
+            position: absolute; 
+            left: 0; 
+            right: 0; 
+            margin-left: auto; 
+            margin-right: auto; 
+            width: 200px;
+            @include flexbox(row);
+        }
+    }
+
+}

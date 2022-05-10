@@ -1,47 +1,77 @@
-from re import S
+# Importing The helpful scripts 
 from scripts.helpful_scripts import *
+# Importing the main contract
 from brownie import(StudentsMain)
 
+# Function that show all the options of the tokens
 def token_options(account):
 
     contract = None
 
+    # Select the last deployed contract
     if StudentsMain[-1]:
         contract = StudentsMain[-1]
     
     if contract:
+        # Select an option
         line_space()
-        option = select_option(["Buy Token","Sell Token","Go Back"],"Remember U need to have a selected account to interact with these functions")
+        option = select_option(["Comprar Token","Vender Token","Volver"],"Recuerda tener una cuenta seleccionada para interactuar con estas funcioness")
         line_space()
 
         if option == 1:
+            # Getting the price
             price = get_price(contract)
-            print(f"The actuall token price - {price}")
+            print(f"El precio del token actual - {price}")
+            # Buy tokens
             buy_token(contract,account,price)
+        
         elif option == 2:
+            # Getting the Price
             price = get_price(contract)
-            print(f"The actuall token price - {price}")
+            print(f"El precio del token actual - {price}")
+            # Sell Tokens
             sell_token(contract,account,price)
     else:
-        print("We cannot found a deployed contract")
+        print("No encontramos un contrato inteligente desplegado")
 
+# Function that calculated the price of the token in ETH
 def get_price(contract):
     tokenPool = contract.GetTokenPool()/10**18
     liquidity = contract.GetLiquidityPool()/10**18
     return (liquidity/tokenPool)    
 
+#  Function that buy tokens
 def buy_token(contract,account,price):
-    amount = float(input("Amount UJG to BUY: "))
+    # Avoid Input error
+    while True:
+        try:
+            amount = float(input("Cantidad de UJG a COMPRAR: "))
+            break
+        except:
+            print("Entrada Invalida")
+    
+    # Showing the total
     line_space()
-    option = select_option(["Yes","No"],f"The total price is: {amount * price}ETH Doo you want Continue?")
+    option = select_option(["Si","No"],f"El precio total es: {amount * price}ETH quiere continuar con la compra?")
     line_space()
+
     if option == 1:
+        # Calling the contract
         tx = contract.BuyToken(amount * 10**18,price * 10**18,{"from":account,"value": amount * price * 10**18})
         print(tx.events["TokenOperation"])
-        print("You Buy The tokens")
+        print("Haz Comprado Tokens")
 
+# Sell the token
 def sell_token(contract,account,price):
-    amount = float(input("Amount UJG to SELL: "))
+    # Avoid Input error
+    while True:
+        try:
+            amount = float(input("Cantidad de UJG a VENDER: "))
+            break
+        except:
+            print("Entrada Invalida")
+    
+    # Calling the contract
     tx = contract.SellToken(amount* 10**18 ,price * 10**18,{"from":account})
     print(tx.events["TokenOperation"])
-    print("You sell the tokens")
+    print("Haz Vendido Tokens")

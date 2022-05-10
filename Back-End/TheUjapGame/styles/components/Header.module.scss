@@ -1,6 +1,7 @@
 @import '../utils/variables.scss';
 @import '../utils/fonts.scss';
 @import '../utils/mixins.scss';
+@import '../utils/display.scss';
 
 .header{
     height: 80px;
@@ -9,39 +10,30 @@
     padding: 0 24px;
     padding-left: 45px;
     @include flexbox(row, space-between);
+    z-index: 99;
+    
+    .menu{
+        font-size: nth($fontSizes, 4 );
+        color: nth($palette, 5 );
+        cursor: pointer;
+        display: none;
+    }
 
     .logo{
-        cursor: pointer;
+        width: 150px;
     }
 
-    .connect{
-        color: nth($palette, 3);
-        background-color: nth($palette, 5);
-        @include flexbox(row, center, center);
-        border: none;
-        padding: 8px 24px;
-        cursor: pointer;
-        border-radius: 10px;
-        transition: .125s;
-        max-width: 400px;
-        overflow: hidden;
-
-        .icon{
-            font-size: nth($fontSizes,2);
+    @include device("mobile"){
+        height: 60px;
+        padding: 15px;
+        .logo{
+            width: 100px;
         }
-
-        span{
-            @include font(title);
-            text-transform: uppercase;
-            margin-left: 10px;
-            font-weight: 700;
+        .menu{
+            display: block;
         }
-
-        &:hover{
-            color: nth($palette, 5);
-            background-color: nth($palette, 3);
-        }
-
-
     }
+
 }
+
+    

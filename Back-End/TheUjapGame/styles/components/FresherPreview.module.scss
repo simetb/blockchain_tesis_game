@@ -1,0 +1,38 @@
+@import '../utils/variables.scss';
+@import '../utils/fonts.scss';
+@import '../utils/mixins.scss';
+
+.preview{
+    @include flexbox(column, center, initial);
+    min-width: 220px;
+    position: relative;
+
+    .info {
+        margin-left: 10px;
+        p{
+            b{
+                color: nth($palette , 4 );
+            }
+            color: nth($palette , 5 );
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 120px;
+        }
+    }
+    
+    .fresher, .platform {
+        position: absolute;
+        bottom: 20px;
+        right: 0px;
+    }
+
+    .rarity span{
+        position: absolute;
+        bottom: 0;
+        right: 25px;
+        color: nth($palette,1);
+    }
+}
+

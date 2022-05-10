@@ -1,12 +1,14 @@
 @import '../utils/variables.scss';
 @import '../utils/fonts.scss';
 @import '../utils/mixins.scss';
+@import '../utils/display.scss';
 
-.sidebar{
+.sidebar, .activeSidebar{
     background-color: nth($palette,2);
     width: 250px;
     height: calc(100vh - 80px);
     @include font(title);
+    z-index: 9;
     nav{
         ul{
             list-style: none;
@@ -38,4 +40,15 @@
             }
         }
     }
+    @include device("mobile"){
+        width: 100%;
+        height: auto;
+        position: absolute;
+        top: -300px;
+        transition: all .5s ease-in-out;
+    }
+}
+
+.activeSidebar {
+    top: 60px;
 }

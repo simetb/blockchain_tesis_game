@@ -1,0 +1,11 @@
+@import '../utils/variables.scss';
+@import '../utils/fonts.scss';
+
+.title{
+    width: min(100%, 930px);
+    color: nth($palette,1);
+    font-size: nth($fontSizes,3);
+    margin-bottom: 55px;
+    border-bottom: solid 2px nth($palette,1);
+    padding-left: 35px;
+}

@@ -1,5 +1,9 @@
+# Importing accounts, network, contracts and mocks
 from brownie import (accounts,network,config,interface,VRFCoordinatorMock,LinkToken,Contract)
+# Import Web3 Function
 from web3 import Web3
+# Import random functions
+import random
 
 # Blockchains...
 FORKED_LOCAL_ENVIROMENTS = ["mainnet-fork","mainnet-fork-dev"]
@@ -20,7 +24,7 @@ def get_account(account,secundary,owner):
     if network.show_active() in LOCAL_BLOCKCHAIN_ENVIRONMENTS:
 
         # get the value option
-        value = select_option(["ganache","other"],"You Are Using a Local Blockchain")
+        value = select_option(["ganache","otra"],"Estas usando una Blockchain Local")
         line_space()
 
         # If you are in ganache local blockchain
@@ -30,18 +34,18 @@ def get_account(account,secundary,owner):
             addresses = get_info_addresses(account,secundary,owner,addresses)
 
             # Get the index and return the account
-            index = select_option(addresses,f"Active Account {get_gannache_index_account(account)}")
-            print("\n Account Selected!")
+            index = select_option(addresses,f"Cuenta Activa {get_gannache_index_account(account)}")
+            print("\n Cuenta Seleccionada!")
             return accounts[index-1]
 
         # If you are in another local blockchain
         else:
-            print("\nAccount Selected! - SECUNDARY ACCOUNTS NO AVAILABLE")
+            print("\nCuenta Seleccionada! - CUENTAS SECUNDARIAS NO ESTAN DISPONIBLES")
             return accounts[0]
     
     # For Mainnets or TestNet Blockchains
     elif network.show_active() in config["networks"]:
-        print("\nAccount Selected! - SECUNDARY ACCOUNTS NO AVAILABLE")
+        print("\nCuenta Seleccionada! - CUENTAS SECUNDARIAS NO ESTAN DISPONIBLES")
         return accounts.add(config["wallets"]["from_key"])
 
 # Get the account index from gannache
@@ -57,9 +61,9 @@ def get_info_addresses(account,secundary,owner,info):
     if account:
         info[get_gannache_index_account(account)] += "- PRINCIPAL"
     if secundary:
-        info[get_gannache_index_account(secundary)] += "- SECUNDARY"
+        info[get_gannache_index_account(secundary)] += "- SECUNDARIA"
     if owner:
-        info[get_gannache_index_account(owner)] += "- OWNER"
+        info[get_gannache_index_account(owner)] += "- ADMIN"
     return info
 
 # Get the contract
@@ -88,7 +92,7 @@ def fund_with_link(contract_address, account,link_token = None):
     total = link_token_contract.balanceOf(account)
     tx = link_token_contract.transfer(contract_address,total,{"from":account})
     tx.wait(1)
-    print("Fund Contract!")
+    print("Contrato Financiado con LINK Token!")
     return tx
 
 # Select an option
@@ -98,10 +102,14 @@ def select_option(options,message):
             if message:
                 print(message)
             [print(f"{index+1}-{option}") for index,option in enumerate(options)]
-            answer = int(input("Select: "))
+            answer = int(input("Seleccionar: "))
             if answer<=len(options) and answer>=1:
                 return answer
             else:
-                print("Wrong input...")
+                print("Entrada Incorrecta...")
         except:
-            print("Wrong input...")
+            print("Entrada Incorrecta...")
+
+# Get a random value
+def getRandomness():
+    return(random.randint(99999999,999999999))

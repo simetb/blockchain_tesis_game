@@ -3,31 +3,31 @@ from scripts.helpful_scripts import *
 
 # The principal console message
 PRINCIPAL_MESSAGE = {
-    'options':["Owner Options","User Options","Change Account","Close Menu"],
+    'options':["Opciones de Admin","Opciones de Usuario","Cambiar Cuenta","Cerrar Menu"],
     'message':""" 
-`Ujap students` game full solidity nft contract
-@dev Full implementation of an ERC721, VRFConsumerBase, Ownable, Strings contracts
+`Ujap students` juego implementado con contratos de nft en solidity
+@dev Una completa implementacion de los contratos ERC721, VRFConsumerBase, Ownable, Strings 
 
-Project made for the presentation of a university thesis, based on the studies 
-and databases of the blockchain to create a game, made to be run on Kovan Test 
-Blockchain, Local Blockchain and Main Ethereum Blockchain.
+Proyecto realizado para la presentación de una tesis universitaria, basado en los estudios
+y bases de datos de la cadena de bloques para crear un juego, hecho para ejecutarse en Kovan Test
+Blockchain, Blockchain local y Blockchain principal de Ethereum.
 
-BackEnd-Author: https://github.com/simetb
+Autor de Backend: https://github.com/simetb
 ----------------------------------------------------------------------"""
 }
 
 # Owner option console message
 OWNER_MESSAGE = {
-    'options':["Deploy Contracts","Liquidity Options","Token Options","Contract Options","Go Back"],
+    'options':["Desplegar contrato","Opciones de Liquidez","Opciones de Token","Optiones de Contrato","Volver"],
     'message':"""
-Only the CONTRACT owner can interact with these functions
+Solo el dueño del CONTRATO puede interactuar con estas funciones
 ----------------------------------------------------------------------"""
 }
 
 # User Options console message
 USER_OPTIONS = {
-    'options':["See Info Account","MarketPlace Options","Nft Options","The Ujap Game","Tokens Options","Transfer Options","Go Back"],
+    'options':["Informacion de la cuenta","Opciones de Mercado","Opciones de Nft","The Ujap Game","Opciones de Token","Opciones de Transferencia","Volver"],
     'message':"""
-You need to have a selected account to interact with these functions
+Necesitas tener una cuenta selecionada para interactuar con estas funciones
 ----------------------------------------------------------------------"""
 }

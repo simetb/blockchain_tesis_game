@@ -1,6 +1,7 @@
 @import '../utils/variables.scss';
 @import '../utils/fonts.scss';
 @import '../utils/mixins.scss';
+@import '../utils/display.scss';
 
 .card {
 
@@ -23,37 +24,25 @@
         height: 120px;
         @include flexbox(column);
         margin-left: 220px;
+  
+    }
 
-        .button {
-
-            width: 120px;
-            color: nth($palette, 3);
-            background-color: nth($palette, 5);
-            @include flexbox(row, center, center);
-            border: none;
-            padding: 8px 24px;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: .125s;
-
-            .icon{
-                font-size: nth($fontSizes,2);
-            }
+    .price {
         
-            span{
-                @include font(title);
-                text-transform: uppercase;
-                margin-left: 10px;
-                font-weight: 700;
-            }
+        margin-bottom: 10px;
+        color: nth($palette, 5 );
+        font-size: nth($fontSizes, 2 );
+        text-align: center;
         
-            &:hover{
-                color: nth($palette, 5);
-                background-color: nth($palette, 3);
-            }
+        .price_number{
+            font-size: nth($fontSizes, 3 );
         }
-    
         
+        b {
+            @include font(title);
+            font-size: nth($fontSizes, 2 );
+            color: nth($palette, 4 );
+        }
     }
 
     .students {
@@ -67,6 +56,25 @@
         span {
             font-size: nth($fontSizes,5);
             margin-top: -10px;
+        }
+    }
+
+    
+    @include device("mobile"){
+        @include flexbox(column, center);
+        height: auto;
+        padding-top: 130px;
+        .school{
+            position: absolute; 
+            left: 0; 
+            right: 0; 
+            margin-left: auto; 
+            margin-right: auto; 
+            width: 200px;
+        }
+        .mint{
+            margin: 0;
+            margin-bottom: 15px;
         }
     }
 

@@ -1,166 +1,224 @@
-import ABI from "./../src/ganache-local/contracts/StudentsMain.json"
-import { useMoralis ,useWeb3ExecuteFunction} from "react-moralis";
-import contract from "./../src/contract-config.json"
+// Moralis
+import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
+// Info Json
+import ABI from "./../src/ganache-local/contracts/StudentsMain.json";
+import contract from "./../src/contract-config.json";
+import images from "../src/freshers-img.json";
+// Custom Hooks
 import { useBigNumber } from "./useBigNumber";
-import images from "../src/img/img-url.json";
-import { useUserInfo } from "./useUserInfo";
+import { useGetRandom } from "./useGetRandom";
 
-export const useNft = () =>{
+// custom hook made for nft manipulation using moralis, json and react hooks
+// To interact with all these functions u need to have an signed metamask user
+export const useNft = () => {
+  // Hooks Initializer
+  const contractProcessor = useWeb3ExecuteFunction();
+  const { account, Moralis } = useMoralis();
+  const { HexToDec } = useBigNumber();
+  const { random } = useGetRandom()
 
-    const contractProcessor = useWeb3ExecuteFunction();
-    const {account, Moralis} = useMoralis();
-    const {HexToDec} = useBigNumber();
-    const {loadIndexNft,indexs} = useUserInfo()
+  // Function to burn an existing nft
+  //
+  // - Requirements:
+  //
+  // - Need StudentIndex
+  const burnNft = (index: number) => {
+    console.log("Burning Nft");
+    // Options burnNft
+    let options_burnNft = {
+      contractAddress: contract.contracts.Main.address,
+      functionName: "BurnNft",
+      abi: ABI.abi,
+      params: {
+        studentIndex: index,
+      },
+    };
 
-    // Burn nft
-    //
-    // - Requirements:
-    //
-    // - Need StudentIndex
-    const burnNft = (index:number) =>{
-        // Options burnNft
-        let options_burnNft = {
-            contractAddress: contract.contracts.Main.address,
-            functionName: 'BurnNft',
-            abi : ABI.abi,
-            params:{
-                studentIndex: index 
-            }
+    // Burn the Nft
+    contractProcessor.fetch({
+      params: options_burnNft,
+      onSuccess: async () => {
+        alert("Nft Was Burn");
+      },
+      onError: (e) => {
+        console.log(e);
+      },
+    });
+  };
+
+  // Function to Mint Nft
+  // The Mint is completly randomness
+  // The ramdoness it`s got by radom hook function, when the nfts is minted to be valid in the game
+  // you need to accept the token uri set transaction
+  const mintNft = async () => {
+    // Only 1 per 1
+    let amount = 1;
+    
+    for (let index = 0; index < amount; index++) {
+      
+      // Generate Random Value
+      const randomValue = Number(random().toFixed())
+      
+      // Options mintNft, with the generated random value
+      let options_mint = {
+        contractAddress: contract.contracts.Main.address,
+        functionName: "CreateNftStudent",
+        abi: ABI.abi,
+        params:{
+          random: randomValue
         }
-    
-        // Burn the Nft
-        contractProcessor.fetch({
-            params:options_burnNft,
-            onSuccess: async() =>{
-                console.log("NFT BURNED!")
-            }
-        })
-    }
+      };
 
-    // Mint Nft
-    const mintNft = () =>{
-        
-        loadIndexNft()
+      // call the contract function CreateNftStudent
+      await contractProcessor.fetch({
+        params: options_mint,
+        onSuccess: async () => {
+          console.log("NFT MINTED!");
 
-        // Options mintNft
-        let options_mint = {
+          // Option Index
+          let options_index = {
             contractAddress: contract.contracts.Main.address,
-            functionName: 'CreateNftStudent',
-            abi : ABI.abi
-        }
-    
-        // mint the Nft
-        contractProcessor.fetch({
-            params:options_mint,
-            onSuccess: async() =>{
-                console.log("NFT MINTED!")
-                
-                // Get Last Nft
-                let lastIndex = (indexs.length - 1)
-                let lastNft = indexs[lastIndex]
+            functionName: "GetStudentsByOwner",
+            abi: ABI.abi,
+            params: {
+              owner: account,
+            },
+          };
 
-                // Get Stats of the Nft
-                let option_info_nft = {
-                    contractAddress: contract.contracts.Main.address,
-                    functionName: 'GetStudentInfo',
-                    abi : ABI.abi,
-                    params:{
-                        studentIndex: lastNft
-                    }
-                }
+          // Call the contract function GetStudentsByOwner
+          contractProcessor.fetch({
+            params: options_index,
+            onSuccess: async (result: any) => {
+              let index = result.length - 1;
+              const lastNft = HexToDec(result[index]);
 
-                contractProcessor.fetch({
-                    params:option_info_nft,
-                    onSuccess: async(result:any) =>{
-                        
-                        let level = HexToDec(result[0]);
-                        let intelligence = HexToDec(result[1])
-                        let cheat = HexToDec(result[2])
-                        let name = result[3]
-                        let id = HexToDec(result[5])
-                        let file;
-                        if(level == 1){
-                            file = images.image.one;
-                            console.log("Your Character is Level 1")
-                        }else if(level == 2){
-                            file = images.image.two;
-                            console.log("Your character is level 2")
-                        }else{
-                            file = images.image.three;
-                            console.log("Your character is level 3")
-                        }
-                        //Get Stats and Id
-                        const metadata = {
-                            "type": "Fresher",
-                            "name": name,
-                            "image":file,
-                            "id":id,
-                            "atributes":[
-                                {
-                                    "atribute_type": "level",
-                                    "value":level
-                                },
-                                {
-                                    "atribute_type": "intelligence",
-                                    "value":intelligence
-                                },
-                                {
-                                    "atribute_type": "cheat",
-                                    "value":cheat
-                                }
-                            ]
-                        }
-                        setTokenUri(metadata,id);
-                    }
-    
-                })
-                
-            }
-        })
+              // Get Stats of the Nft
+              let option_info_nft = {
+                contractAddress: contract.contracts.Main.address,
+                functionName: "GetStudentInfo",
+                abi: ABI.abi,
+                params: {
+                  studentIndex: lastNft,
+                },
+              };
+
+              // Call the contract function GetStudentInfo
+              contractProcessor.fetch({
+                params: option_info_nft,
+                onSuccess: async (result: any) => {
+                  let level = HexToDec(result[0]);
+                  let intelligence = HexToDec(result[1]);
+                  let cheat = HexToDec(result[2]);
+                  let name = result[3];
+                  let id = HexToDec(result[5]);
+                  let market = result[6];
+                  let file;
+                  if (level == 1) {
+                    file = images.image.one;
+                    console.log("Your Character is Level 1");
+                  } else if (level == 2) {
+                    file = images.image.two;
+                    console.log("Your character is level 2");
+                  } else {
+                    file = images.image.three;
+                    console.log("Your character is level 3");
+                  }
+                  //Get Stats and Id
+                  const metadata = {
+                    type: "Fresher",
+                    name: name,
+                    image: file,
+                    id: id,
+                    atributes: [
+                      {
+                        atribute_type: "level",
+                        value: level,
+                      },
+                      {
+                        atribute_type: "intelligence",
+                        value: intelligence,
+                      },
+                      {
+                        atribute_type: "cheat",
+                        value: cheat,
+                      },
+                    ],
+                    market: market,
+                  };
+                  // Create the metadata and token uri
+                  setTokenUri(metadata, id);
+                },
+                onError: async (e) => {
+                  console.log(e);
+                },
+              });
+            },
+          });
+        },onError: async(e) =>{
+          console.log(e)
+        },
+      });
     }
+  };
 
-    const setTokenUri = async (metadata,id) =>{
-        const metadataFile:any = new Moralis.File("metadata.json",{base64: btoa(JSON.stringify(metadata))})
-        await metadataFile.saveIPFS();
-        console.log( metadataFile.ipfs())
-        let option_token_uri = {
-            contractAddress: contract.contracts.Main.address,
-            functionName: 'SetTokenURI',
-            abi : ABI.abi,
-            params:{
-                studentId: id,
-                tokenURI: metadataFile.ipfs()
-            }
-        }
-        contractProcessor.fetch({
-            params:option_token_uri,
-            onSuccess: async() =>{
-                console.log("Token Uri Setted")
-            }
-        })
+  // Function to save the token Uri
+  const setTokenUri = async (metadata, id) => {
+    // Transform the metadata in JSON
+    const metadataFile: any = new Moralis.File("metadata.json", {
+      base64: btoa(JSON.stringify(metadata)),
+    });
+    // Save the file in Ipf
+    await metadataFile.saveIPFS();
+    console.log(metadataFile.ipfs());
 
-    }
-    const transferNft = (to,index) =>{
-        let option_transfer = {
-            contractAddress: contract.contracts.Main.address,
-            functionName: 'TransferNft',
-            abi : ABI.abi,
-            params:{
-                from:account,
-                to: to,
-                studentIndex: index
-            }
-        }
-        contractProcessor.fetch({
-            params:option_transfer,
-            onSuccess: async() =>{
-                console.log("Nft Transfered")
-            }
-        })
-    }
+    // Option of token uri
+    let option_token_uri = {
+      contractAddress: contract.contracts.Main.address,
+      functionName: "SetTokenURI",
+      abi: ABI.abi,
+      params: {
+        studentId: id,
+        tokenURI: metadataFile.ipfs(),
+      },
+    };
 
-    
-    return {burnNft,mintNft,transferNft}
-}
+    // Call the contract function SetTokenURI
+    contractProcessor.fetch({
+      params: option_token_uri,
+      onSuccess: async () => {
+        console.log("Token Uri Setted");
+      },
+    });
+  };
 
-    
+  // Function to transfer an NFT
+  //
+  // - Requirements:
+  //
+  // to: secundary address
+  // index: Index of the nft
+  const transferNft = (to, index) => {
+
+    // Options to transfer nft
+    let option_transfer = {
+      contractAddress: contract.contracts.Main.address,
+      functionName: "TransferNft",
+      abi: ABI.abi,
+      params: {
+        from: account,
+        to: to,
+        studentIndex: index,
+      },
+    };
+
+    // Contract call Function TransferNft
+    contractProcessor.fetch({
+      params: option_transfer,
+      onSuccess: async () => {
+        alert("Nft Transfered");
+      },
+    });
+  };
+
+  return { burnNft, mintNft, transferNft };
+};
