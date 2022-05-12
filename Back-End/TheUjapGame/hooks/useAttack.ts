@@ -19,11 +19,17 @@ export const useAttack = () => {
   // Custom Hooks
   const { HexToDec } = useBigNumber();
   const { random } = useGetRandom()
+  // Modals
+  const [win,setWin] = useState(false)
+  const [losse,setLosse] = useState(false)
+  const [errorAttack,setErrorAttack] = useState(false)
 
   // function to play or attack a level
   const attackNft = (levelId, index) => {
+    
     // Get a random value
-    const randomValue  = random()
+    const randomValue  = Number(random().toFixed())
+    
     // Options of attack
     let option_attack = {
       contractAddress: contract.contracts.Main.address,
@@ -35,13 +41,38 @@ export const useAttack = () => {
         random: randomValue
       },
     };
+
     // call contract function Attack
     // onSuccess => (Do Something)
     contractProcessor.fetch({
       params: option_attack,
       onSuccess: async () => {
-        console.log("Nft Transfered");
-      },
+        // See if win the victory
+        let option_win_status = {
+          contractAddress: contract.contracts.Main.address,
+          functionName: "SeeWin",
+          abi: ABI.abi,
+          params: {
+            id: index,
+          },
+        };
+
+        contractProcessor.fetch({
+          params:option_win_status,
+          onSuccess: (result) =>{
+            if(result){
+              setWin(true)
+            }else{
+              setLosse(true)
+            }
+          }, onError: (e) =>{
+            setErrorAttack(true)
+          }
+        })
+        
+      }, onError: (e) =>{
+        setErrorAttack(true)
+      }
     });
   };
 
@@ -113,5 +144,5 @@ export const useAttack = () => {
     setLevelInfo(levels);
   };
 
-  return { attackNft, loadLevelInfo, levelInfo };
+  return { attackNft, loadLevelInfo, levelInfo, win, setWin, losse, setLosse, errorAttack,setErrorAttack };
 };

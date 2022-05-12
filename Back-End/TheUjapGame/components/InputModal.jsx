@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 //components
 import { Button } from "./";
@@ -12,9 +12,13 @@ import store from "../public/img/store.png"
 export default function CornerModal({
   showing,
   message = "default",
+  title = "Title",
   closeModal,
+  action,
+  type="text"
 }) {
   const [animation, setAnimation] = useState(styles.card)
+  const [inputValue,setInputValue] = useState("")
   
   const hide = async (ms) => {
     setAnimation(styles.out);
@@ -25,14 +29,17 @@ export default function CornerModal({
   return (
         <div className={styles.container}>
           <div className={`${animation}`}>
-              <p className={styles.title}>Set Price</p>
+              <p className={styles.title}>{title}</p>
               <div className={styles.store}>
                 <Image src={store} alt="ads" width={180} height={180}/> 
               </div>
               <p className={styles.message}>{message}</p>
-              <input type="number" name="price" id="price" />
+              <input spellCheck="false" autoComplete="off" type={type} name="price" id="price" onChange={(e) =>setInputValue(e.target.value)} />
               <div className={styles.button}>
-                <Button>Set Price</Button>
+                <Button onClick={()=> {
+                  action(inputValue)
+                  hide(500)
+                  }}>Aceptar</Button>
               </div>
               <IoClose className={styles.close} onClick={() => hide(500)} />
           </div>

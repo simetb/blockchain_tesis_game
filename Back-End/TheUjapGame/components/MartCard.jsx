@@ -4,8 +4,6 @@ import Image from "next/image";
 import styles from "../styles/components/MartCard.module.scss";
 //images
 import mart from "../public/img/mart.png";
-//icons
-import { IoSchoolOutline } from "react-icons/io5";
 
 export default function MintCard({ freshers }) {
   return (

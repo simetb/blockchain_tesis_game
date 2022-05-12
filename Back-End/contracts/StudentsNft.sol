@@ -92,6 +92,9 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
 
     //  Data random number from the user
     mapping(address => uint256) internal _userRandomNumber;
+    
+    // Mapping the victory
+    mapping(uint256 => bool) internal _winState;
 
     /** 
     *   @dev Events that are used to deploy events in js with the contract
@@ -348,6 +351,14 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
     }
 
     /**
+    * @dev function to see if the nft win the attack 
+    */
+    function SeeWin(uint256 id)
+    public
+    view
+    returns(bool){return(_winState[id]);}
+
+    /**
     *   @dev Get request {VRFConsumerBase - requestRandomness}
     *   Kovan LinktToken Faucet: https://faucets.chain.link
     *
@@ -452,9 +463,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
     {
         require((levelNumber >= 1 && levelNumber <= 10), "Invalid Level");
 
-        Student memory student = _students[studentIndex];
-
-        require(student.intelligenceLevel > 0);
+        require(_students[studentIndex].intelligenceLevel > 0);
 
         requestRandomness(random);
 
@@ -465,11 +474,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
         *   after that, thath go to trigger the cooldown function   
         */
 
-        uint256 basePowerLevel = GetPowerLevel(levelNumber);
-
         uint256 roll = (_userRandomNumber[msg.sender] % 100) + 1 ; 
-
-        uint256 totalAttackPower = roll + student.cheatLevel + student.intelligenceLevel;
 
         _triggerCooldown(studentIndex);
 
@@ -477,17 +482,19 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
 
         _transferUserToContract(attackPrice, msg.sender);
 
-        if( basePowerLevel <= totalAttackPower){
-            uint256 wear = (basePowerLevel/20)*2;
+        if( GetPowerLevel(levelNumber) <= (roll + _students[studentIndex].cheatLevel + _students[studentIndex].intelligenceLevel)){
+            uint256 wear = (GetPowerLevel(levelNumber)/20)*2;
             _wear(studentIndex,wear);
             uint256 reward = Reward(levelNumber);
             _transferContractToUser(reward, msg.sender);
-            emit ResultAttack(true, totalAttackPower, basePowerLevel,wear,roll,reward);
+            _winState[studentIndex] = true;
+            emit ResultAttack(true, roll + _students[studentIndex].cheatLevel + _students[studentIndex].intelligenceLevel, GetPowerLevel(levelNumber),wear,roll,reward);
     
         }else{
-            uint256 wear = (basePowerLevel/10)*2;
+            uint256 wear = (GetPowerLevel(levelNumber)/10)*2;
             _wear(studentIndex,wear);
-            emit ResultAttack(false, totalAttackPower, basePowerLevel,wear,roll,-attackPrice);
+            _winState[studentIndex] = false;
+            emit ResultAttack(false, roll + _students[studentIndex].cheatLevel + _students[studentIndex].intelligenceLevel, GetPowerLevel(levelNumber),wear,roll,-attackPrice);
         }
 
     }

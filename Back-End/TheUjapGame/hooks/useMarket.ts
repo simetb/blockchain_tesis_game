@@ -20,14 +20,19 @@ export const useMarket = () => {
   const [nftsMarket, setNftsMarket] = useState([]);
   const [infoNfts, setInfoNfts] = useState([]);
 
+  // Modals
+  const [successBuy,setSuccessBuy] = useState(false)
+  const [successSell,setSuccessSell] = useState(false)
+  const [successOut,setSuccessOut] = useState(false)
+  const [errorMarket,setErrorMarket] = useState(false)
+
   // Function to put an nft in market
   //
   // - Requirements:
   //
   // index: Nft
   // price: Price of the nft of the owner need to be uint
-  const putInMarket = (index, price) => {
-    console.log(index);
+  const putInMarket = (index, price) => {;
 
     // Options to put in market an nft
     let options = {
@@ -45,8 +50,10 @@ export const useMarket = () => {
     contractProcessor.fetch({
       params: options,
       onSuccess: async () => {
-        alert("Nft In marketPlace");
-      },
+        setSuccessSell(true)
+      },onError:(e)=>{
+        setErrorMarket(true)
+      }
     });
   };
 
@@ -57,7 +64,6 @@ export const useMarket = () => {
   //
   // Only the owner of the nft can execute this function
   const getOutMarket = async (index) => {
-    console.log(index);
 
     // Options of get out
     let options = {
@@ -74,10 +80,10 @@ export const useMarket = () => {
     contractProcessor.fetch({
       params: options,
       onSuccess: async () => {
-        alert("nft outside the marketplace");
+        setSuccessOut(true)
       },
       onError: (e) => {
-        //console.log(e)
+        setErrorMarket(true)
       },
     });
   };
@@ -105,7 +111,6 @@ export const useMarket = () => {
         }
       },
       onError: (e) => {
-        console.log(e);
       },
     });
     // Select result array
@@ -151,6 +156,7 @@ export const useMarket = () => {
             onSuccess: async (result) => {
               const iq = HexToDec(result[1]);
               const id = HexToDec(result[5]);
+              const market = result[6]
 
               // Get the token uri to get the image and the fix stats
               let tokenURIOption = {
@@ -168,69 +174,88 @@ export const useMarket = () => {
                 params: tokenURIOption,
                 onSuccess: async (result: string) => {
                   if (!result) {
-                    console.log("Nft does`nt have token URI!");
                   } else {
-                    const res = await fetch(result);
-                    const data = await res.json();
-                    totalInfo.push({
-                      name: data.name,
-                      atributes: {
-                        iq: iq,
-                        level: data.atributes[0].value,
-                        cheat: data.atributes[2].value,
-                      },
-                      idStudent: id,
-                      idMarket: idMarket,
-                      image: data.image,
-                      price: price/10**18,
-                    });
-
-                    setInfoNfts(totalInfo);
+                    if(market){
+                      const res = await fetch(result);
+                      const data = await res.json();
+                      totalInfo.push({
+                        name: data.name,
+                        atributes: {
+                          iq: iq,
+                          level: data.atributes[0].value,
+                          cheat: data.atributes[2].value,
+                        },
+                        idStudent: id,
+                        idMarket: idMarket,
+                        image: data.image,
+                        price: price/10**18,
+                      });
+                      setInfoNfts(totalInfo);
+                    }
                   }
                 },
                 onError: (e) => {
-                  console.log(e);
                 },
               });
             },
             onError: (e) => {
-              console.log(e);
             },
           });
         },
         onError: (e) => {
-          console.log(e);
         },
       });
     }
-    console.log(totalInfo);
   };
 
   // Function to buy an nft in the marketplace
   // u need to have the full amount
   // and select the nft in the respecting view
   const buyNft = (index) => {
-    // options buy in market 
-    let options_info = {
+    // Get student maket index by id
+    let options_market = {
       contractAddress: contract.contracts.Main.address,
-      functionName: "BuyMarket",
+      functionName: "GetMarketIndexById",
       abi: ABI.abi,
       params: {
-        marketIndex: index,
+        id: index,
       },
     };
 
-    // Call contract function BuyMarket
     contractProcessor.fetch({
-      params: options_info,
-      onSuccess: () => {
-        alert("Nft Buyed");
-      },
-      onError: (e) => {
-        alert(e);
-      },
-    });
-    console.log("Buying Nft");
+      params: options_market,
+      onSuccess: (result) =>{
+
+        const value = HexToDec(result)
+
+        let options_info = {
+          contractAddress: contract.contracts.Main.address,
+          functionName: "BuyMarket",
+          abi: ABI.abi,
+          params: {
+            marketIndex: value,
+          },
+        }
+
+        // Call contract function BuyMarket
+        contractProcessor.fetch({
+          params: options_info,
+          onSuccess: () => {
+            setSuccessBuy(true)
+          },
+          onError: (e) => {
+          setErrorMarket(true)
+          },
+        });
+
+      },onError: (e) =>{
+        setErrorMarket(true)
+      }
+    })
+
+   
+
+    
   };
 
   return {
@@ -241,5 +266,13 @@ export const useMarket = () => {
     loadInfoNfts,
     infoNfts,
     buyNft,
+    successBuy,
+    setSuccessBuy,
+    successSell,
+    setSuccessSell,
+    errorMarket,
+    setErrorMarket,
+    successOut,
+    setSuccessOut
   };
 };

@@ -96,7 +96,7 @@ export const useUserInfo = () => {
         params: id_options,
         onSuccess: async (result: any) => {
           const id = HexToDec(result[5]);
-          const intelligence = HexToDec(result[1]);
+          const intelligence:number = HexToDec(result[1]);
           const market = result[6];
 
           // Search The Index By Id
@@ -130,7 +130,6 @@ export const useUserInfo = () => {
                 params: tokenURIOption,
                 onSuccess: async (result: string) => {
                   if (!result) {
-                    console.log("Nft does`nt have token URI!");
                   } else {
                     // Fetch to the token uri and getting the data
                     const res = await fetch(result);
@@ -140,7 +139,7 @@ export const useUserInfo = () => {
                       type: data.type,
                       name: data.name,
                       atributes: {
-                        iq: intelligence,
+                        iq: intelligence ,
                         level: data.atributes[0].value,
                         cheat: data.atributes[2].value,
                       },
@@ -154,14 +153,12 @@ export const useUserInfo = () => {
                   }
                 },
                 onError: (e) => {
-                  console.log(e);
                 },
               });
             },
           });
         },
         onError: (e) => {
-          console.log(e);
         },
       });
     }

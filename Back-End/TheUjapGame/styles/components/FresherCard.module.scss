@@ -33,7 +33,15 @@
         margin-left: 10px;
         p{
             margin-bottom: 5px;
+            
         }
+    }
+
+    .intelligence{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 80px;
     }
 
     .fresher, .platform {

@@ -3,8 +3,7 @@ import styles from "../styles/components/TestSheet.module.scss";
 //icons
 import { IoCaretForwardCircleSharp } from "react-icons/io5";
 
-import { useAttack } from "../hooks";
-
+// Default values to basic level
 export default function TestSheet({
   name = "Test",
   power = 0,
@@ -12,8 +11,8 @@ export default function TestSheet({
   reward = 0,
   fresher = { id: -1 },
   level = 0,
+  attackNft = () =>{}
 }) {
-  const { attackNft } = useAttack();
 
   return (
     <div className={styles.testSheet}>

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //components
-import { Button } from "../components/";
+import { Button, CornerModal} from "../components/";
 //styles
 import styles from "../styles/components/SwapCard.module.scss";
 //icons
@@ -9,27 +9,30 @@ import { FaEthereum } from "react-icons/fa";
 // Moralis
 import { useToken } from "../hooks";
 
-export default function SwapCard({ action, price }) {
-  const { buyTokens, sellTokens } = useToken();
-
+export default function SwapCard({ action, price, buyTokens, sellTokens }) {
+  // Mapp States
   const [total, setTotal] = useState(0);
   const [amount, setAmount] = useState(0);
 
+  // Buy option, prevenDefault no reload
   const Buy = (e) => {
     e.preventDefault();
     buyTokens(amount);
   };
 
+  // Sell option, prevenDefault no reload
   const Sell = (e) => {
     e.preventDefault();
     sellTokens(amount);
   };
 
+  // Mapping the total value (Depend TokenPrice)
   const changeTotal = (e) => {
     setAmount(e.target.value);
     setTotal(e.target.value * price);
   };
 
+  // Mapping changeamount (Depend TokenPrice)
   const changeAmount = (e) => {
     setTotal(e.target.value);
     setAmount(e.target.value / price);

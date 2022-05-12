@@ -15,10 +15,6 @@
             }
             color: nth($palette , 5 );
             margin-bottom: 5px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 120px;
         }
     }
     
@@ -33,6 +29,13 @@
         bottom: 0;
         right: 25px;
         color: nth($palette,1);
+    }
+
+    .intelligence{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 80px;
     }
 }
 

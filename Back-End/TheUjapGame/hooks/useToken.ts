@@ -4,7 +4,7 @@ import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import ABI from "../src/ganache-local/contracts/StudentsMain.json";
 import contract from "../src/contract-config.json";
 // React
-import { useState } from "react";
+import { useState} from "react";
 // Custom Hooks
 import { useBigNumber } from "./useBigNumber";
 
@@ -19,6 +19,10 @@ export const useToken = () => {
   // Token
   const [tokenPool, setTokenPool] = useState(-1); // Save the actual token pool
   const [liquidityPool, setLiquidityPool] = useState(-1); // Save the actual liquidity pool
+  // Modals
+  const [successSell,setSuccessSell] = useState(false)
+  const [successBuy,setSuccessBuy] = useState(false)
+  const [error,setError] = useState(false)
 
   // function that loads the information of the token in the contract
   const loadTokenInfo = () => {
@@ -37,7 +41,6 @@ export const useToken = () => {
         setTokenPool(data / 10 ** 18);
       },
       onError: (error) => {
-        console.error(error);
       },
     });
 
@@ -56,7 +59,6 @@ export const useToken = () => {
         setLiquidityPool(data / 10 ** 18);
       },
       onError: (error) => {
-        console.error(error);
       },
     });
   };
@@ -96,10 +98,10 @@ export const useToken = () => {
       params: options,
       onSuccess: () => {
         //On Success the Operation => Do Someting?
-        console.log("Tokens Buyed - Do Something");
+        setSuccessBuy(true)
       },
       onError: (error) => {
-        console.error(error);
+        setError(true)
       },
     });
   };
@@ -124,10 +126,10 @@ export const useToken = () => {
       params: options,
       //On Success the Operation => Do Someting?
       onSuccess: () => {
-        console.log("Tokens Selled - Do Something");
+        setSuccessSell(true)
       },
       onError: (error) => {
-        console.error(error);
+        setError(true)
       },
     });
   };
@@ -136,8 +138,14 @@ export const useToken = () => {
     loadTokenInfo,
     buyTokens,
     sellTokens,
+    setSuccessBuy,
+    setSuccessSell,
+    setError,
     tokenPool,
     liquidityPool,
     tokenPrice,
+    successBuy,
+    successSell,
+    error
   };
 };

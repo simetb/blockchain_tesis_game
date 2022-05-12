@@ -9,6 +9,8 @@ import platform from "../public/img/platform.png";
 import baseFresher from "../public/img/fresher.png";
 
 export default function FresherPreview({ fresher }) {
+
+  // Values to show
   let id;
   let name;
   let iq;
@@ -16,6 +18,7 @@ export default function FresherPreview({ fresher }) {
   let level;
   let image;
 
+  // Preventing Null Fresher Error
   try {
     id = fresher.id;
     name = fresher.name;
@@ -32,7 +35,6 @@ export default function FresherPreview({ fresher }) {
     image = baseFresher;
   }
 
-  console.log(fresher);
   return (
     <div className={styles.preview}>
       <div className={styles.info}>
@@ -42,7 +44,7 @@ export default function FresherPreview({ fresher }) {
         <p>
           <b>Nombre:</b> {name}
         </p>
-        <p>
+        <p className={styles.intelligence}>
           <b>Iq:</b> {iq}
         </p>
         <p>

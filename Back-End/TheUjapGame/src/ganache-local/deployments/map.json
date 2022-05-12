@@ -1,16 +1,16 @@
 {
   "5777": {
     "LinkToken": [
-      "0x2F931DcA1cA43EAB01CcB59fD364B34468D68D69"
+      "0xF9c09dF7CB65dA187e0e172877a2ef176Ff42115"
     ],
     "StudentsMain": [
-      "0x064aa02353104469cC441Dd610bDe6ba6bCF1fbe"
+      "0x74d6AcC07D11c594D108e6964aA885CE9a3Bbc83"
     ],
     "TokenUJG": [
-      "0x1FB94FCc212e5a601A44b532cB37569a31277914"
+      "0x0cf3c0cBCf713D9be1409cE2E1DB78C268fF8d48"
     ],
     "VRFCoordinatorMock": [
-      "0x4450b0AE593dE9D8185b0e6455ab99C0B727d5cE"
+      "0xbe4CbF596064133B2575297694e950DBC9654FbC"
     ]
   }
 }

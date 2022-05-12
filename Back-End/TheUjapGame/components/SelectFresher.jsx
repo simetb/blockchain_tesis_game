@@ -5,8 +5,10 @@ import { Button } from "../components/";
 import styles from "../styles/components/SelectFresher.module.scss";
 
 export default function SelectFresher({ freshers, handleClick }) {
+  // Default null value
   const [fresher, setFresher] = useState(null);
 
+  // Get fresher Index
   const handleChange = (e) => {
     setFresher(e.target.value);
   };

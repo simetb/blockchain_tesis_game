@@ -25,18 +25,34 @@ import teacher7 from "../public/img/teachers/teacher7.png";
 import teacher8 from "../public/img/teachers/teacher8.png";
 import teacher9 from "../public/img/teachers/teacher9.png";
 import teacher10 from "../public/img/teachers/teacher10.png";
+import baseFresher from "../public/img/fresher.png";
 
 import { useAttack } from "../hooks";
 
-export default function LevelTest({ vsBar, fresher }) {
+export default function LevelTest({ vsBar, fresher, attackNft }) {
+  
+  // Custom hook {useAttack}
   const { loadLevelInfo, levelInfo } = useAttack();
 
+  // Load the info from levels
   useEffect(() => {
     loadLevelInfo();
   }, []);
 
+  // Prevent Null Fresher error
   if (fresher != undefined) {
-    fresher = JSON.parse(fresher);
+    try{
+      fresher = JSON.parse(fresher);
+    }catch{
+      fresher = {
+        id : "???",
+        name : "???",
+        iq : "???",
+        cheat: "???",
+        level: 0,
+        image : baseFresher
+      }
+    }
   }
 
   try {
@@ -66,6 +82,7 @@ export default function LevelTest({ vsBar, fresher }) {
               name={"Geometria Analitica"}
               fresher={fresher}
               level={1}
+              attackNft={attackNft}
             />
           </div>
         </div>
@@ -96,6 +113,7 @@ export default function LevelTest({ vsBar, fresher }) {
               name={"Algebra Lineal"}
               fresher={fresher}
               level={2}
+              attackNft={attackNft}
             />
           </div>
         </div>
@@ -123,6 +141,7 @@ export default function LevelTest({ vsBar, fresher }) {
               name={"Fisica"}
               fresher={fresher}
               level={3}
+              attackNft={attackNft}
             />
           </div>
         </div>
@@ -153,6 +172,7 @@ export default function LevelTest({ vsBar, fresher }) {
               name={"Fund Elec"}
               fresher={fresher}
               level={4}
+              attackNft={attackNft}
             />
           </div>
         </div>
@@ -180,6 +200,7 @@ export default function LevelTest({ vsBar, fresher }) {
               name={"Diseño Logico"}
               fresher={fresher}
               level={5}
+              attackNft={attackNft}
             />
           </div>
         </div>
@@ -210,6 +231,7 @@ export default function LevelTest({ vsBar, fresher }) {
               name={"Control Instrumen"}
               fresher={fresher}
               level={6}
+              attackNft={attackNft}
             />
           </div>
         </div>
@@ -237,6 +259,7 @@ export default function LevelTest({ vsBar, fresher }) {
               name={"Sis de Informacion"}
               fresher={fresher}
               level={7}
+              attackNft={attackNft}
             />
           </div>
         </div>
@@ -267,6 +290,7 @@ export default function LevelTest({ vsBar, fresher }) {
               name={"Met Cuantitativos"}
               fresher={fresher}
               level={8}
+              attackNft={attackNft}
             />
           </div>
         </div>
@@ -297,6 +321,7 @@ export default function LevelTest({ vsBar, fresher }) {
               name={"Tesis"}
               fresher={fresher}
               level={9}
+              attackNft={attackNft}
             />
           </div>
         </div>
@@ -327,6 +352,7 @@ export default function LevelTest({ vsBar, fresher }) {
               name={"Vida Laboral"}
               fresher={fresher}
               level={10}
+              attackNft={attackNft}
             />
           </div>
         </div>
@@ -557,6 +583,7 @@ export default function LevelTest({ vsBar, fresher }) {
               name={"Vida Laboral"}
               fresher={fresher}
               level={10}
+              attackNft={attackNft}
             />
           </div>
         </div>

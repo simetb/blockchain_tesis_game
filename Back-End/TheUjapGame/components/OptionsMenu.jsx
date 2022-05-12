@@ -4,38 +4,37 @@ import { IoGift, IoTrash, IoPricetags } from "react-icons/io5";
 //styles
 import styles from "../styles/components/OptionsMenu.module.scss";
 
-import { useNft, useMarket } from "../hooks";
+import { useMarket } from "../hooks";
 
 // This component triggers the actions of GIFT, BURN AND SELL NFT
-export default function OptionsMenu({ fresher, isInMarket }) {
-  const { transferNft, burnNft } = useNft();
-  const { putInMarket, getOutMarket } = useMarket();
+export default function OptionsMenu({ fresher, isInMarket, transferModal, setNftId, burnModal,marketModal}) {
 
+  // Funtion to get out the nft
+  // - Requirement
+  // - Only the nft owner can execute this function
+  const {getOutMarket} = useMarket()
+
+  // Active the burn modal
   const burn = () => {
-    let decision = confirm("are you sure you want to burn the nft?");
-    if (decision) {
-      burnNft(Number(fresher.id));
-    }
+    burnModal(true)
+    setNftId(Number(fresher.id))
   };
 
+  // Active the ransfer modal
   const transfer = () => {
-    let address = prompt("Address of the lucky wallet");
-    if (address != "") {
-      transferNft(address, Number(fresher.id));
-    }
+    transferModal(true)
+    setNftId(Number(fresher.id))
   };
 
+  // Active the market modal && Get out of market my nft
   const marketOption = () => {
+    let value = fresher.id;
     if (fresher.market) {
-      let value = fresher.id;
       getOutMarket(value);
+      marketModal(false)
     } else {
-      let price = Number(prompt("Price in UJG"));
-      if (price != NaN && price > 0) {
-        putInMarket(fresher.id, price);
-      } else {
-        alert("Price Invalid");
-      }
+      marketModal(true)
+      setNftId(value)
     }
   };
 

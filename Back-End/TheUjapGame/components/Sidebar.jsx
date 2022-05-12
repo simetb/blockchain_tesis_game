@@ -12,7 +12,6 @@ import { RiCoinsLine } from "react-icons/ri";
 
 export default function Sidebar({ setActive, active }) {
   const router = useRouter();
-  console.log(active);
   return (
     <aside className={active ? styles.activeSidebar : styles.sidebar}>
       <nav>

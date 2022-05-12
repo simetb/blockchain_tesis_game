@@ -7,6 +7,7 @@ import images from "../src/freshers-img.json";
 // Custom Hooks
 import { useBigNumber } from "./useBigNumber";
 import { useGetRandom } from "./useGetRandom";
+import { useState } from "react";
 
 // custom hook made for nft manipulation using moralis, json and react hooks
 // To interact with all these functions u need to have an signed metamask user
@@ -16,6 +17,11 @@ export const useNft = () => {
   const { account, Moralis } = useMoralis();
   const { HexToDec } = useBigNumber();
   const { random } = useGetRandom()
+  // Modals
+  const [successMint, setSuccessMint] = useState(false)
+  const [successTransfer, setSuccessTransfer] = useState(false)
+  const [successBurn, setSuccessBurn] = useState(false)
+  const [error, setError] = useState(false)
 
   // Function to burn an existing nft
   //
@@ -23,7 +29,6 @@ export const useNft = () => {
   //
   // - Need StudentIndex
   const burnNft = (index: number) => {
-    console.log("Burning Nft");
     // Options burnNft
     let options_burnNft = {
       contractAddress: contract.contracts.Main.address,
@@ -38,10 +43,11 @@ export const useNft = () => {
     contractProcessor.fetch({
       params: options_burnNft,
       onSuccess: async () => {
-        alert("Nft Was Burn");
+        setSuccessBurn(true)
       },
       onError: (e) => {
         console.log(e);
+        setError(true)
       },
     });
   };
@@ -187,7 +193,10 @@ export const useNft = () => {
       params: option_token_uri,
       onSuccess: async () => {
         console.log("Token Uri Setted");
-      },
+        setSuccessMint(true)
+      },onError: async () =>{
+        setError(true)
+      }
     });
   };
 
@@ -215,10 +224,12 @@ export const useNft = () => {
     contractProcessor.fetch({
       params: option_transfer,
       onSuccess: async () => {
-        alert("Nft Transfered");
-      },
+        setSuccessTransfer(true)
+      },onError: async() =>{
+        setError(true)
+      }
     });
   };
 
-  return { burnNft, mintNft, transferNft };
+  return { burnNft, mintNft, transferNft,  setSuccessMint,setSuccessTransfer,setSuccessBurn, setError, successMint,successTransfer,successBurn, error};
 };

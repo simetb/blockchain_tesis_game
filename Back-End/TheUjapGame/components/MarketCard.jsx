@@ -7,9 +7,7 @@ import styles from "../styles/components/MarketCard.module.scss";
 //images
 import platform from "../public/img/platform.png";
 
-import { useMarket } from "../hooks";
-export default function FresherCard({ fresher }) {
-  const { buyNft } = useMarket();
+export default function FresherCard({ fresher, buyNft }) {
 
   return (
     <div className={styles.card}>
