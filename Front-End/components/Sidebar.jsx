@@ -3,14 +3,13 @@ import { useRouter } from "next/router";
 import Link from 'next/link';
 import styles from "../styles/components/Sidebar.module.scss";
 import {IoIdCardOutline, IoStorefrontOutline, IoHomeOutline} from 'react-icons/io5';
-import {MdOutlineQuiz} from 'react-icons/md';
+import {MdOutlineQuiz, MdAdminPanelSettings} from 'react-icons/md';
 import {RiCoinsLine} from 'react-icons/ri';
-
-
 
 export default function Sidebar( {setActive, active} ) {
   const router = useRouter();
-  console.log(active)
+  // test var
+  const isAdmin = true;
   return (
     <aside className={active ? styles.activeSidebar : styles.sidebar}>
       <nav>
@@ -23,6 +22,15 @@ export default function Sidebar( {setActive, active} ) {
               </span>
             </li>
           </Link>
+          {/* The admin view only showing when isAdmin is true */}
+          { isAdmin && <Link href='/admin' passHref>
+            <li onClick={() => setActive(!active)} className={router.pathname == "/admin" ? styles.active: ""}>
+              <MdAdminPanelSettings className={styles.icon}/>
+              <span>
+                manage
+              </span>
+            </li>
+          </Link>}
           <Link href='/freshers' passHref>
             <li onClick={() => setActive(!active)} className={router.pathname == "/freshers" ? styles.active: ""}>
               <IoIdCardOutline className={styles.icon}/>

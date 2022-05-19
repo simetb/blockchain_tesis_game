@@ -29,7 +29,7 @@ export default function nft( {freshers} ) {
         <title>Freshers - Play</title>
       </Head>
       {/* Test Modal Button */}
-       <button onClick={() => setShowModal(!showModal)}>click me</button>
+      {/* <button onClick={() => setShowModal(!showModal)}>click me</button> */}
       <Title>Take a test</Title>
       <section className={styles.levels}>
         <TestCard freshers={freshers} />

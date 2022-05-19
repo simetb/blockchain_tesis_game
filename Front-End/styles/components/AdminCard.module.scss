@@ -1,0 +1,65 @@
+@import '../utils/variables.scss';
+@import '../utils/fonts.scss';
+@import '../utils/mixins.scss';
+@import '../utils/display.scss';
+
+.adminCard {
+
+    @include flexbox(row, space-around ,center);
+    width: 100%;
+    min-height: 150px;
+    padding: 15px;
+    background-color: nth($palette, 2);
+    border-radius: 20px;
+    position: relative;
+
+    .hall {
+        position: absolute;
+        top: -50px;
+        left: 20px;
+    }
+
+    .game{
+        margin-left: 200px;
+    }
+
+    .game, .market {
+        color: nth($palette,5);
+        border: solid 2px nth($palette,5);
+        border-radius: 20px;
+        width: 220px;
+        height: 120px;
+        padding: 10px;
+        text-align: center;
+        @include flexbox(column,initial);
+        p{
+            margin-bottom: 10px;
+        }
+        span {
+            font-size: nth($fontSizes,5);
+            margin-top: -15px;
+        }
+    }
+
+    @include device("mobile"){
+        @include flexbox(column, center);
+        height: auto;
+        padding-top: 0px;
+        .hall{
+            position: absolute; 
+            left: 0; 
+            right: 0; 
+            margin-left: auto; 
+            margin-right: auto; 
+            width: 200px;
+        }
+        .game{
+            margin-left: 0;
+            margin-top: 130px;
+        }
+        .game, .market {
+            margin-bottom: 10px;
+        }
+    }
+
+}
