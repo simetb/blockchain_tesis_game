@@ -44,12 +44,12 @@ export default function Home() {
             Freshers es un juego Play to Earn hecho con fines de Aprendizaje/Educativo
           </p>
           <div className={styles.buttons}>
-            <a href="">
+            <a href="https://temispita9000.gitbook.io/documentacion-ujapgame/">
               <Button onClick={undefined}>
                 <IoDocumentTextOutline /> &nbsp; Documentacion
               </Button>
             </a>
-            <a href="">
+            <a href="https://temispita9000.gitbook.io/cryptos/" target="_blank">
               <Button onClick={undefined}>
                 <IoDocumentOutline /> &nbsp; Whitepaper
               </Button>

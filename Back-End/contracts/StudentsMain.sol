@@ -300,6 +300,9 @@ contract StudentsMain is StudentsNft{
     view 
     returns(uint256){return(_market.length);}
 
+    /**
+    * @dev Get the info of NFT from the market
+    */
     function GetNftInMarket(uint256 marketIndex)
     public
     view

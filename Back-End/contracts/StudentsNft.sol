@@ -321,6 +321,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
     public 
     view
     returns(uint256){return(20 * level * _rewardPriceMultiplicator * 1 ether);}
+    
     /**
     *   @dev Change the CoolDownTime value
     *   
