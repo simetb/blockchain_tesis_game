@@ -20,3 +20,5 @@ export { default as SelectFresher } from './SelectFresher';
 export { default as FresherPreview } from './FresherPreview';
 export { default as CornerModal } from './CornerModal';
 export { default as InputModal } from './InputModal';
+export { default as AdminCard } from './AdminCard';
+export { default as AdminInput } from './AdminInput';

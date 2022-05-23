@@ -30,8 +30,17 @@ export const useAdminContract = () => {
   // Total Nft in market
   const [nftInMarket, setNftInMarket] = useState(0);
   // Moralis Instance and custom hook
-  const { Moralis } = useMoralis();
+  const { Moralis, account, isAuthenticated} = useMoralis();
   const { HexToDec } = useBigNumber();
+  const adminAddress = contract.contracts.Main.owner.toLowerCase()
+  
+  //Detect if an admin is online
+  let isAdmin = false;
+  if (account == adminAddress && isAuthenticated){
+    isAdmin = true;
+  }else{
+    isAdmin = false;
+  }
 
   // Function that change reward multiplicator default x1
   const setNewRewardMultiplicator = (multiplicator) => {
@@ -160,7 +169,7 @@ export const useAdminContract = () => {
       params: options,
       onSuccess: async () => {
         console.log("New nft price setted");
-        setNftPrice(nftPrice);
+        setNftPrice(nftPrice/10**18);
       },
     });
   };
@@ -177,7 +186,7 @@ export const useAdminContract = () => {
       params: options,
       onSuccess: async (result) => {
         const price = HexToDec(result);
-        setNftPrice(price);
+        setNftPrice(price/10**18);
       },
     });
   };
@@ -363,6 +372,7 @@ export const useAdminContract = () => {
     contractBalance,
     nftInGame,
     nftInMarket,
+    isAdmin,
     setNewRewardMultiplicator,
     loadRewardMultiplicator,
     setNewWearMultiplicator,

@@ -14,8 +14,9 @@ import logo from "../public/img/logo.png";
 import { useMoralis } from "react-moralis";
 
 const Header = ({ setActive, active }) => {
+  
   // Moralis Hooks
-  const { authenticate, isAuthenticated } = useMoralis();
+  const { authenticate, isAuthenticated, logout } = useMoralis();
 
   // Login with Moralis
   const login = () => {
@@ -24,16 +25,9 @@ const Header = ({ setActive, active }) => {
     }
   };
 
-  // LogOut with Moralis
-  const logout = () => {
-    if (isAuthenticated) {
-      authenticate("Linking with the app");
-    }
-  };
-
   // Mapp the user status
   useState(() => {
-    if (!isAuthenticated) authenticate("Linking with the app");
+    authenticate("Linking with the app")
   }, []);
 
   if (!isAuthenticated) {
