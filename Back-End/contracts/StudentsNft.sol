@@ -120,6 +120,12 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
 
     // Control Reward Variables
     uint256 private _rewardPriceMultiplicator;
+
+    // Control Total NFT in Game
+    uint256 internal _nftsInGame;
+
+    // Control Total NFT in Market
+    uint256 internal _nftsInMarket;
     
     /**
     *   @dev Kovan Default Blockhain Implementation
@@ -440,6 +446,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
 
         _safeMint(msg.sender, newId);
 
+        _nftsInGame++;
         emit NftCreated(student.name,student.level,student.intelligenceLevel,student.cheatLevel);
     }
 

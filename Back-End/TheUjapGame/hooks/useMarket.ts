@@ -139,7 +139,7 @@ export const useMarket = () => {
         onSuccess: async (result) => {
           const idMarket = HexToDec(result[0]);
           const price = HexToDec(result[1]);
-
+          
           // optionf of the info of the nft in market
           let options_nft = {
             contractAddress: contract.contracts.Main.address,
@@ -157,7 +157,7 @@ export const useMarket = () => {
               const iq = HexToDec(result[1]);
               const id = HexToDec(result[5]);
               const market = result[6]
-
+              
               // Get the token uri to get the image and the fix stats
               let tokenURIOption = {
                 contractAddress: contract.contracts.Main.address,
@@ -173,6 +173,9 @@ export const useMarket = () => {
               await contractProcessor.fetch({
                 params: tokenURIOption,
                 onSuccess: async (result: string) => {
+                  console.log("Im Here")
+                  console.log(result)
+                  console.log(market)
                   if (!result) {
                   } else {
                     if(market){

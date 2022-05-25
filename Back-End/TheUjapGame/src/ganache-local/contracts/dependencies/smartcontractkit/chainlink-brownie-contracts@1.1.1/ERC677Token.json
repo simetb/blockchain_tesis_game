@@ -300,8 +300,8 @@
           }
         ],
         "contractDependencies": [
-          476,
           532,
+          476,
           632
         ],
         "contractKind": "contract",

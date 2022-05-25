@@ -29,6 +29,8 @@ export const useAdminContract = () => {
   const [nftInGame, setNftInGame] = useState(0);
   // Total Nft in market
   const [nftInMarket, setNftInMarket] = useState(0);
+  // Modal
+  const [modal,setModal] = useState(false)
   // Moralis Instance and custom hook
   const { Moralis, account, isAuthenticated} = useMoralis();
   const { HexToDec } = useBigNumber();
@@ -57,6 +59,7 @@ export const useAdminContract = () => {
       params: options,
       onSuccess: async () => {
         console.log("New reward multiplicator setted");
+        setModal(true)
         setRewardMultiplicator(multiplicator);
       },
     });
@@ -94,6 +97,7 @@ export const useAdminContract = () => {
       params: options,
       onSuccess: async () => {
         console.log("New wear multiplicator setted");
+        setModal(true)
         setWearMultiplicator(multiplicator);
       },
     });
@@ -131,6 +135,7 @@ export const useAdminContract = () => {
       params: options,
       onSuccess: async () => {
         console.log("New attack multiplicator setted");
+        setModal(true)
         setAttackPriceMultiplicator(multiplicator);
       },
     });
@@ -169,6 +174,7 @@ export const useAdminContract = () => {
       params: options,
       onSuccess: async () => {
         console.log("New nft price setted");
+        setModal(true)
         setNftPrice(nftPrice/10**18);
       },
     });
@@ -207,6 +213,7 @@ export const useAdminContract = () => {
       params: options,
       onSuccess: async () => {
         console.log("New cooldowntime setted");
+        setModal(true)
         setCoolDownTime(hours);
       },
     });
@@ -232,6 +239,7 @@ export const useAdminContract = () => {
   // Function that burn tokens
   // this will increase the price of the token
   const burnTokens = (amount) => {
+    console.log(amount)
     amount = Moralis.Units.ETH(amount);
     let options = {
       contractAddress: contract.contracts.Main.address,
@@ -246,6 +254,7 @@ export const useAdminContract = () => {
       params: options,
       onSuccess: async () => {
         console.log("Tokens Burned");
+        setModal(true)
       },
     });
   };
@@ -260,13 +269,14 @@ export const useAdminContract = () => {
       abi: ABI.abi,
       params: {
         amount: amount,
-      },
+      },  
     };
 
     contractProcessor.fetch({
       params: options,
       onSuccess: async () => {
         console.log("Tokens Minted");
+        setModal(true)
       },
     });
   };
@@ -290,7 +300,7 @@ export const useAdminContract = () => {
 
   // Function that withdraw an amount from the contract
   // this will decrease the price of the token
-  const withdraw = (amount, account) => {
+  const withdraw = (amount) => {
     amount = Moralis.Units.ETH(amount);
     let options = {
       contractAddress: contract.contracts.Main.address,
@@ -298,7 +308,7 @@ export const useAdminContract = () => {
       abi: ABI.abi,
       params: {
         amount: amount,
-        owner: account,
+        owner: contract.contracts.Main.owner.toLowerCase()
       },
     };
 
@@ -306,13 +316,14 @@ export const useAdminContract = () => {
       params: options,
       onSuccess: async () => {
         console.log("Withdraw...!!");
+        setModal(true)
       },
     });
   };
 
   // Function that transfer liquidity to the contract
   // this will increase the price of the token
-  const transferLiquidity = (amount, account) => {
+  const transferLiquidity = (amount) => {
     amount = Moralis.Units.ETH(amount);
     let options = {
       contractAddress: contract.contracts.Main.address,
@@ -324,7 +335,8 @@ export const useAdminContract = () => {
     contractProcessor.fetch({
       params: options,
       onSuccess: async () => {
-        console.log("Liquidity Added to contract...!!");
+        console.log("Liquidity Added to contract!");
+        setModal(true)
       },
     });
   };
@@ -341,7 +353,7 @@ export const useAdminContract = () => {
       params: options,
       onSuccess: async (result) => {
         let data = HexToDec(result);
-        setNftInGame(Math.round(data / 10 ** 18));
+        setNftInGame(Math.round(data));
       },
     });
   };
@@ -358,7 +370,7 @@ export const useAdminContract = () => {
       params: options,
       onSuccess: async (result) => {
         let data = HexToDec(result);
-        setNftInMarket(Math.round(data / 10 ** 18));
+        setNftInMarket(Math.round(data));
       },
     });
   };
@@ -373,6 +385,7 @@ export const useAdminContract = () => {
     nftInGame,
     nftInMarket,
     isAdmin,
+    modal,
     setNewRewardMultiplicator,
     loadRewardMultiplicator,
     setNewWearMultiplicator,
@@ -390,5 +403,6 @@ export const useAdminContract = () => {
     transferLiquidity,
     loadTotalNftInGame,
     loadTotalNftInMarket,
+    setModal
   };
 };

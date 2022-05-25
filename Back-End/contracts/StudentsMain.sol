@@ -140,6 +140,7 @@ contract StudentsMain is StudentsNft{
         delete _students[studentIndex];
 
         _transferContractToUser(_burnReward, msg.sender);
+        _nftsInGame--;
         emit NftOperation(msg.sender, address(0), studentId, _burnReward);
     }
 
@@ -290,7 +291,7 @@ contract StudentsMain is StudentsNft{
     function GetTotalNftInGame() 
     public 
     view 
-    returns(uint256){return(_students.length);}
+    returns(uint256){return(_nftsInGame);}
 
     /** 
     *   @dev Get the total Number of Nft in market
@@ -298,7 +299,7 @@ contract StudentsMain is StudentsNft{
     function GetTotalNftInMarket() 
     public 
     view 
-    returns(uint256){return(_market.length);}
+    returns(uint256){return(_nftsInMarket);}
 
     /**
     * @dev Get the info of NFT from the market
@@ -365,6 +366,8 @@ contract StudentsMain is StudentsNft{
             )
         );
         _students[studentIndex].market = true;
+
+        _nftsInMarket++;
         
         emit NftOperation(msg.sender, address(this), _students[studentIndex].id, 10 * 1 ether);
     }
@@ -397,6 +400,8 @@ contract StudentsMain is StudentsNft{
 
         delete _market[marketIndex];
 
+        _nftsInMarket--;
+
         emit NftOperation(buyer, owner, _students[indexNft].id, amount);
     }
 
@@ -426,6 +431,8 @@ contract StudentsMain is StudentsNft{
         _students[indexNft].market = false;
 
         delete _market[marketIndex];
+
+        _nftsInMarket--;
 
         emit NftOperation(msg.sender, msg.sender, _market[marketIndex].id, 10 * 1 ether);
     }

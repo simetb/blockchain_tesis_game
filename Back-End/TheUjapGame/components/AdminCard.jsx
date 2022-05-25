@@ -5,7 +5,7 @@ import townHall from "../public/img/town hall.png"
 //styles
 import styles from "../styles/components/AdminCard.module.scss"
 
-export default function AdminCard() {
+export default function AdminCard({nftGame, nftMarketPlace}) {
 
   return (
     <div className={styles.adminCard}>
@@ -13,15 +13,15 @@ export default function AdminCard() {
         <Image src={townHall} alt="academy" width={200} height={180}/>
       </div>
       <div className={styles.game}>
-        <p>Total Freshers in the game</p>
+        <p>Total de Freshers en el Juego</p>
         <span>
-          3
+          {nftGame}
         </span>
       </div>  
       <div className={styles.market}>
-        <p>Total Freshers in the market</p>
+        <p>Total de Freshers en el Market</p>
         <span>
-          3
+          {nftMarketPlace}
         </span>
       </div>  
     </div>

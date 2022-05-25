@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Router from "next/router";
 //Styles
 import styles from "../styles/components/Header.module.scss";
 //components

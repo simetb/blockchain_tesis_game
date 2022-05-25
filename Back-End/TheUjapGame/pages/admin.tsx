@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import Router from 'next/router';
 import Head from "next/head";
 //components
-import { Title, AdminCard, AdminInput } from "../components/"
+import { Title, AdminCard, AdminInput, CornerModal } from "../components/"
 //styles
 import styles from "../styles/views/admin.module.scss"
 import { useAdminContract } from '../hooks';
@@ -24,10 +24,26 @@ export default function admin() {
         loadAttackPriceMultiplicator,
         setNewAttackPriceMultiplicator,
 
-        //Nft Price
+        // Nft Price
         nftPrice,
         loadNftPrice,
-        setNewNftPrice
+        setNewNftPrice,
+
+        // Info Nft
+        loadTotalNftInGame,
+        loadTotalNftInMarket,
+        nftInGame,
+        nftInMarket,
+
+        // Token Admin
+        mintTokens,
+        burnTokens,
+        transferLiquidity,
+        withdraw,
+
+        // Modal
+        modal,
+        setModal
 
     } = useAdminContract();
 
@@ -42,6 +58,8 @@ export default function admin() {
         loadWearMultiplicator()
         loadAttackPriceMultiplicator()
         loadNftPrice()
+        loadTotalNftInGame()
+        loadTotalNftInMarket()
     },[rewardMultiplicator,wearMultiplicator,attackPriceMultiplicator,nftPrice])
 
     return (
@@ -51,13 +69,13 @@ export default function admin() {
             </Head>
             <Title>Administrar Juego</Title>
             <section className={styles.sections}>
-                <AdminCard/>
+                <AdminCard nftGame={nftInGame} nftMarketPlace={nftInMarket}/>
                 <div className={styles.subtitles}>
                     <Title>Administrar Token</Title>
-                    <AdminInput name="Mint Tokens" func={a=>{}} />
-                    <AdminInput name="Burn Tokens" func={a=>{}}/>
-                    <AdminInput name="Transfer Liquidity" func={a=>{}}/>
-                    <AdminInput name="Cashout Tokens" func={a=>{}}/>
+                    <AdminInput name="Mintear Tokens UJG" func={mintTokens} />
+                    <AdminInput name="Quemar Tokens UJG" func={burnTokens}/>
+                    <AdminInput name="Transferir Liquidez ETH" func={transferLiquidity}/>
+                    <AdminInput name="Retirar Liquidez ETH" func={withdraw}/>
                     <Title>Administrar de Economia</Title>
                     <div className={styles.values}>
                         <div className={styles.currents}>
@@ -83,7 +101,8 @@ export default function admin() {
                     <AdminInput name="Multiplicador Desgaste" func={setNewWearMultiplicator}/>
                     <AdminInput name="Multiplicador Ataque" func={setNewAttackPriceMultiplicator}/>
                 </div>
-            </section>  
+            </section>
+            {modal ? <CornerModal image={1} closeModal={setModal} showing={modal} title="Admin" message="Hecho Correctamente"/> : null}  
         </div>
     )
 }
