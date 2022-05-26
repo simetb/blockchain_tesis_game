@@ -23,8 +23,14 @@ const Header = ({ setActive, active }) => {
   const login = () => {
     if (!isAuthenticated) {
       authenticate("Linking with the app");
+      Router.push("/")
     }
   };
+
+  const exit = () =>{
+    logout()
+    Router.push("/")
+  }
 
   // Mapp the user status
   useState(() => {
@@ -67,7 +73,7 @@ const Header = ({ setActive, active }) => {
             </a>
           </Link>
         </div>
-        <Button onClick={logout}>
+        <Button onClick={exit}>
           <IoWalletOutline className={styles.icon} />
           <span>Desconectar</span>
         </Button>

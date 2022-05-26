@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
+import Router from "next/router";
 //components
 import { FresherCard, MintCard, CornerModal, InputModal} from "../components";
 import { Title } from "../components";
@@ -8,7 +9,7 @@ import styles from "../styles/views/freshers.module.scss";
 // Moralis
 import { useMoralis } from "react-moralis";
 // Custom Hooks
-import { useUserInfo, useNft, useMarket } from "../hooks";
+import { useUserInfo, useNft, useMarket, useAdminContract } from "../hooks";
 
 const Freshers = () => {
   // Custom Hooks {useUserInfo}
@@ -19,6 +20,8 @@ const Freshers = () => {
   const { putInMarket,successSell,setSuccessSell,errorMarket,setErrorMarket,successOut,setSuccessOut } = useMarket();
   // Custom Hook {useNft}
   const {burnNft, mintNft, transferNft,  setSuccessMint,setSuccessTransfer,setSuccessBurn, setError, successMint,successTransfer,successBurn, error} = useNft()
+
+  const {isAdmin} = useAdminContract()
 
   // Modals and values
   const[transferModal,setTransferModal] = useState(false)
@@ -87,6 +90,12 @@ const Freshers = () => {
   useEffect(() => {
     loadNfts();
   }, [indexs]);
+
+  // if the isAdmin value is true, it will be pushed to the main page every single time the component
+    // tries to mount
+    useEffect(() => {
+      isAdmin && Router.push("/"); 
+    },[])
 
   return (
     <div className={styles.wrapper}>

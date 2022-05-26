@@ -39,16 +39,10 @@ contract StudentsMain is StudentsNft{
     // Amount of money(ether) in the contract
     uint256 private _liquidityPool;
 
-    struct StudentMarket{
-        uint256 id;
-        uint256 price;
-        address owner;
-    }
-
     /**
-    *   @dev Array NFT in marketplace save struct `StudentMarket`
-    */    
-    StudentMarket[] internal _market;
+    * @dev variable that save the marketWallet 
+    */
+    address private _marketWallet;
 
     // The reward token amount that you get for burn ur nft
     uint256 private _burnReward;
@@ -84,19 +78,16 @@ contract StudentsMain is StudentsNft{
         //  Price variables initialization
         _burnReward = burnReward;
         _transferPrice = transferPrice;
+
+        // MarketWallet
+        _marketWallet = msg.sender;
     }
 
     /** 
     *   Check if the actual nft exist in market
     */
-    modifier MarketExist(uint256 id){
-        bool exist = false;
-        for (uint256 index = 0; index < _market.length; index++) {
-            if(_market[index].id == id){
-                exist = true;
-            } 
-        }
-        require(exist,"The nft can be found or not exist, try latter...");
+    modifier MarketExist(uint256 studentIndex){
+        require(_students[studentIndex].market,"The nft can be found or not exist, try latter...");
         _;
     }
 
@@ -258,6 +249,12 @@ contract StudentsMain is StudentsNft{
         );
     }
 
+    function GetStudentPrice(uint256 studentIndex)
+    public
+    view
+    returns(uint256){return(_students[studentIndex].price);}
+
+
     /** 
     *   @dev Get the URI from the NFT Tokem
     */
@@ -299,22 +296,8 @@ contract StudentsMain is StudentsNft{
     function GetTotalNftInMarket() 
     public 
     view 
-    returns(uint256){return(_nftsInMarket);}
+    returns(uint256){return(_nftOwnerCount[_marketWallet]);}
 
-    /**
-    * @dev Get the info of NFT from the market
-    */
-    function GetNftInMarket(uint256 marketIndex)
-    public
-    view
-    returns(
-        uint256,
-        uint256,
-        address){return(
-            _market[marketIndex].id,
-            _market[marketIndex].price,
-            _market[marketIndex].owner);
-        }
 
     /** 
     *   @dev Get the student index by the id
@@ -330,18 +313,29 @@ contract StudentsMain is StudentsNft{
         }
     }
 
-    /** 
-    *   @dev Get the student market index by the id
+    /**
+    *   @dev see all the INDEX NFT of the owner 
+    *
+    *   Requirements:
+    * - the owner address cannot be 0x0...
     */
-    function GetMarketIndexById(uint256 id)
-    public
-    view
-    returns(uint256){
-        for (uint256 i = 0; i < _market.length; i++) {
-            if(id == _market[i].id){
-                return(i);
+    function GetStudentsInMarket() 
+    public 
+    view 
+    returns(uint256[] memory){
+        uint256[] memory result = new uint256[](_nftOwnerCount[_marketWallet]);
+
+        uint256 counter = 0;
+
+        for (uint i = 0; i < _students.length; i++){
+
+            if(_students[i].market){
+                result[counter] = i;
+                counter++;
             }
+
         }
+        return result;
     }
 
     /**
@@ -358,18 +352,15 @@ contract StudentsMain is StudentsNft{
     EnoughToken(msg.sender, 10 * 1 ether){
         _transferUserToContract(10 * 1 ether, msg.sender);
         
-        _market.push(
-            StudentMarket(
-                _students[studentIndex].id,
-                price,
-                msg.sender
-            )
-        );
         _students[studentIndex].market = true;
 
-        _nftsInMarket++;
+        _students[studentIndex].price = price;
+
+        _transfer(msg.sender, _marketWallet, _students[studentIndex].id);
+
+        _nftOwnerCount[_marketWallet] +=1;
         
-        emit NftOperation(msg.sender, address(this), _students[studentIndex].id, 10 * 1 ether);
+        emit NftOperation(msg.sender, _marketWallet, _students[studentIndex].id, 10 * 1 ether);
     }
 
     /** 
@@ -380,29 +371,33 @@ contract StudentsMain is StudentsNft{
     *
     * - U need to have the enough amount of token in your wallet
     */
-    function BuyMarket(uint256 marketIndex) 
+    function BuyMarket(uint256 studentIndex) 
     public 
-    EnoughToken(msg.sender,_market[marketIndex].price)
-    MarketExist(_market[marketIndex].id){
-        uint256 amount = _market[marketIndex].price;
+    EnoughToken(msg.sender,_students[studentIndex].price)
+    MarketExist(studentIndex){
+        uint256 amount = _students[studentIndex].price;
 
-        address owner = _market[marketIndex].owner;
+        address owner = _nftToOwner[_students[studentIndex].id];
     
-        uint256 indexNft = GetStudentIndexById(_market[marketIndex].id);
-
         address buyer = msg.sender;
         
         _tokenUJG.TransferToken(buyer, owner, amount);
 
-        _students[indexNft].market = false;
+        _students[studentIndex].market = false;
 
-        _transferLogic(owner,buyer,_students[indexNft].id);
+        _students[studentIndex].price = 0;
 
-        delete _market[marketIndex];
+        _transfer(_marketWallet, buyer, _students[studentIndex].id);
 
-        _nftsInMarket--;
+        _nftOwnerCount[_marketWallet]-=1;
+        
+        _nftOwnerCount[owner] -=1;
+        
+        _nftOwnerCount[buyer] +=1;
 
-        emit NftOperation(buyer, owner, _students[indexNft].id, amount);
+        _nftToOwner[_students[studentIndex].id] = buyer;
+
+        emit NftOperation(buyer, owner, _students[studentIndex].id, amount);
     }
 
     /** 
@@ -416,25 +411,19 @@ contract StudentsMain is StudentsNft{
     public 
     OnlyOwnerOf(studentIndex)
     EnoughToken(msg.sender, 10 * 1 ether)
-    MarketExist(_students[studentIndex].id){
-
-        uint256 nftId = _students[studentIndex].id;
-
-        uint256 marketIndex = GetMarketIndexById(nftId);
-
-        address owner = _market[marketIndex].owner;
+    MarketExist(studentIndex){
         
+        address owner = _nftToOwner[_students[studentIndex].id];
+
         _transferUserToContract(10 * 1 ether, owner);
         
-        uint256 indexNft = GetStudentIndexById(_market[marketIndex].id); 
+        _transfer(_marketWallet, owner, _students[studentIndex].id);
 
-        _students[indexNft].market = false;
+        _students[studentIndex].market = false;
 
-        delete _market[marketIndex];
+        _nftOwnerCount[_marketWallet] -=1;
 
-        _nftsInMarket--;
-
-        emit NftOperation(msg.sender, msg.sender, _market[marketIndex].id, 10 * 1 ether);
+        emit NftOperation(msg.sender, msg.sender, _students[studentIndex].id, 10 * 1 ether);
     }
 
     /**

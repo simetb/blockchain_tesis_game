@@ -17,7 +17,6 @@ export const useMarket = () => {
   const { Moralis } = useMoralis();
 
   // Save Nfts in market an info
-  const [nftsMarket, setNftsMarket] = useState([]);
   const [infoNfts, setInfoNfts] = useState([]);
 
   // Modals
@@ -90,98 +89,72 @@ export const useMarket = () => {
 
   // Function to get the total number of nft in market
   // with that total number create an array to select one and return it
-  const getTotalNftInMarket = async () => {
-    let TotalNft = []; // select array
-
+  const getTotalNftInMarket =() => {
+    let info_nft = [];
     // options to get the number of nft and create array
     let options_number_nfts = {
       contractAddress: contract.contracts.Main.address,
-      functionName: "GetTotalNftInMarket",
+      functionName: "GetStudentsInMarket",
       abi: ABI.abi,
     };
 
-    // call function contract GetTotalNftInMarket
+    // call function contract GetStudentsInMarket
     contractProcessor.fetch({
       params: options_number_nfts,
-      onSuccess: async (result) => {
-        const amount = HexToDec(result);
-
-        for (let index = 0; index < amount; index++) {
-          TotalNft.push(index);
-        }
-      },
-      onError: (e) => {
-      },
-    });
-    // Select result array
-    setNftsMarket(TotalNft);
-  };
-
-  // function that load all the info of the nfts
-  const loadInfoNfts = async () => {
-    let totalInfo = [];// array object
-    // Get all the info
-    for (let index = 0; index < nftsMarket.length; index++) {
-      
-      // options forg get the stats with the market index
-      let options_info = {
-        contractAddress: contract.contracts.Main.address,
-        functionName: "GetNftInMarket",
-        abi: ABI.abi,
-        params: {
-          marketIndex: index,
-        },
-      };
-
-      // call contract function GetNftInMarket
-      await contractProcessor.fetch({
-        params: options_info,
-        onSuccess: async (result) => {
-          const idMarket = HexToDec(result[0]);
-          const price = HexToDec(result[1]);
+      onSuccess:(result:[]) => {
+        const amount_nft = result.length
+        console.log(amount_nft)
+        for(let value of result){
+          let id_nft = HexToDec(value)
           
-          // optionf of the info of the nft in market
-          let options_nft = {
+          let options_info_nft = {
             contractAddress: contract.contracts.Main.address,
             functionName: "GetStudentInfo",
             abi: ABI.abi,
-            params: {
-              studentIndex: idMarket,
-            },
+            params:{
+              studentIndex: id_nft
+            }
           };
 
-          // call contract function GetStudentInfo
           contractProcessor.fetch({
-            params: options_nft,
-            onSuccess: async (result) => {
+            params: options_info_nft,
+            onSuccess:(result) =>{
               const iq = HexToDec(result[1]);
               const id = HexToDec(result[5]);
-              const market = result[6]
-              
-              // Get the token uri to get the image and the fix stats
-              let tokenURIOption = {
+              const market = result[6];
+
+              let nft_price = {
                 contractAddress: contract.contracts.Main.address,
-                functionName: "GetTokenURI",
+                functionName: "GetStudentPrice",
                 abi: ABI.abi,
                 params: {
-                  studentId: id,
+                  studentIndex: id,
                 },
-              };
+              }
 
-              // call contract function GetTokenURI
-              // only the nfts that got a token uri can be show in the market
-              await contractProcessor.fetch({
-                params: tokenURIOption,
-                onSuccess: async (result: string) => {
-                  console.log("Im Here")
-                  console.log(result)
-                  console.log(market)
-                  if (!result) {
-                  } else {
-                    if(market){
+              contractProcessor.fetch({
+                params:nft_price,
+                onSuccess:(result)=>{
+                  const price = HexToDec(result)/10**18
+
+                // Get the token uri to get the image and the fix stats
+                let tokenURIOption = {
+                  contractAddress: contract.contracts.Main.address,
+                  functionName: "GetTokenURI",
+                  abi: ABI.abi,
+                  params: {
+                    studentId: id,
+                  },
+                };
+
+                contractProcessor.fetch({
+                  params:tokenURIOption,
+                  onSuccess:async (result:any)=>{
+                    if(result && market){
                       const res = await fetch(result);
                       const data = await res.json();
-                      totalInfo.push({
+
+                      info_nft.push({
                         name: data.name,
                         atributes: {
                           iq: iq,
@@ -189,75 +162,58 @@ export const useMarket = () => {
                           cheat: data.atributes[2].value,
                         },
                         idStudent: id,
-                        idMarket: idMarket,
                         image: data.image,
-                        price: price/10**18,
+                        price: price,
                       });
-                      setInfoNfts(totalInfo);
+                      console.log(info_nft)
+                      if(info_nft.length == amount_nft){
+                        setInfoNfts(info_nft);
+                      }
                     }
                   }
-                },
-                onError: (e) => {
-                },
-              });
-            },
-            onError: (e) => {
-            },
-          });
-        },
-        onError: (e) => {
-        },
-      });
-    }
+                })
+
+                },onError:(e)=>{
+                  console.log(e)
+                }
+              })
+              
+            },onError: (e) =>{
+            }
+          })
+        }
+      },
+      onError: (e) => {
+      },
+    });
   };
+
 
   // Function to buy an nft in the marketplace
   // u need to have the full amount
   // and select the nft in the respecting view
   const buyNft = (index) => {
-    // Get student maket index by id
-    let options_market = {
+    
+    let options_info = {
       contractAddress: contract.contracts.Main.address,
-      functionName: "GetMarketIndexById",
+      functionName: "BuyMarket",
       abi: ABI.abi,
       params: {
-        id: index,
+        studentIndex: index,
       },
-    };
+    }
 
+    // Call contract function BuyMarket
     contractProcessor.fetch({
-      params: options_market,
-      onSuccess: (result) =>{
-
-        const value = HexToDec(result)
-
-        let options_info = {
-          contractAddress: contract.contracts.Main.address,
-          functionName: "BuyMarket",
-          abi: ABI.abi,
-          params: {
-            marketIndex: value,
-          },
-        }
-
-        // Call contract function BuyMarket
-        contractProcessor.fetch({
-          params: options_info,
-          onSuccess: () => {
-            setSuccessBuy(true)
-          },
-          onError: (e) => {
-          setErrorMarket(true)
-          },
-        });
-
-      },onError: (e) =>{
-        setErrorMarket(true)
-      }
-    })
-
-   
-
+      params: options_info,
+      onSuccess: () => {
+        setSuccessBuy(true)
+        getTotalNftInMarket()
+      },
+      onError: (e) => {
+      setErrorMarket(true)
+      },
+    });
     
   };
 
@@ -265,8 +221,6 @@ export const useMarket = () => {
     putInMarket,
     getOutMarket,
     getTotalNftInMarket,
-    nftsMarket,
-    loadInfoNfts,
     infoNfts,
     buyNft,
     successBuy,

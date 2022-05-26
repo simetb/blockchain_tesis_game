@@ -23,6 +23,7 @@ export default function Sidebar( {setActive, active} ) {
               </span>
             </li>
           </Link>
+
           {/* The admin view only showing when isAdmin is true */}
           { isAdmin && <Link href='/admin' passHref>
             <li onClick={() => setActive(!active)} className={router.pathname == "/admin" ? styles.active: ""}>
@@ -32,40 +33,51 @@ export default function Sidebar( {setActive, active} ) {
               </span>
             </li>
           </Link>}
-          <Link href='/freshers' passHref>
+
+          
+          {/* The admin view only showing when isAdmin is false */}
+          { !isAdmin && <Link href='/freshers' passHref>
             <li onClick={() => setActive(!active)} className={router.pathname == "/freshers" ? styles.active: ""}>
               <IoIdCardOutline className={styles.icon}/>
               <span>
                 freshers
               </span>
             </li>
-          </Link>
-          <Link href='/marketplace' passHref>
+          </Link>}
+
+          {/* The admin view only showing when isAdmin is false */}
+          { !isAdmin && <Link href='/marketplace' passHref>
             <li onClick={() => setActive(!active)} className={router.pathname == "/marketplace" ? styles.active: ""}>
               <IoStorefrontOutline className={styles.icon}/>
               <span>
                 Marketplace
               </span>
             </li>
-          </Link>
-          <Link href='/play' passHref>
+          </Link>}
+
+          {/* The admin view only showing when isAdmin is false */}
+          { !isAdmin && <Link href='/play' passHref>
             <li onClick={() => setActive(!active)} className={router.pathname == "/play" ? styles.active: ""}>
               <MdOutlineQuiz className={styles.icon}/>
               <span>
                 Take a Test
               </span>
             </li>
-          </Link>
-          <Link href='/token' passHref>
+          </Link>}
+
+          {/* The admin view only showing when isAdmin is false */}
+          { !isAdmin && <Link href='/token' passHref>
             <li onClick={() => setActive(!active)} className={router.pathname == "/token" ? styles.active: ""}>
               <RiCoinsLine className={styles.icon}/>
               <span>
                 Token
               </span>
             </li>
-          </Link>
+          </Link>}
+      
         </ul>
       </nav>
+      
     </aside>
   )
 }

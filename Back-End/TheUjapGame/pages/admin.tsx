@@ -53,6 +53,7 @@ export default function admin() {
         !isAdmin && Router.push("/"); 
     })
 
+    // Load all the info with any act of information
     useEffect(() =>{
         loadRewardMultiplicator()
         loadWearMultiplicator()
@@ -60,7 +61,7 @@ export default function admin() {
         loadNftPrice()
         loadTotalNftInGame()
         loadTotalNftInMarket()
-    },[rewardMultiplicator,wearMultiplicator,attackPriceMultiplicator,nftPrice])
+    },[])
 
     return (
         <div className={styles.wrapper}>

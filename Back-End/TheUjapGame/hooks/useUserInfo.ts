@@ -66,7 +66,7 @@ export const useUserInfo = () => {
           let value = HexToDec(entry);
           values.push(value);
         }
-        await setIndexs(values);
+        setIndexs(values);
       },
     });
   };
@@ -78,6 +78,7 @@ export const useUserInfo = () => {
   const loadNfts = async () => {
     // Array to save the nftss
     let students = [];
+    let totalNft =  indexs.length;
     for (let index = 0; index < indexs.length; index++) {
       let indexKey = indexs[index];
       
@@ -130,6 +131,7 @@ export const useUserInfo = () => {
                 params: tokenURIOption,
                 onSuccess: async (result: string) => {
                   if (!result) {
+                    totalNft -=1;
                   } else {
                     // Fetch to the token uri and getting the data
                     const res = await fetch(result);
@@ -149,7 +151,9 @@ export const useUserInfo = () => {
                       market: market,
                     });
                     // Push the data array object
-                    setNfts(students);
+                    if(students.length == totalNft){
+                      setNfts(students);
+                    }
                   }
                 },
                 onError: (e) => {

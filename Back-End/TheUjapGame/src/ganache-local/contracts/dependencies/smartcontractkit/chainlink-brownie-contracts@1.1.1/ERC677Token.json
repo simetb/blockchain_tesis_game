@@ -301,8 +301,8 @@
         ],
         "contractDependencies": [
           532,
-          476,
-          632
+          632,
+          476
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -1208,20 +1208,20 @@
                 {
                   "externalReferences": [
                     {
-                      "_addr": {
-                        "declaration": 209,
-                        "isOffset": false,
-                        "isSlot": false,
-                        "src": "1042:5:0",
-                        "valueSize": 1
-                      }
-                    },
-                    {
                       "length": {
                         "declaration": 215,
                         "isOffset": false,
                         "isSlot": false,
                         "src": "1020:6:0",
+                        "valueSize": 1
+                      }
+                    },
+                    {
+                      "_addr": {
+                        "declaration": 209,
+                        "isOffset": false,
+                        "isSlot": false,
+                        "src": "1042:5:0",
                         "valueSize": 1
                       }
                     }

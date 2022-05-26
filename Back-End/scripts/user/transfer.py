@@ -34,7 +34,7 @@ def transfer_options(primary_account,secundary_account):
 def transfer_nft(contract,primary_account,secundary_account):
     # Get the nft
     index = select_nft(contract,primary_account)
-    if index != None:
+    if index != -1:
         # Calling the contract
         transfer_tx =  contract.TransferNft(
             primary_account,
@@ -89,8 +89,9 @@ def select_nft(contract,account):
                 if select == index:
                     print("Nft Seleccionado")
                     selection = False
-            else:
-                print("El Nft seleccionado no existe") 
+            if selection:
+                print("El Nft seleccionado no existe")
+                return -1 
 
     else:
         print("Esta cuenta no tiene nfts")

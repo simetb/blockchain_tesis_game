@@ -20,7 +20,14 @@ export default function TestSheet({
       <p>Poder: {power}</p>
       <p>Costo: {cost}</p>
       <p>Recompensa: {reward}</p>
-      <IoCaretForwardCircleSharp onClick={() => attackNft(level, fresher.id)} />
+      <IoCaretForwardCircleSharp 
+      onClick={() => {
+        try{
+          attackNft(level, fresher.id)
+        }catch{
+          
+        }
+      }}/>
     </div>
   );
 }

@@ -61,6 +61,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
         uint32 attackTime;
         uint256 id;
         bool market;
+        uint256 price;
     }
 
     // Cooldown Attack of the NFT
@@ -123,9 +124,6 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
 
     // Control Total NFT in Game
     uint256 internal _nftsInGame;
-
-    // Control Total NFT in Market
-    uint256 internal _nftsInMarket;
     
     /**
     *   @dev Kovan Default Blockhain Implementation
@@ -533,7 +531,7 @@ contract StudentsNft is Ownable,ERC721, VRFConsumerBase{
         uint256 cheatLevel = ((randomNumber * 2) % 100) + 1;
         string memory name = _names[randomNumber % 25];
 
-        Student memory character =  Student(level,intelligenceLevel,cheatLevel,name,uint32 (now),newId,false);
+        Student memory character =  Student(level,intelligenceLevel,cheatLevel,name,uint32 (now),newId,false,0);
         // Saving the character...
         _students.push(character);
         _nftId+=1;

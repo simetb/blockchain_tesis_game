@@ -1,34 +1,45 @@
 import React, { useEffect } from "react";
 import Head from "next/head";
+import Router from "next/router";
 //components
 import { MarketCard, MartCard,CornerModal } from "../components";
 import { Title } from "../components";
 // styles
 import styles from "../styles/views/freshers.module.scss";
 // Custom Hooks
-import { useMarket } from "../hooks";
+import { useMarket, useAdminContract } from "../hooks";
 // Moralis
 import { useMoralis } from "react-moralis";
 
 const Freshers = () => {
-  // Hook Moralis
-  const { isAuthenticated } = useMoralis();
   // custom hook {useMarket}
-  const { getTotalNftInMarket, loadInfoNfts, infoNfts, successBuy,setSuccessBuy, errorMarket,setErrorMarket, buyNft} = useMarket();
+  const { getTotalNftInMarket, infoNfts, successBuy,setSuccessBuy, errorMarket,setErrorMarket, buyNft} = useMarket();
+
+  // Moralis
+  const { isAuthenticated } = useMoralis();
+  
+
+  const {isAdmin} = useAdminContract()
 
   // Load Nft in Market
   useEffect(() => {
     getTotalNftInMarket();
-    loadInfoNfts();
   }, []);
 
-  // Load Nft In Market 
+  // if the isAdmin value is true, it will be pushed to the main page every single time the component
+    // tries to mount
+    useEffect(() => {
+      isAdmin && Router.push("/"); 
+  },[])
+
+  // Load user Nft
   useEffect(() => {
     if (isAuthenticated) {
       getTotalNftInMarket();
-      loadInfoNfts();
     }
   }, [isAuthenticated]);
+
+   
 
   return (
     <div className={styles.wrapper}>

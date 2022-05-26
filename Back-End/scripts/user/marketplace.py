@@ -14,7 +14,7 @@ def marketplace_options(account):
     if contract:
         #Selecting an option
         line_space()
-        option = select_option(["Vender Nft","Comprar Nft","Sacar mi Nft del marketplace","Volver"],"Recuerda tener una cuenta seleccionada para interactuar con estas funciones")
+        option = select_option(["Vender Nft","Comprar Nft","Sacar mi Nft del marketplace","Ver el marketplace","Volver"],"Recuerda tener una cuenta seleccionada para interactuar con estas funciones")
         line_space()
 
         if option == 1:
@@ -22,7 +22,8 @@ def marketplace_options(account):
             # Selecting the nft
             nft = select_nft(contract,account)
             # Put the nft in the Market Place
-            put_in_market(contract,account,nft)
+            if nft != -1:
+                put_in_market(contract,account,nft)
 
         elif option == 2:
             #  Buy an Nft in market
@@ -32,8 +33,12 @@ def marketplace_options(account):
             print("Factuar por sacar un nft del market 10 UJG")
             # Get Out My Nft from the market
             nft = select_nft(contract,account)
-            get_out_of_market(contract,account,nft)
-
+            if nft != -1:
+                get_out_of_market(contract,account,nft)
+        elif option == 4:
+            # See Nfts in market
+            see_market(contract)
+            pass
     else:
         print("No se ha encontrado ningun contrato inteligente desplegado")
 
@@ -58,7 +63,7 @@ def get_out_of_market(contract,account,nft):
     market_tx = contract.GetOutMarket(nft,{"from":account})
     print(market_tx.events['NftOperation'])
     # Calling the contract
-    print("Nftsacado del market")
+    print("Nft sacado del market")
 
 # Function that buy an nft in the marketplace
 def buy_ntf_in_market(contract,account):
@@ -72,7 +77,7 @@ def buy_ntf_in_market(contract,account):
 # Function that select an nft from the market
 def select_nft_market(contract):
     # Get the nft in marketplace
-    nfts = contract.GetTotalNftInMarket()
+    nfts = contract.GetStudentsInMarket()
     print(nfts)
     # Select the nft
     # Avoid Input Error
@@ -83,6 +88,14 @@ def select_nft_market(contract):
         except:
             print("Invalid Input")
     return select
+
+# Function that show the NFTS in the marketplace
+def see_market(contract):
+    getNfts = contract.GetStudentsInMarket()
+    print(getNfts)
+    for key in getNfts:
+        print(key)
+
 
 # Function to select the Nft
 def select_nft(contract,account):
@@ -105,8 +118,9 @@ def select_nft(contract,account):
                 if select == index:
                     print("Nft Seleccionado")
                     selection = False
-            else:
-                print("El Nft seleccionado no existe") 
+            if selection:
+                print("El Nft seleccionado no existe")
+                return -1 
 
     else:
         print("Esta cuenta no tiene nfts")

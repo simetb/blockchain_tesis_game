@@ -15,9 +15,9 @@ def attack(account):
     if contract:
         # Selecting the Nft
         nft = select_nft(contract,account)
-        print(nft)
 
-        if nft != None:
+
+        if nft != -1:
             # Select the lv to fight
             level = select_level()
 
@@ -49,13 +49,15 @@ def select_nft(contract,account):
                 if select == index:
                     print("Nft Seleccionado")
                     selection = False
-            else:
-                print("El Nft seleccionado no existe") 
+            if selection:
+                print("El Nft seleccionado no existe")
+                return -1 
 
     else:
         print("Esta cuenta no tiene nfts")
     
     return select
+
 
 
 # Function to select the level

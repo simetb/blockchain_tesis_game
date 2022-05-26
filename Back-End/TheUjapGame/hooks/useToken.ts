@@ -102,8 +102,10 @@ export const useToken = () => {
       },
       onError: (error) => {
         setError(true)
-      },
+      }
     });
+
+    
   };
 
   //Function that sells a number of user tokens and transfers them
@@ -130,8 +132,9 @@ export const useToken = () => {
       },
       onError: (error) => {
         setError(true)
-      },
+      }
     });
+
   };
 
   return {

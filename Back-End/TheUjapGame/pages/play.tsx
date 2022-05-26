@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Router from "next/router";
 //components
 import { Title, LevelTest, TestCard, CornerModal } from "../components";
 // styles
@@ -8,31 +9,31 @@ import { useMoralis } from "react-moralis";
 // React
 import { useEffect, useState } from "react";
 // Custom Hooks
-import { useUserInfo, useAttack } from "../hooks";
+import { useUserInfo, useAttack, useAdminContract } from "../hooks";
 
 export default function nft() {
   // Custom Hook {useUserInfo}
   const { loadNfts, nfts, loadIndexNft, indexs } = useUserInfo();
-  // Hook Moralis
-  const { isAuthenticated } = useMoralis();
   // React Hook
   const [student, setStudent] = useState();
   // Custom Hook {useAttack}
   const {attackNft, win, setWin, losse, setLosse, errorAttack,setErrorAttack } = useAttack()
+
+  const {isAdmin} = useAdminContract()
+
+   // if the isAdmin value is true, it will be pushed to the main page every single time the component
+    // tries to mount
+    useEffect(() => {
+      isAdmin && Router.push("/"); 
+  },[])
+  
 
   // Load The level info
   useEffect(() => {
     loadIndexNft();
     loadNfts();
   }, []);
-
-  // Load Level Info
-  useEffect(() => {
-    if (isAuthenticated) {
-      loadIndexNft();
-    }
-  }, [isAuthenticated]);
-
+  
   // Load User Nft
   useEffect(() => {
     loadNfts();

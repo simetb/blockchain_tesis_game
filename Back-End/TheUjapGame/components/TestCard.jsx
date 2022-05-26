@@ -15,12 +15,19 @@ export default function TestCard({ freshers, setValue }) {
     setValue(fresher);
   }, [fresher]);
 
+  let students = [];
+  for(let value in freshers){
+    if(!freshers[value].market){
+      students.push(freshers[value])
+    }
+  }
+
   return (
     <div className={styles.testCard}>
       <div className={styles.academy}>
         <Image src={academy} alt="academy" width={200} height={180} />
       </div>
-      <SelectFresher freshers={freshers} handleClick={setFresher} />
+      <SelectFresher freshers={students} handleClick={setFresher} />
       <FresherPreview fresher={fresher ? JSON.parse(fresher) : {}} />
     </div>
   );

@@ -8,17 +8,20 @@ import styles from "../styles/components/MarketCard.module.scss";
 import platform from "../public/img/platform.png";
 
 export default function FresherCard({ fresher, buyNft }) {
+  let test = () =>{
+    console.log("Imhere")
+  }
 
   return (
     <div className={styles.card}>
       <p className={styles.title}>ESTUDIANTE</p>
       <div className={styles.buy}>
-        <Button onClick={() => buyNft(fresher.idMarket)}>Comprar</Button>
+        <Button onClick={() => buyNft(fresher.idStudent)}>Comprar</Button>
       </div>
       <p className={styles.identity}>CARNET DE IDENTIDAD</p>
       <div className={styles.info}>
         <p>
-          <b>UID:</b> {fresher.idMarket}
+          <b>UID:</b> {fresher.idStudent}
         </p>
         <p>
           <b>Nombre:</b> {fresher.name}

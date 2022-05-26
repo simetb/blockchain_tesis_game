@@ -48,7 +48,7 @@ export const useNft = () => {
       onError: (e) => {
         console.log(e);
         setError(true)
-      },
+      }
     });
   };
 

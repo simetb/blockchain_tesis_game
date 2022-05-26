@@ -1,10 +1,11 @@
 import Head from "next/head";
+import Router from "next/router";
 //components
 import { Title, SwapCard, CurrencyCard, CornerModal} from "../components";
 // styles
 import styles from "../styles/views/token.module.scss";
 // custom hook
-import { useToken, useUserInfo } from "../hooks";
+import { useToken, useUserInfo, useAdminContract } from "../hooks";
 import { useEffect } from "react";
 // moralis
 import { useMoralis } from "react-moralis";
@@ -15,16 +16,20 @@ export default function nft() {
   const { tokenBalance, loadUserInfo } = useUserInfo();
   // Custom Hook {useToken}
   const { loadTokenInfo, tokenPrice,setSuccessSell, successSell,setSuccessBuy,successBuy, buyTokens, sellTokens, error, setError} = useToken();
-  // Moralis Hook
-  const { isAuthenticated } = useMoralis();
+
+  const {isAdmin} = useAdminContract()
+
+  // if the isAdmin value is true, it will be pushed to the main page every single time the component
+    // tries to mount
+    useEffect(() => {
+      isAdmin && Router.push("/"); 
+  },[])
 
   // Mapping and getting the info from the token
   // Liquidity, TokenPool, Price, User Balance
   useEffect(() => {
-    if (isAuthenticated) {
-      loadTokenInfo();
-      loadUserInfo();
-    }
+    loadTokenInfo();
+    loadUserInfo();
   }, []);
 
   return (
