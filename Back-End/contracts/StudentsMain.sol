@@ -314,7 +314,7 @@ contract StudentsMain is StudentsNft{
     }
 
     /**
-    *   @dev see all the INDEX NFT of the owner 
+    *   @dev see all the INDEX NFT of the market 
     *
     *   Requirements:
     * - the owner address cannot be 0x0...
