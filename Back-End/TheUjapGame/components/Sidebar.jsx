@@ -40,7 +40,7 @@ export default function Sidebar( {setActive, active} ) {
             <li onClick={() => setActive(!active)} className={router.pathname == "/freshers" ? styles.active: ""}>
               <IoIdCardOutline className={styles.icon}/>
               <span>
-                freshers
+                Freshers
               </span>
             </li>
           </Link>}
@@ -50,7 +50,7 @@ export default function Sidebar( {setActive, active} ) {
             <li onClick={() => setActive(!active)} className={router.pathname == "/marketplace" ? styles.active: ""}>
               <IoStorefrontOutline className={styles.icon}/>
               <span>
-                Marketplace
+                Mercado
               </span>
             </li>
           </Link>}
@@ -60,7 +60,7 @@ export default function Sidebar( {setActive, active} ) {
             <li onClick={() => setActive(!active)} className={router.pathname == "/play" ? styles.active: ""}>
               <MdOutlineQuiz className={styles.icon}/>
               <span>
-                Take a Test
+                Hacer Parcial
               </span>
             </li>
           </Link>}
