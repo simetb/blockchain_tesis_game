@@ -22,3 +22,4 @@ export { default as CornerModal } from './CornerModal';
 export { default as InputModal } from './InputModal';
 export { default as AdminCard } from './AdminCard';
 export { default as AdminInput } from './AdminInput';
+export { default as MetaAdvice } from './MetaAdvice';

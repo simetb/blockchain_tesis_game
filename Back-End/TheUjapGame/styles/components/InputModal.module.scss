@@ -102,7 +102,7 @@
     }
     
     .out {
-        @include moveDown();
+        @include moveDown(.5s);
     }
       
 }

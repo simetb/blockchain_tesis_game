@@ -1,0 +1,35 @@
+@import '../utils/variables.scss';
+@import '../utils/fonts.scss';
+@import '../utils/mixins.scss';
+@import '../utils/animations.scss';
+
+.advice, .out {
+    width: calc(100% - 250px);
+    position: absolute;
+    bottom: 0px;
+    left: 250px;
+    padding: 20px;
+    background-color: nth($palette, 1);
+    color: nth($palette,5);
+    a {
+        color: nth($palette ,4)
+    }
+    .close {
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        transition: .2s;
+        svg{
+            font-size: nth($fontSizes,2);
+        }
+        &:hover{
+            color: nth($palette,6)
+        }
+    }
+}
+.out{
+    @include moveDown(2s);
+}
+  
+

@@ -111,7 +111,7 @@
   animation: moveUp .5s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
 }
 
-@mixin moveDown() {
+@mixin moveDown($time) {
   
   @keyframes moveDown {
     0% {
@@ -121,7 +121,7 @@
       transform:translateY(800px);
     }
   }
-  animation: moveDown .5s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
+  animation: moveDown $time cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
 }
 
 

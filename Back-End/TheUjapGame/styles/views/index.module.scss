@@ -11,6 +11,7 @@
     .main{
         width: min(100%, 930px);
         height: calc( 100vh - 120px );
+        max-height: 600px;
         @include flexbox(row, space-between);
         padding: 50px;
         background-color: nth($palette,2);
@@ -125,6 +126,7 @@
             
             .slogan{
                 font-size: nth($fontSizes, 1 );
+                margin-bottom: 25px;
             }
     
             .buttons{

@@ -1,7 +1,8 @@
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 //components
-import { Button } from "../components/";
+import { Button, MetaAdvice } from "../components/";
 // styles
 import styles from "../styles/views/index.module.scss";
 //images
@@ -19,6 +20,17 @@ import { IoDocumentTextOutline, IoDocumentOutline } from "react-icons/io5";
 
 // '/' directory content
 export default function Home() {
+
+  // install metamask advice
+  const [showAdvice, setShowAdvice] = useState(false);
+
+  //check if metamask is installed 
+  useEffect(() => {
+    if (typeof window.ethereum == 'undefined') {
+      setShowAdvice(true);
+    }
+  },[])
+
   return (
     <div className={styles.wrapper}>
       {/* HTML HEAD */}
@@ -88,6 +100,7 @@ export default function Home() {
           </section>
         </div>
       </section>
+      {showAdvice ? <MetaAdvice closeAdvice={setShowAdvice}/> : null}
     </div>
   );
 }
