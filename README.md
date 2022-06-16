@@ -1,4 +1,5 @@
 # BLOCKCHAIN TESIS GAME
+Juego Play to Earn desplegado en Blockchain
 ***
 Este sistema fue hecho para optar por el titulo de ingenieria en computacion para la Universidad Jose Antonio Paez, en el mismo se muestra implementaciones de contratos programados en solidity y desplegados por python en una Cadena de Bloques Local. Estos datos son rescatados gracias al uso de Moralis en React.
 ***
