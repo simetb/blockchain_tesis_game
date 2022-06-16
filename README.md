@@ -2,7 +2,7 @@
 ***
 Este sistema fue hecho para optar por el titulo de ingenieria en computacion para la Universidad Jose Antonio Paez, en el mismo se muestra implementaciones de contratos programados en solidity y desplegados por python en una Cadena de Bloques Local. Estos datos son rescatados gracias al uso de Moralis en React.
 ***
-## CONSIDERACIONES DEL FRONT - END
+# CONSIDERACIONES DEL FRONT - END
 ***
 ***
 # CONSIDERACIONES DEL BACK - END
@@ -14,7 +14,7 @@ Este sistema fue hecho para optar por el titulo de ingenieria en computacion par
 ## - Env config
 Algunas variables de entorno tienen que ser configuradas antes del compilado del sistema.
 
-###Archivo en la carpeta Backend
+### Archivo en la carpeta Backend
 
 Cartera de Usuario de metamask.
 
@@ -24,7 +24,7 @@ Servidor de conexion.
 
 `export WEB3_INFURA_PROJECT_ID= INFURA_PROJECT_ID_KEY`
 
-###Archivo principal de react
+### Archivo principal de react
 
 Servidor de Moralis.
 
