@@ -1,3 +1,8 @@
+# Info
+***
+- Traducir la informacion de la documentaciones y la informacion de el readme del main 
+***
+
 # BLOCKCHAIN TESIS GAME
 ***
 Este sistema fue hecho para optar por el título de ingeniería en computación para la Universidad José Antonio Páez, en el mismo se muestra implementaciones de contratos programados en solidity y desplegados por python en una Cadena de Bloques Local. Estos datos son rescatados gracias al uso de Moralis en Nextjs.
