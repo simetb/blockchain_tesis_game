@@ -1,87 +1,75 @@
-# BLOCKCHAIN TESIS GAME
-***
-Este sistema fue hecho para optar por el título de ingeniería en computación para la Universidad José Antonio Páez, en el mismo se muestra implementaciones de contratos programados en solidity y desplegados por python en una Cadena de Bloques Local. Estos datos son rescatados gracias al uso de Moralis en Nextjs.
-***
-# CONSIDERACIONES DEL FRONT END
+# TheUjapGame
 
-## - Instalación
+This system was created to obtain the title of computer engineering from José Antonio Páez University. It showcases implementations of smart contracts programmed in Solidity and deployed by Python on a Local Blockchain. This data is retrieved thanks to the use of Moralis in Next.js.
 
-Dentro de la carpeta "TheUjapGame", iniciar la terminal e instalar las dependencias con tu administrador de paquetes de preferencia.
+## FRONT END CONSIDERATIONS
+- Installation
+Inside the "TheUjapGame" folder, start the terminal and install the dependencies with your preferred package manager.
 
-```bash
 npm install
-# o
+# or
 yarn install
-```
 
-## - Despliegue
+- Deployment
+Use your package manager to start a development environment:
 
-Utiliza tu administrador de paquetes para iniciar un entorno de desarrollo:
-
-```bash
 npm run dev
-# o
+# or
 yarn dev
-```
 
-Abre [http://localhost:3000](http://localhost:3000) para ver en el resultado en tu navegador.
+Open http://localhost:3000 to see the result in your browser.
 
-***
-# CONSIDERACIONES DEL BACK END
-1. [Env config](#env-config)
-2. [Brownie](#brownie)
+## BACK END CONSIDERATIONS
+Env config
+Brownie
 
-<a name="env-config"></a>
-## - Env config
-Algunas variables de entorno tienen que ser configuradas antes del compilado del sistema.
+- Env config
+Some environment variables need to be configured before compiling the system.
 
-### Archivo en la carpeta Backend
+File in the Backend folder
+Metamask User Wallet.
 
-Cartera de Usuario de metamask.
+export PRIVATE_KEY=ADDRESS_METAMASK
 
-`export PRIVATE_KEY= ADDRESS_METAMASK`
+Connection Server.
 
-Servidor de conexión.
+export WEB3_INFURA_PROJECT_ID=INFURA_PROJECT_ID_KEY
 
-`export WEB3_INFURA_PROJECT_ID= INFURA_PROJECT_ID_KEY`
+Main React file
+Moralis Server.
 
-### Archivo principal de React
+NEXT_PUBLIC_SERVER_URL=URL_MORALIS_KEY
 
-Servidor de Moralis.
+Moralis Project ID
 
-`NEXT_PUBLIC_SERVER_URL = URL_MORALIS_KEY`
+NEXT_PUBLIC_APP_ID=PROJECT_ID
 
-ID del proyecto de Moralis
+Burn address, or DEFAULT wallet address
 
-`NEXT_PUBLIC_APP_ID = PROJECT_ID`
+CONTRACT_ADDRESS="0x"
 
-Dirección de quemado, o dirección de cartera DEFAULT
+- Brownie
+It is necessary to connect the brownie system to the system with the ganache interface. This can be done with a fairly simple instruction:
 
-`CONTRACT_ADDRESS = "0x"`
+$ brownie networks add Ethereum ganache-local host=http://0.0.0.0:8545 chainid=1337
 
-<a name="brownie"></a>
-## - Brownie
-Es necesario conectar el sistema de brownie a el sistema con la interfaz de ganache. Esto se puede realizar con una instrucción bastante sencilla:
+After this, it is possible to execute:
 
-`$ brownie networks add Ethereum ganache-local host=http://0.0.0.0:8545 chainid=1337`
+$ brownie run scripts/main.py
 
-Luego de esto, es posible ejecutar:
+To use the console menu developed by us to facilitate the deployment of contracts.
 
-`$ brownie run scripts/main.py`
+Once all this is done, the program can be executed without any problem.
 
-Para usar el menu en consola desarrollado por nosotros para facilitar el despliegue de los contratos.
-
-Hecho todo esto, el programa puede ser ejecutado sin ningun problema.
-***
-# Desarrolladores
+# Developers
 
 ## Temis Barreto - Simetb 
-### Desarrollo de Backend, Contratos Inteligentes y Configuración de BloackChain Local
+### Backend Development, Smart Contracts, and Local Blockchain Configuration
 
 [![](https://avatars.githubusercontent.com/u/71613243?size=50)](https://github.com/simetb)
 
-## Daniel Hernández - ManguitoDeveloper (Perfil Antiguo: DanteHPVzla)
-### Desarrollo de Frontend y Diseño de la aplicación
+## Daniel Hernández - ManguitoDeveloper (DanteHPVzla)
+### Design and Front App Developer
 
 [![](https://avatars.githubusercontent.com/u/98782422?size=50)](https://github.com/ManguitoDeveloper)
 [![](https://avatars.githubusercontent.com/u/60875213?size=50)](https://github.com/DanteHPVzla)
